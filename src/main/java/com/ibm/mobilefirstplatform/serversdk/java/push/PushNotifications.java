@@ -26,6 +26,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+/**
+ * TODO:
+ */
 public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
@@ -35,12 +38,22 @@ public class PushNotifications {
 	
 	protected static String pushMessageEndpointURL;
 	
+	/**
+	 * TODO:
+	 * @param tenantId
+	 * @param pushSecret
+	 * @param bluemixRegion
+	 */
 	public static void init(String tenantId, String pushSecret, String bluemixRegion){
 		secret = pushSecret;
 		
 		pushMessageEndpointURL = "https://imfpush" + bluemixRegion + ":443/imfpush/v1/apps/" + tenantId + "/messages";
 	}
 	
+	/**
+	 * TODO:
+	 * @param bluemixRegion
+	 */
 	public static void init(String bluemixRegion){
 		//TODO: get tenantId and app secret from VCAP_SERVICES
 		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
@@ -62,15 +75,18 @@ public class PushNotifications {
 		}
 	}
 	
-	
-	//TODO: add callback
-	public static void send(JSONObject notificationToBeSent){
+	/**
+	 * TODO:
+	 * @param notification
+	 * @param listener
+	 */
+	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
-			throw new RuntimeException("PushNotifications has not been properly initialized."); //TODO: use failure callback
+			listener.onFailure(null, null, new RuntimeException("PushNotifications has not been properly initialized."));
 		}
 		
-		if(notificationToBeSent == null){
-			throw new RuntimeException("Cannot send null notification."); //TODO: use failure callback
+		if(notification == null){
+			listener.onFailure(null, null, new RuntimeException("Cannot send null notification."));
 		}
 		
 		//TODO:
@@ -85,7 +101,7 @@ public class PushNotifications {
 		CloseableHttpResponse response = null;
 		
 		try {
-			body = new StringEntity(notificationToBeSent.toString());
+			body = new StringEntity(notification.toString());
 			pushPost.setEntity(body);
 			
 			response = httpClient.execute(pushPost);
@@ -95,17 +111,14 @@ public class PushNotifications {
 			
 			String responseBody = new String(outputAsByteArray.toByteArray());
 			
-			//TODO send response to callbacks
-			System.out.println(responseBody);
+			listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
 			
 		} catch (UnsupportedEncodingException e) {
 			// Will never happen, since it will always be a proper JSON Object.
 		} catch (ClientProtocolException e) {
-			//TODO: use failure callback
-			e.printStackTrace();
+			listener.onFailure(null, null, e);
 		} catch (IOException e) {
-			//TODO: use failure callback
-			e.printStackTrace();
+			listener.onFailure(null, null, e);
 		}
 		finally {
 			if(response != null){

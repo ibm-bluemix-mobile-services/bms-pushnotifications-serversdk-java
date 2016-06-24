@@ -19,9 +19,11 @@ import org.json.JSONObject;
  * The NotificationBuilder is used to create a new push notification that is going to be sent
  * using the Push Notification service in IBM® Bluemix.
  * 
- * All parameters are optional. Set them as needed.
+ * The push notification's message that is passed in the constructor is required. 
+ * All other parameters are optional. Set them as needed.
  */
 public class NotificationBuilder {
+	private static final String MESSAGE_OBJECT_KEY = "message";
 	private static final String SETTINGS_OBJECT_KEY = "settings";
 	protected JSONObject notification;
 	
@@ -53,23 +55,37 @@ public class NotificationBuilder {
 		MAX
 	}
 	
-	public NotificationBuilder(){
+	/**
+	 * Create a new NotificationBuilder to help create a new push notification.
+	 * This NotificationBuilder can be used to configure the push notification before it is sent,
+	 * by configuring optional parameters.
+	 * 
+	 * @param alert the message to be sent in the push notification
+	 */
+	public NotificationBuilder(String alert){
 		notification = new JSONObject();
 		
+		JSONObject message = new JSONObject();
+		message.put("alert", alert);
+		
 		//An empty message is the minimum required.
-		notification.put("message", new JSONObject());
+		notification.put(MESSAGE_OBJECT_KEY, new JSONObject());
 	}
 	
 	/**
-	 * TODO:write doc
-	 * @param alert
-	 * @param url
-	 * @return
+	 * Set an optional URL to be included with the push notification.
+	 * 
+	 * @param url the URL to be included
+	 * @return the NotificationBuilder object so that calls can be chained
 	 */
-	public NotificationBuilder setMessage(String alert, String url){
-		JSONObject message = new JSONObject();
-		if(alert != null && alert.length() > 0){
-			message.put("alert", alert);
+	public NotificationBuilder setMessageURL(String url){
+		JSONObject message;
+
+		if(notification.has(MESSAGE_OBJECT_KEY)){
+			message = notification.getJSONObject(MESSAGE_OBJECT_KEY);
+		}
+		else{
+			message = new JSONObject();
 		}
 		
 		if(url != null && url.length() > 0){
@@ -77,18 +93,18 @@ public class NotificationBuilder {
 		}
 		
 		if(!message.keySet().isEmpty()){
-			notification.put("message", message);
+			notification.put(MESSAGE_OBJECT_KEY, message);
 		}
 		
 		return this;
 	}
 	
 	/**
-	 * TODO:write doc
-	 * @param deviceIds
-	 * @param platforms
-	 * @param tagNames
-	 * @return
+	 * Specify the targets that will receive the push notification.
+	 * @param deviceIds an optional array of device ids specified as strings that the push notification will be sent to
+	 * @param platforms an optional array of {@link PushNotificationsPlatform} enums used to specify which platforms to send to
+	 * @param tagNames an optional string array with the list of tags that will receive the notification
+	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setTarget(String[] deviceIds, PushNotificationsPlatform[] platforms, String[] tagNames){
 		JSONObject target = new JSONObject();
@@ -119,14 +135,15 @@ public class NotificationBuilder {
 	}
 	
 	/**
-	 * TODO:write doc
-	 * @param badge
-	 * @param category
-	 * @param iosActionKey
-	 * @param payload
-	 * @param soundFile
-	 * @param type
-	 * @return
+	 * Configure specific Apple Push Notification Service (APNS) settings for iOS devices.
+	 *  
+	 * @param badge the number to display as the badge of the application icon
+	 * @param category the category identifier to be used for intereactive push notifications
+	 * @param iosActionKey the title for the Action key
+	 * @param payload custom JSON payload that will be sent as part of the notification message
+	 * @param soundFile the name of the sound file in the application bundle; the sound of this file is played as an alert
+	 * @param type determines whether an alert is shown or the message is placed in the notification center; specified with the {@link APNSNotificationType} enum
+	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setAPNSSettings(Integer badge, String category, String iosActionKey, JSONObject payload, String soundFile, APNSNotificationType type){
 		JSONObject apnsSettings = new JSONObject();
@@ -174,14 +191,15 @@ public class NotificationBuilder {
 	}
 	
 	/**
-	 * TODO:write doc
-	 * @param collapseKey
-	 * @param delayWhileIdle
-	 * @param payload
-	 * @param priority
-	 * @param soundFile
-	 * @param secondsToLive
-	 * @return
+	 * Configure specific Google Cloud Messaging (GCM) settings.
+	 * 
+	 * @param collapseKey key that identifies a group of messages that can be collapsed together
+	 * @param delayWhileIdle indicates whether the message should not be sent until the device becomes active
+	 * @param payload custom JSON payload that will be sent as part of the notification message
+	 * @param priority the priority of the message, specified using the {@link GCMPriority} enum
+	 * @param soundFile the sound file (on device) that will be attempted to play when the notification arrives on the device
+	 * @param secondsToLive specifies how long (in seconds) the message should be kept in GCM storage if the device is offline
+	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setGCMSettings(String collapseKey, Boolean delayWhileIdle, JSONObject payload, GCMPriority priority, String soundFile, Integer secondsToLive ){
 		JSONObject gcmSettings = new JSONObject();
@@ -229,7 +247,7 @@ public class NotificationBuilder {
 	}
 	
 	/**
-	 * Build the push notification as configured. The result of this method is to be passed to PushNotification.send() as a parameter.
+	 * Build the push notification as configured. The result of this method is to be passed to {@link PushNotifications#send(JSONObject, PushNotificationsResponseListener)} as a parameter.
 	 * @return the push notification built as specified, ready to be sent
 	 */
 	public JSONObject build(){
