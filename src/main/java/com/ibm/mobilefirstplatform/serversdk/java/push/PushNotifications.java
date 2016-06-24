@@ -59,30 +59,11 @@ public class PushNotifications {
 	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
 	 */
 	public static void init(String bluemixRegion){
-		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
-		
 		String tenantId = null;
 		String pushSecret = null;
 		
-		if(vcapServicesAsString != null){
-			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
-			
-			JSONObject appObject = vcapServices.optJSONObject("app");
-			
-			if(appObject != null){
-				tenantId = appObject.optString("application_id");
-			}
-			
-			JSONObject servicesObject = vcapServices.optJSONObject("services");
-			
-			if(servicesObject != null && servicesObject.has("imfpush")){
-				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
-				
-				if(imfPushCredentials != null){
-					pushSecret = imfPushCredentials.optString("appSecret");
-				}
-			}
-		}
+		tenantId = getApplicationIdFromVCAP();
+		pushSecret = getPushSecretFromVCAP();
 		
 		if(tenantId != null && pushSecret != null){
 			init(tenantId,pushSecret,bluemixRegion);
@@ -90,6 +71,39 @@ public class PushNotifications {
 		else{
 			//TODO: runtime exception?
 		}
+	}
+
+	private static String getApplicationIdFromVCAP() {
+		String vcapApplicationAsString = System.getenv("VCAP_APPLICATION");
+		if(vcapApplicationAsString != null){
+			JSONObject vcapApplication = new JSONObject(vcapApplicationAsString);
+
+			JSONObject appObject = vcapApplication.optJSONObject("app");
+			
+			if(appObject != null){
+				return appObject.optString("application_id");
+			}	
+		}
+		return null;
+	}
+
+	private static String getPushSecretFromVCAP() {
+		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
+		
+		if(vcapServicesAsString != null){
+			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
+			JSONObject servicesObject = vcapServices.optJSONObject("services");
+			
+			if(servicesObject != null && servicesObject.has("imfpush")){
+				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
+				
+				if(imfPushCredentials != null){
+					return imfPushCredentials.optString("appSecret");
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	/**
