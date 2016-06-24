@@ -130,6 +130,11 @@ under the License.
       <passphrase>optional; leave empty if not used.</passphrase>
     </server>
     -->
+    <server>
+      <id>ossrh</id>
+      <username>mavenCentralUsername</username>
+      <password>mavenCentralPassword</password>
+    </server>
   </servers>
 
   <!-- mirrors
