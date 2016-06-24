@@ -27,7 +27,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
 /**
- * TODO:
+ * This class is used to send push notifications from a Java server to mobile devices
+ * using the Push Notification service in IBM® Bluemix.
  */
 public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
@@ -87,7 +88,7 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			//TODO: exception?
+			//TODO: runtime exception?
 		}
 	}
 	
