@@ -69,7 +69,7 @@ public class NotificationBuilder {
 		message.put("alert", alert);
 		
 		//An empty message is the minimum required.
-		notification.put(MESSAGE_OBJECT_KEY, new JSONObject());
+		notification.put(MESSAGE_OBJECT_KEY, message);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class NotificationBuilder {
 				platformArray.put(platform.getValue());
 			}
 			
-			target.put("platforms", new JSONArray(platforms));
+			target.put("platforms", platforms);
 		}
 		
 		if(tagNames != null && tagNames.length > 0){
@@ -209,7 +209,7 @@ public class NotificationBuilder {
 		}
 		
 		if(delayWhileIdle != null){
-			gcmSettings.put("delayWhileIdle", delayWhileIdle.booleanValue());
+			gcmSettings.put("delayWhileIdle", delayWhileIdle.toString());
 		}
 		
 		if(payload != null){
@@ -225,7 +225,7 @@ public class NotificationBuilder {
 		}
 		
 		if(secondsToLive != null){
-			gcmSettings.put("secondsToLive", secondsToLive.intValue());
+			gcmSettings.put("timeToLive", secondsToLive.intValue());
 		}
 		
 		if(!gcmSettings.keySet().isEmpty()){
