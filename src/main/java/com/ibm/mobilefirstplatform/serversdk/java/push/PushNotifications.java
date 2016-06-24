@@ -69,7 +69,7 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			//TODO: runtime exception?
+			//TODO: exception
 		}
 	}
 
@@ -113,6 +113,7 @@ public class PushNotifications {
 	 * @param listener an optional {@link PushNotificationsResponseListener} to listen to the result of this operation
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
+		//TODO:
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
 			listener.onFailure(null, null, new RuntimeException("PushNotifications has not been properly initialized."));
 		}
