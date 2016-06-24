@@ -15,8 +15,8 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
+import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -39,10 +39,11 @@ public class PushNotifications {
 	protected static String pushMessageEndpointURL;
 	
 	/**
-	 * TODO:
-	 * @param tenantId
-	 * @param pushSecret
-	 * @param bluemixRegion
+	 * Specify the credentials and Bluemix region for your push notification service.
+	 *  
+	 * @param tenantId the tenant ID for the Bluemix application that the Push Notifications service is bound to
+	 * @param pushSecret the credential required for Push Notifications service authorization
+	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
 	 */
 	public static void init(String tenantId, String pushSecret, String bluemixRegion){
 		secret = pushSecret;
@@ -51,11 +52,12 @@ public class PushNotifications {
 	}
 	
 	/**
-	 * TODO:
-	 * @param bluemixRegion
+	 * If your application server is running on Bluemix, and your push notification service is bound to your application,
+	 * you can use this method for initialization which will get the credentials from Bluemix's environment variables.
+	 * 
+	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
 	 */
 	public static void init(String bluemixRegion){
-		//TODO: get tenantId and app secret from VCAP_SERVICES
 		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
 		
 		String tenantId = null;
@@ -73,7 +75,7 @@ public class PushNotifications {
 			JSONObject servicesObject = vcapServices.optJSONObject("services");
 			
 			if(servicesObject != null && servicesObject.has("imfpush")){
-				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials"); //TODO
+				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
 				
 				if(imfPushCredentials != null){
 					pushSecret = imfPushCredentials.optString("appSecret");
@@ -90,9 +92,10 @@ public class PushNotifications {
 	}
 	
 	/**
-	 * TODO:
-	 * @param notification
-	 * @param listener
+	 * Send the given push notification, as configured, to devices using the Push Notification service. 
+	 * 
+	 * @param notification the push notification to be sent
+	 * @param listener an optional {@link PushNotificationsResponseListener} to listen to the result of this operation
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
@@ -103,7 +106,6 @@ public class PushNotifications {
 			listener.onFailure(null, null, new RuntimeException("Cannot send null notification."));
 		}
 		
-		//TODO:
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
@@ -111,24 +113,34 @@ public class PushNotifications {
 		pushPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
 		pushPost.addHeader("appSecret", secret);
 		
-		StringEntity body;
+		StringEntity body = new StringEntity(notification.toString(), "UTF-8");
+		pushPost.setEntity(body);
+
 		CloseableHttpResponse response = null;
+		String responseBody = null;
 		
 		try {
-			body = new StringEntity(notification.toString());
-			pushPost.setEntity(body);
-			
 			response = httpClient.execute(pushPost);
 			
-			ByteArrayOutputStream outputAsByteArray = new ByteArrayOutputStream();
-			response.getEntity().writeTo(outputAsByteArray);
+			if(response.getEntity() != null){
+				ByteArrayOutputStream outputAsByteArray = new ByteArrayOutputStream();
+				response.getEntity().writeTo(outputAsByteArray);
+				
+				responseBody = new String(outputAsByteArray.toByteArray());
+			}
 			
-			String responseBody = new String(outputAsByteArray.toByteArray());
+			Integer statusCode = null;
 			
-			listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
+			if(response.getStatusLine() != null){
+				statusCode = response.getStatusLine().getStatusCode();
+			}
 			
-		} catch (UnsupportedEncodingException e) {
-			// Will never happen, since it will always be a proper JSON Object.
+			if(statusCode == HttpStatus.SC_ACCEPTED){
+				listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
+			}
+			else{
+				listener.onFailure(statusCode, responseBody, null);
+			}
 		} catch (ClientProtocolException e) {
 			listener.onFailure(null, null, e);
 		} catch (IOException e) {
