@@ -58,20 +58,34 @@ public class PushNotifications {
 		//TODO: get tenantId and app secret from VCAP_SERVICES
 		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
 		
+		String tenantId = null;
+		String pushSecret = null;
+		
 		if(vcapServicesAsString != null){
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
 			
 			JSONObject appObject = vcapServices.optJSONObject("app");
 			
 			if(appObject != null){
-				appObject.get("application_id");
+				tenantId = appObject.optString("application_id");
 			}
 			
 			JSONObject servicesObject = vcapServices.optJSONObject("services");
 			
-			if(servicesObject != null){
-				servicesObject.get(""); //TODO
+			if(servicesObject != null && servicesObject.has("imfpush")){
+				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials"); //TODO
+				
+				if(imfPushCredentials != null){
+					pushSecret = imfPushCredentials.optString("appSecret");
+				}
 			}
+		}
+		
+		if(tenantId != null && pushSecret != null){
+			init(tenantId,pushSecret,bluemixRegion);
+		}
+		else{
+			//TODO: exception?
 		}
 	}
 	

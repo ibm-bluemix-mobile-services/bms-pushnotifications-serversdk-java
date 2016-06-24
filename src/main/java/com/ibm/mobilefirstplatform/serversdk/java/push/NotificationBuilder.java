@@ -193,7 +193,7 @@ public class NotificationBuilder {
 	/**
 	 * Configure specific Google Cloud Messaging (GCM) settings.
 	 * 
-	 * @param collapseKey key that identifies a group of messages that can be collapsed together
+	 * @param collapseKey key that identifies a group of push notifications that can be replaced with the latest one
 	 * @param delayWhileIdle indicates whether the message should not be sent until the device becomes active
 	 * @param payload custom JSON payload that will be sent as part of the notification message
 	 * @param priority the priority of the message, specified using the {@link GCMPriority} enum
