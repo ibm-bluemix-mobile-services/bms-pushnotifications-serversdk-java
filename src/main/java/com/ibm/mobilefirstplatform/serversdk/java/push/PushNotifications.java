@@ -1,3 +1,16 @@
+/*
+ *     Copyright 2016 IBM Corp.
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
+
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
@@ -53,11 +66,11 @@ public class PushNotifications {
 	//TODO: add callback
 	public static void send(JSONObject notificationToBeSent){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
-			throw new RuntimeException("PushNotifications has not been properly initialized.");
+			throw new RuntimeException("PushNotifications has not been properly initialized."); //TODO: use failure callback
 		}
 		
 		if(notificationToBeSent == null){
-			throw new RuntimeException("Cannot send null notification.");
+			throw new RuntimeException("Cannot send null notification."); //TODO: use failure callback
 		}
 		
 		//TODO:
@@ -82,16 +95,16 @@ public class PushNotifications {
 			
 			String responseBody = new String(outputAsByteArray.toByteArray());
 			
-			//TODO
+			//TODO send response to callbacks
 			System.out.println(responseBody);
 			
 		} catch (UnsupportedEncodingException e) {
 			// Will never happen, since it will always be a proper JSON Object.
 		} catch (ClientProtocolException e) {
-			// TODO 
+			//TODO: use failure callback
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO 
+			//TODO: use failure callback
 			e.printStackTrace();
 		}
 		finally {
