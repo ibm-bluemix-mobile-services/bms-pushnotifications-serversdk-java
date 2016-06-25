@@ -69,12 +69,12 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			//TODO: exception
+			throw new IllegalArgumentException("Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.");
 		}
 	}
 
-	private static String getApplicationIdFromVCAP() {
-		String vcapApplicationAsString = System.getenv("VCAP_APPLICATION");
+	protected static String getApplicationIdFromVCAP() {
+		String vcapApplicationAsString = getEnvironmentVariable("VCAP_APPLICATION");
 		if(vcapApplicationAsString != null){
 			JSONObject vcapApplication = new JSONObject(vcapApplicationAsString);
 
@@ -87,8 +87,12 @@ public class PushNotifications {
 		return null;
 	}
 
-	private static String getPushSecretFromVCAP() {
-		String vcapServicesAsString = System.getenv("VCAP_SERVICES");
+	protected static String getEnvironmentVariable(String name) {
+		return System.getenv(name);
+	}
+
+	protected static String getPushSecretFromVCAP() {
+		String vcapServicesAsString = getEnvironmentVariable("VCAP_SERVICES");
 		
 		if(vcapServicesAsString != null){
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
@@ -113,17 +117,22 @@ public class PushNotifications {
 	 * @param listener an optional {@link PushNotificationsResponseListener} to listen to the result of this operation
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
-		//TODO:
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
 			listener.onFailure(null, null, new RuntimeException("PushNotifications has not been properly initialized."));
 		}
 		
 		if(notification == null){
-			listener.onFailure(null, null, new RuntimeException("Cannot send null notification."));
+			listener.onFailure(null, null, new IllegalArgumentException("Cannot send null notification."));
 		}
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 		
+		HttpPost pushPost = createPushPostRequest(notification);
+
+		executePushPostRequest(pushPost, httpClient, listener);
+	}
+
+	protected static HttpPost createPushPostRequest(JSONObject notification) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 		
 		pushPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
@@ -131,32 +140,18 @@ public class PushNotifications {
 		
 		StringEntity body = new StringEntity(notification.toString(), "UTF-8");
 		pushPost.setEntity(body);
+		
+		return pushPost;
+	}
 
+	protected static void executePushPostRequest(HttpPost pushPost,
+			CloseableHttpClient httpClient, PushNotificationsResponseListener listener) {
 		CloseableHttpResponse response = null;
-		String responseBody = null;
 		
 		try {
 			response = httpClient.execute(pushPost);
 			
-			if(response.getEntity() != null){
-				ByteArrayOutputStream outputAsByteArray = new ByteArrayOutputStream();
-				response.getEntity().writeTo(outputAsByteArray);
-				
-				responseBody = new String(outputAsByteArray.toByteArray());
-			}
-			
-			Integer statusCode = null;
-			
-			if(response.getStatusLine() != null){
-				statusCode = response.getStatusLine().getStatusCode();
-			}
-			
-			if(statusCode == HttpStatus.SC_ACCEPTED){
-				listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
-			}
-			else{
-				listener.onFailure(statusCode, responseBody, null);
-			}
+			sendResponseToListener(response, listener);
 		} catch (ClientProtocolException e) {
 			listener.onFailure(null, null, e);
 		} catch (IOException e) {
@@ -170,6 +165,31 @@ public class PushNotifications {
 					// Closing response is merely a best effort.
 				}
 			}
+		}
+	}
+
+	protected static void sendResponseToListener(CloseableHttpResponse response,
+			PushNotificationsResponseListener listener) throws IOException {
+		String responseBody = null;
+		
+		if(response.getEntity() != null){
+			ByteArrayOutputStream outputAsByteArray = new ByteArrayOutputStream();
+			response.getEntity().writeTo(outputAsByteArray);
+			
+			responseBody = new String(outputAsByteArray.toByteArray());
+		}
+		
+		Integer statusCode = null;
+		
+		if(response.getStatusLine() != null){
+			statusCode = response.getStatusLine().getStatusCode();
+		}
+		
+		if(statusCode == HttpStatus.SC_ACCEPTED){
+			listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
+		}
+		else{
+			listener.onFailure(statusCode, responseBody, null);
 		}
 	}
 }

@@ -63,6 +63,10 @@ public class NotificationBuilder {
 	 * @param alert the message to be sent in the push notification
 	 */
 	public NotificationBuilder(String alert){
+		if(alert == null){
+			throw new IllegalArgumentException("The alert cannot be null.");
+		}
+		
 		notification = new JSONObject();
 		
 		JSONObject message = new JSONObject();
@@ -81,12 +85,7 @@ public class NotificationBuilder {
 	public NotificationBuilder setMessageURL(String url){
 		JSONObject message;
 
-		if(notification.has(MESSAGE_OBJECT_KEY)){
-			message = notification.getJSONObject(MESSAGE_OBJECT_KEY);
-		}
-		else{
-			message = new JSONObject();
-		}
+		message = notification.getJSONObject(MESSAGE_OBJECT_KEY);
 		
 		if(url != null && url.length() > 0){
 			message.put("url", url);
@@ -217,7 +216,7 @@ public class NotificationBuilder {
 		}
 		
 		if(priority != null){
-			gcmSettings.put("priority", priority.name().toLowerCase());
+			gcmSettings.put("priority", priority.name());
 		}
 		
 		if(soundFile != null && soundFile.length() > 0){
