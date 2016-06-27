@@ -77,12 +77,8 @@ public class PushNotifications {
 		String vcapApplicationAsString = getEnvironmentVariable("VCAP_APPLICATION");
 		if(vcapApplicationAsString != null){
 			JSONObject vcapApplication = new JSONObject(vcapApplicationAsString);
-
-			JSONObject appObject = vcapApplication.optJSONObject("app");
 			
-			if(appObject != null){
-				return appObject.optString("application_id");
-			}	
+			return vcapApplication.optString("application_id");
 		}
 		return null;
 	}
@@ -96,10 +92,9 @@ public class PushNotifications {
 		
 		if(vcapServicesAsString != null){
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
-			JSONObject servicesObject = vcapServices.optJSONObject("services");
 			
-			if(servicesObject != null && servicesObject.has("imfpush")){
-				JSONObject imfPushCredentials = servicesObject.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
+			if(vcapServices.has("imfpush")){
+				JSONObject imfPushCredentials = vcapServices.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
 				
 				if(imfPushCredentials != null){
 					return imfPushCredentials.optString("appSecret");
