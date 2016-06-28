@@ -6,7 +6,7 @@ jdk:
 - openjdk6
 
 script: 
-- rm -f build/maven/build/conf/settings.xml
+- rm -f build/maven/conf/settings.xml
 - cp settings.xml build/maven/build/conf/settings.xml
 - ./build/maven/bin/mvn clean deploy
 
