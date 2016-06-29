@@ -7,13 +7,9 @@ jdk:
 
 install: true
 
-script: 
-- pwd
-- ls
+script:
 - rm -f build/maven/conf/settings.xml
-- ls build/maven/conf
-- cp settings.xml build/maven/build/conf/settings.xml
-- ls build/maven/conf
+- cp settings.xml build/maven/conf/settings.xml
 - ./build/maven/bin/mvn clean deploy
 
 before_script:
