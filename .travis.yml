@@ -11,6 +11,7 @@ script:
 - cat settings.xml
 - rm -f build/maven/conf/settings.xml
 - cp settings.xml build/maven/conf/settings.xml
+- cat settings.xml
 - ./build/maven/bin/mvn clean deploy
 
 before_script:
