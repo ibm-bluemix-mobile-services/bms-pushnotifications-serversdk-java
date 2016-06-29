@@ -16,6 +16,6 @@ script:
 - ls build/maven/conf
 - ./build/maven/bin/mvn clean deploy
 
-before_install:
+before_script:
 - openssl aes-256-cbc -K $encrypted_36f14abec38f_key -iv $encrypted_36f14abec38f_iv
   -in settings.xml.enc -out settings.xml -d
