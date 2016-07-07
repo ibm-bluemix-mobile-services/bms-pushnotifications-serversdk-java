@@ -89,9 +89,6 @@ public class NotificationBuilder {
 		
 		if(url != null && url.length() > 0){
 			message.put("url", url);
-		}
-		
-		if(!message.keySet().isEmpty()){
 			notification.put(MESSAGE_OBJECT_KEY, message);
 		}
 		

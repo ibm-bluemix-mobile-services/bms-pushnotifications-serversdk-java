@@ -15,6 +15,8 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -34,6 +36,8 @@ public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
+	
+	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName()); 
 	
 	protected static String secret;
 	
@@ -57,6 +61,8 @@ public class PushNotifications {
 	 * you can use this method for initialization which will get the credentials from Bluemix's environment variables.
 	 * 
 	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
+	 * 
+	 * @throws IllegalArgumentException if either the push application ID or the secret are not found in the environment variables 
 	 */
 	public static void init(String bluemixRegion){
 		String tenantId = null;
@@ -69,7 +75,9 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			throw new IllegalArgumentException("Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.");
+			IllegalArgumentException exception = new IllegalArgumentException("PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.");
+			logger.log(Level.SEVERE, exception.toString(), exception);
+			throw exception;
 		}
 	}
 
@@ -113,11 +121,22 @@ public class PushNotifications {
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
-			listener.onFailure(null, null, new RuntimeException("PushNotifications has not been properly initialized."));
+			Throwable exception = new RuntimeException("PushNotifications has not been properly initialized.");
+			logger.log(Level.SEVERE, exception.toString(), exception);
+			
+			if(listener != null){
+				listener.onFailure(null, null, exception);
+			}
+			return;
 		}
 		
 		if(notification == null){
-			listener.onFailure(null, null, new IllegalArgumentException("Cannot send null notification."));
+			Throwable exception = new IllegalArgumentException("Cannot send a null push notification.");
+			logger.log(Level.SEVERE, exception.toString(), exception);
+			if(listener != null){
+				listener.onFailure(null, null, exception);
+			}
+			return;
 		}
 		
 		CloseableHttpClient httpClient = HttpClients.createDefault();
@@ -146,11 +165,19 @@ public class PushNotifications {
 		try {
 			response = httpClient.execute(pushPost);
 			
-			sendResponseToListener(response, listener);
+			if(listener != null){
+				sendResponseToListener(response, listener);
+			}
 		} catch (ClientProtocolException e) {
-			listener.onFailure(null, null, e);
+			logger.log(Level.SEVERE, e.toString(), e);
+			if(listener != null){
+				listener.onFailure(null, null, e);
+			}
 		} catch (IOException e) {
-			listener.onFailure(null, null, e);
+			logger.log(Level.SEVERE, e.toString(), e);
+			if(listener != null){
+				listener.onFailure(null, null, e);
+			}
 		}
 		finally {
 			if(response != null){
@@ -180,8 +207,8 @@ public class PushNotifications {
 			statusCode = response.getStatusLine().getStatusCode();
 		}
 		
-		if(statusCode == HttpStatus.SC_ACCEPTED){
-			listener.onSuccess(response.getStatusLine().getStatusCode(), responseBody);
+		if(statusCode != null && statusCode == HttpStatus.SC_ACCEPTED){
+			listener.onSuccess(statusCode, responseBody);
 		}
 		else{
 			listener.onFailure(statusCode, responseBody, null);

@@ -234,4 +234,26 @@ public class NotificationBuilderTest {
 		assertTrue(notification.getJSONObject("message").has("alert"));
 		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
 	}
+	
+	@Test
+	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNull() {
+		String testAlert = "testMessage";
+		NotificationBuilder builder = new NotificationBuilder(testAlert);
+		
+		builder.setAPNSSettings(null, null, null, null, null, null)
+			.setAPNSSettings(null, "", "", null, "", null)
+			.setGCMSettings(null, null, null, null, null, null)
+			.setGCMSettings("", null, null, null, null, null)
+			.setMessageURL(null)
+			.setMessageURL("")
+			.setTarget(null, null, null)
+			.setTarget(new String[]{}, new NotificationBuilder.PushNotificationsPlatform[]{}, new String[]{});
+		
+		JSONObject notification = builder.build();
+		
+		assertEquals(1, notification.keySet().size());
+		assertTrue(notification.has("message"));
+		assertTrue(notification.getJSONObject("message").has("alert"));
+		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
+	}
 }
