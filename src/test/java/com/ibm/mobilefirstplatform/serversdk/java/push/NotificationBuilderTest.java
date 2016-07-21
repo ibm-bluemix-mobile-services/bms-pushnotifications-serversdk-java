@@ -2,11 +2,13 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import static org.junit.Assert.*;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
 
 public class NotificationBuilderTest {
 	
@@ -42,7 +44,7 @@ public class NotificationBuilderTest {
 		builder.setMessageURL(null)
 			.setAPNSSettings(null, null, null, null, null, null)
 			.setGCMSettings(null, null, null, null, null, null)
-			.setTarget(null, null, null);
+			.setTarget(null, null, null, null);
 		
 		JSONObject notification = builder.build();
 		
@@ -223,16 +225,34 @@ public class NotificationBuilderTest {
 
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
+		PushNotificationsPlatform[] targetPlatforms = { };
 		
-		//TODO:
-//		builder.setTarget(deviceIds, platforms, tagNames);
+		builder.setTarget(new String[]{"device1", "device2"}, 
+							new String[]{"userId1", "userId2"},
+							new PushNotificationsPlatform[]{PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE},
+							new String[]{"tag1","tag2"});
 		
 		JSONObject notification = builder.build();
 		
-		//Should also still have the message in the notification:
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
+		assertTrue(notification.has("target"));
+		
+		JSONObject target = notification.getJSONObject("target");
+		
+		assertTrue(target.has("deviceIds"));
+		JSONArray deviceIds = target.getJSONArray("deviceIds");
+		assertEquals("device2", deviceIds.get(1));
+		
+		assertTrue(target.has("userIds"));
+		JSONArray userIds = target.getJSONArray("userIds");
+		assertEquals("userId2", userIds.get(1));
+		
+		assertTrue(target.has("platforms"));
+		JSONArray platforms = target.getJSONArray("platforms");
+		assertEquals("A", platforms.get(0));
+		
+		assertTrue(target.has("tagNames"));
+		JSONArray tags = target.getJSONArray("tagNames");
+		assertEquals("tag2", tags.get(1));
 	}
 	
 	@Test
@@ -246,8 +266,8 @@ public class NotificationBuilderTest {
 			.setGCMSettings("", null, null, null, null, null)
 			.setMessageURL(null)
 			.setMessageURL("")
-			.setTarget(null, null, null)
-			.setTarget(new String[]{}, new NotificationBuilder.PushNotificationsPlatform[]{}, new String[]{});
+			.setTarget(null, null, null, null)
+			.setTarget(new String[]{}, new String[]{}, new NotificationBuilder.PushNotificationsPlatform[]{}, new String[]{});
 		
 		JSONObject notification = builder.build();
 		
