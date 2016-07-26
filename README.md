@@ -41,7 +41,7 @@ You can also configure the notification with some other optional settings, such 
 
 ```
 builder.setMessageURL(urlToBeIncludedWithThePushNotification)
-	.setTarget(deviceIdArray, platformArray, tagNameArray)
+	.setTarget(deviceIdArray, userIdArray, platformArray, tagNameArray)
 	.setAPNSSettings(badge, category, iosActionKey, payload, soundFile, APNSNotificationType)
 	.setGCMSettings(collapseKey, delayWhileIdle, jsonPayload, GCMPriority.HIGH, soundFile, secondsToLive)
 ```
