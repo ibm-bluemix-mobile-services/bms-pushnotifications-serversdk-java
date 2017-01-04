@@ -12,7 +12,7 @@ You can get the SDK from Maven Central. For example, to get it with Maven, inclu
 <dependency>
 	<groupId>com.ibm.mobilefirstplatform.serversdk.java</groupId>
 	<artifactId>push</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 </dependency>
 ```
 
