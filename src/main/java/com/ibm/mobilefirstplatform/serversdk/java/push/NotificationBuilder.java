@@ -98,15 +98,20 @@ public class NotificationBuilder {
 	/**
 	 * Specify the targets that will receive the push notification.
 	 * @param deviceIds an optional array of device ids specified as strings that the push notification will be sent to
+	 * @param userIds an optional array of user ids specified as strings for whose devices the push notification will be sent to
 	 * @param platforms an optional array of {@link PushNotificationsPlatform} enums used to specify which platforms to send to
 	 * @param tagNames an optional string array with the list of tags that will receive the notification
 	 * @return the NotificationBuilder object so that calls can be chained
 	 */
-	public NotificationBuilder setTarget(String[] deviceIds, PushNotificationsPlatform[] platforms, String[] tagNames){
+	public NotificationBuilder setTarget(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms, String[] tagNames){
 		JSONObject target = new JSONObject();
 		
 		if(deviceIds != null && deviceIds.length > 0){
 			target.put("deviceIds", new JSONArray(deviceIds));
+		}
+		
+		if ( userIds != null && userIds.length > 0 ) {
+			target.put("userIds", new JSONArray(userIds));
 		}
 		
 		if(platforms != null && platforms.length > 0){
@@ -116,7 +121,7 @@ public class NotificationBuilder {
 				platformArray.put(platform.getValue());
 			}
 			
-			target.put("platforms", platforms);
+			target.put("platforms", platformArray);
 		}
 		
 		if(tagNames != null && tagNames.length > 0){
