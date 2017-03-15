@@ -82,11 +82,18 @@ public class PushNotifications {
 	}
 
 	protected static String getApplicationIdFromVCAP() {
-		String vcapApplicationAsString = getEnvironmentVariable("VCAP_APPLICATION");
-		if(vcapApplicationAsString != null){
-			JSONObject vcapApplication = new JSONObject(vcapApplicationAsString);
+		String vcapServicesAsString = getEnvironmentVariable("VCAP_SERVICES");
+		
+		if(vcapServicesAsString != null){
+			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
 			
-			return vcapApplication.optString("application_id");
+			if(vcapServices.has("imfpush")){
+				JSONObject imfPushCredentials = vcapServices.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
+				
+				if(imfPushCredentials != null){
+					return imfPushCredentials.optString("appGuid");
+				}
+			}
 		}
 		return null;
 	}
