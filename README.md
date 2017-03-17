@@ -5,7 +5,7 @@
 
 The Push Notifications Server-side SDK for Java is used to send push notifications to registered devices through the [Push Notifications service in IBM® Bluemix](https://console.ng.bluemix.net/docs/services/mobilepush/index.html).
 
-##Getting the SDK
+## Getting the SDK
 
 You can get the SDK from Maven Central. For example, to get it with Maven, include the following in your dependencies:
 
@@ -13,11 +13,11 @@ You can get the SDK from Maven Central. For example, to get it with Maven, inclu
 <dependency>
 	<groupId>com.ibm.mobilefirstplatform.serversdk.java</groupId>
 	<artifactId>push</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 </dependency>
 ```
 
-##Sending a push notification
+## Sending a push notification
 
 To send a push notification, first initialize the SDK with the Bluemix region of your application, and optionally, your credentials:
 
