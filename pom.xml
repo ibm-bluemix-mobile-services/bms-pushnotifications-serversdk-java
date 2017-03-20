@@ -122,6 +122,14 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+			    <groupId>org.eluder.coveralls</groupId>
+			    <artifactId>coveralls-maven-plugin</artifactId>
+			    <version>4.3.0</version>
+				<configuration>
+					<sourceEncoding>UTF-8</sourceEncoding>
+				</configuration>
+			</plugin>
 			<!-- Uncomment this plugin to enable GPG signing of the artifacts, required in order to release to Maven Central. -->
 			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>

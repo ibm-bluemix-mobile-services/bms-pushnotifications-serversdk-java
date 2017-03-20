@@ -7,11 +7,16 @@ jdk:
 
 install: true
 
+before_script:
+- openssl aes-256-cbc -K $encrypted_36f14abec38f_key -iv $encrypted_36f14abec38f_iv
+  -in settings.xml.enc -out settings.xml -d
+
 script:
 - rm -f build/maven/conf/settings.xml
 - cp settings.xml build/maven/conf/settings.xml
 - ./build/maven/bin/mvn clean deploy --settings=build/maven/conf/settings.xml
 
-before_script:
-- openssl aes-256-cbc -K $encrypted_36f14abec38f_key -iv $encrypted_36f14abec38f_iv
-  -in settings.xml.enc -out settings.xml -d
+after_success:
+  - if [[ "${TRAVIS_JOB_NUMBER}" = *".1"* ]]; then
+      mvn clean test jacoco:report coveralls:report;
+    fi
