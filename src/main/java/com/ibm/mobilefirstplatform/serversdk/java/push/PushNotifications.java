@@ -33,9 +33,9 @@ import org.json.JSONObject;
  * using the Push Notification service in IBM® Bluemix.
  */
 public class PushNotifications {
-	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
-	public static final String UK_REGION = ".eu-gb.bluemix.net";
-	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
+	public static final String US_SOUTH_REGION = PushConstants.US_SOUTH_REGION;
+	public static final String UK_REGION = PushConstants.UK_REGION;
+	public static final String SYDNEY_REGION = PushConstants.SYDNEY_REGION;
 	
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName()); 
 	
@@ -53,7 +53,7 @@ public class PushNotifications {
 	public static void init(String tenantId, String pushSecret, String bluemixRegion){
 		secret = pushSecret;
 		
-		pushMessageEndpointURL = "https://imfpush" + bluemixRegion + ":443/imfpush/v1/apps/" + tenantId + "/messages";
+		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.PORTURL + tenantId + PushConstants.PROJECT;
 	}
 	
 	/**
@@ -75,23 +75,23 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			IllegalArgumentException exception = new IllegalArgumentException("PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.");
+			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSHINITEXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
 		}
 	}
 
 	protected static String getApplicationIdFromVCAP() {
-		String vcapServicesAsString = getEnvironmentVariable("VCAP_SERVICES");
+		String vcapServicesAsString = getEnvironmentVariable(PushConstants.VCAP_SERVICES);
 		
 		if(vcapServicesAsString != null){
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
 			
-			if(vcapServices.has("imfpush")){
-				JSONObject imfPushCredentials = vcapServices.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
+			if(vcapServices.has(PushConstants.IMFPUSH)){
+				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0).optJSONObject(PushConstants.CREDENTIALS);
 				
 				if(imfPushCredentials != null){
-					return imfPushCredentials.optString("appGuid");
+					return imfPushCredentials.optString(PushConstants.APPGUID);
 				}
 			}
 		}
@@ -103,16 +103,16 @@ public class PushNotifications {
 	}
 
 	protected static String getPushSecretFromVCAP() {
-		String vcapServicesAsString = getEnvironmentVariable("VCAP_SERVICES");
+		String vcapServicesAsString = getEnvironmentVariable(PushConstants.VCAP_SERVICES);
 		
 		if(vcapServicesAsString != null){
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
 			
-			if(vcapServices.has("imfpush")){
-				JSONObject imfPushCredentials = vcapServices.getJSONArray("imfpush").optJSONObject(0).optJSONObject("credentials");
+			if(vcapServices.has(PushConstants.IMFPUSH)){
+				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0).optJSONObject(PushConstants.CREDENTIALS);
 				
 				if(imfPushCredentials != null){
-					return imfPushCredentials.optString("appSecret");
+					return imfPushCredentials.optString(PushConstants.APPSECRET);
 				}
 			}
 		}
@@ -128,7 +128,7 @@ public class PushNotifications {
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
-			Throwable exception = new RuntimeException("PushNotifications has not been properly initialized.");
+			Throwable exception = new RuntimeException(PushConstants.NOTPROPERLYINITIALIZEDEXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			
 			if(listener != null){
@@ -138,7 +138,7 @@ public class PushNotifications {
 		}
 		
 		if(notification == null){
-			Throwable exception = new IllegalArgumentException("Cannot send a null push notification.");
+			Throwable exception = new IllegalArgumentException(PushConstants.NULLNOTIFICATIONEXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			if(listener != null){
 				listener.onFailure(null, null, exception);
@@ -156,10 +156,10 @@ public class PushNotifications {
 	protected static HttpPost createPushPostRequest(JSONObject notification) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 		
-		pushPost.addHeader(HTTP.CONTENT_TYPE, "application/json");
-		pushPost.addHeader("appSecret", secret);
+		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENTTYPE);
+		pushPost.addHeader(PushConstants.APPSECRET, secret);
 		
-		StringEntity body = new StringEntity(notification.toString(), "UTF-8");
+		StringEntity body = new StringEntity(notification.toString(), PushConstants.UTFEIGHT);
 		pushPost.setEntity(body);
 		
 		return pushPost;

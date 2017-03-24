@@ -43,8 +43,13 @@ You can also configure the notification with some other optional settings, such 
 ```
 builder.setMessageURL(urlToBeIncludedWithThePushNotification)
 	.setTarget(deviceIdArray, userIdArray, platformArray, tagNameArray)
-	.setAPNSSettings(badge, category, iosActionKey, payload, soundFile, APNSNotificationType)
-	.setGCMSettings(collapseKey, delayWhileIdle, jsonPayload, GCMPriority.HIGH, soundFile, secondsToLive)
+	.setAPNSSettings(badge, category, iosActionKey, payload, soundFile, APNSNotificationType, titleLockKey, locKey, launchImage, titleLocArgs, locArgs, title, subtitle, attachmentUrl)
+	.setGCMSettings(collapseKey, delayWhileIdle, jsonPayload, priority, soundFile, secondsToLive, icon, visibility, sync, style)
+	.setChromeSettings(title, iconUrl, secondsToLive, jsonPayload)
+	.setChromeAppExtSettings(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, jsonPayload)
+	.setFirefoxWebSettings(title, iconUrl, secondsToLive, jsonPayload)
+	.setSafariWebSettings(title, urlArgs, action);
+	
 ```
 (Note that you can chain the different calls to `NotificationBuilder`.)
 

@@ -22,6 +22,8 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class PushNotificationsTest {
 	@Before
 	public void cleanup(){
@@ -38,7 +40,7 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldCreateCorrectPostRequest(){
+	public void shouldCreateCorrectPostRequest() {
 		PushNotifications.pushMessageEndpointURL = "http://www.testendpoint.com";
 		PushNotifications.secret = "testAppSecret";
 
