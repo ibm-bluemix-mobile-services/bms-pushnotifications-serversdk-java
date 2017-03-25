@@ -42,7 +42,7 @@ public class NotificationBuilderTest {
 
 
 	@Test
-	public void shouldAllowAllOtherParametersToBeOptionalAndNotIncludeThemInTheNotificationIfNull() throws JsonProcessingException  {
+	public void shouldAllowAllOtherParametersToBeOptionalAndNotIncludeThemInTheNotificationIfNull()  {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
@@ -149,7 +149,7 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureGCMSettings() throws JsonProcessingException  {
+	public void shouldAllowToConfigureGCMSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
@@ -336,7 +336,7 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureAllSettingsSimultaneouslyWithoutOverridingEachOther() throws JsonProcessingException  {
+	public void shouldAllowToConfigureAllSettingsSimultaneouslyWithoutOverridingEachOther() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
@@ -538,7 +538,7 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToSetTarget() throws JsonProcessingException {
+	public void shouldAllowToSetTarget()  {
 
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
@@ -572,7 +572,7 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNull() throws JsonProcessingException  {
+	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNull()  {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 

@@ -692,7 +692,7 @@ public class NotificationBuilder {
 
 	public NotificationBuilder setGCMSettings(String collapseKey, Boolean delayWhileIdle, JSONObject payload,
 			GCMPriority priority, String soundFile, Integer secondsToLive, String icon, Visibility visibility,
-			Boolean sync, JSONObject style) throws JsonProcessingException {
+			Boolean sync, JSONObject style) {
 
 		Settings settings = null;
 		Android android = null;
@@ -747,13 +747,14 @@ public class NotificationBuilder {
 		}
 
 		if (style != null && style.length() > 0) {
-			JsonNode jsonNodeStyle=null;
 			try {
-			jsonNodeStyle = mapper.readTree(style.toString());	
+			JsonNode jsonNodeStyle = mapper.readTree(style.toString());	
+			Style sytleJsonNode = mapper.treeToValue(jsonNodeStyle, Style.class);
+			android.setStyle(sytleJsonNode);
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
-			android.setStyle(jsonNodeStyle);
+			
 		}
 
 		if (android != null) {

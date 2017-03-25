@@ -15,7 +15,6 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
@@ -386,6 +385,7 @@ public final class PushMessageModel {
             private Visibility visibility;
             private String icon;
 
+            
             public void setSound(final String sound) {
                 this.sound = sound;
             }
@@ -444,11 +444,8 @@ public final class PushMessageModel {
                 return sync;
             }
 
-            public void setStyle(final JsonNode style) throws JsonProcessingException {
-            	
-            	ObjectMapper mapper = new ObjectMapper();
-            	Style sytleJsonNode = mapper.treeToValue(style, Style.class);
-                this.style = sytleJsonNode;
+            public void setStyle(final Style style)  {
+                this.style = style;
             }
 
             public Style getStyle() {
