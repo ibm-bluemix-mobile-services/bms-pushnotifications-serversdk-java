@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
@@ -353,7 +352,7 @@ public class NotificationBuilderTest {
 		assertTrue(gcm.has("sync"));
 		assertEquals("true", gcm.getString("sync"));
 
-		assertTrue(gcm.has("style")!=true);
+		assertTrue(!gcm.has("style"));
 	}
 
 	private void checkAPNSSettings(JSONObject notification) {
