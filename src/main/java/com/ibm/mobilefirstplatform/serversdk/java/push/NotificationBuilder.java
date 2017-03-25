@@ -85,15 +85,15 @@ public class NotificationBuilder {
 			throw new IllegalArgumentException(PushConstants.ALERTNOTNULLEXCEPTIOPN);
 		}
 
-		PushMessageModel model = new PushMessageModel();
+		final PushMessageModel model = new PushMessageModel();
 
-		Message messageObj = new Message();
+		final Message messageObj = new Message();
 		messageObj.setAlert(alert);
 		model.setMessage(messageObj);
 
 		notification = new JSONObject();
 
-		JSONObject message = generateJSON(model);
+		final JSONObject message = generateJSON(model);
 		// message.put("alert", alert);
 
 		// An empty message is the minimum required.
@@ -108,7 +108,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setMessageURL(String url) {
-		JSONObject message;
+		final JSONObject message;
 
 		message = notification.getJSONObject(PushConstants.MESSAGE_OBJECT_KEY);
 
@@ -117,9 +117,9 @@ public class NotificationBuilder {
 			Message messageObj = new Message();
 			messageObj.setUrl(url);
 
-			JSONObject jsonMessageObj = generateJSON(messageObj);
+			final JSONObject jsonMessageObj = generateJSON(messageObj);
 			if (message != null) {
-				JSONObject mergeMessage = mergeJasonObj(message, jsonMessageObj);
+				final JSONObject mergeMessage = mergeJasonObj(message, jsonMessageObj);
 				notification.put(PushConstants.MESSAGE_OBJECT_KEY, mergeMessage);
 			}
 
@@ -152,12 +152,29 @@ public class NotificationBuilder {
 		PushMessageModel model = null;
 		Target targetObj = null;
 
-		if ((deviceIds != null && deviceIds.length > 0) || (userIds != null && userIds.length > 0)
-				|| (platforms != null && platforms.length > 0) || (tagNames != null && tagNames.length > 0)) {
+		if (checkTargetParams(deviceIds, userIds, platforms, tagNames)) {
 			targetObj = new Target();
 			model = new PushMessageModel();
 		}
 
+		setTargetWithParams(deviceIds, userIds, platforms, tagNames, targetObj);
+		
+		if (targetObj != null) {
+			model.setTarget(targetObj);
+
+			final JSONObject target = generateJSON(model);
+
+			if (!target.keySet().isEmpty()) {
+				notification = mergeJasonObj(target, notification);
+
+			}
+		}
+
+		return this;
+	}
+
+	private void setTargetWithParams(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
+			String[] tagNames, Target targetObj) {
 		if (deviceIds != null && deviceIds.length > 0) {
 			targetObj.setDeviceIds(deviceIds);
 		}
@@ -173,18 +190,12 @@ public class NotificationBuilder {
 		if (tagNames != null && tagNames.length > 0) {
 			targetObj.setTagNames(tagNames);
 		}
-		if (targetObj != null) {
-			model.setTarget(targetObj);
+	}
 
-			JSONObject target = generateJSON(model);
-
-			if (!target.keySet().isEmpty()) {
-				notification = mergeJasonObj(target, notification);
-
-			}
-		}
-
-		return this;
+	private boolean checkTargetParams(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
+			String[] tagNames) {
+		return (deviceIds != null && deviceIds.length > 0) || (userIds != null && userIds.length > 0)
+				|| (platforms != null && platforms.length > 0) || (tagNames != null && tagNames.length > 0);
 	}
 
 	/**
@@ -206,29 +217,18 @@ public class NotificationBuilder {
 		Settings settings = null;
 		SafariWeb safariWeb = null;
 
-		if ((title != null && title.length() > 0) || (urlArgs != null && urlArgs.length > 0)
-				|| (action != null && action.length() > 0)) {
+		if (checkSafariParams(title, urlArgs, action)) {
 
 			settings = new Settings();
 			safariWeb = new SafariWeb();
 		}
 
-		if (title != null && title.length() > 0) {
-			safariWeb.setTitle(title);
-		}
-
-		if (urlArgs != null && urlArgs.length > 0) {
-			safariWeb.setUrlArgs(urlArgs);
-		}
-
-		if (action != null && action.length() > 0) {
-			safariWeb.setAction(action);
-		}
+		setSafariWebWithParams(title, urlArgs, action, safariWeb);
 
 		if (safariWeb != null) {
 			settings.setSafariWeb(safariWeb);
 
-			JSONObject safariSettings = generateJSON(settings);
+			final JSONObject safariSettings = generateJSON(settings);
 
 			if (!safariSettings.keySet().isEmpty()) {
 				JSONObject jasonSettings = null;
@@ -248,6 +248,25 @@ public class NotificationBuilder {
 			}
 		}
 		return this;
+	}
+
+	private void setSafariWebWithParams(String title, String[] urlArgs, String action, SafariWeb safariWeb) {
+		if (title != null && title.length() > 0) {
+			safariWeb.setTitle(title);
+		}
+
+		if (urlArgs != null && urlArgs.length > 0) {
+			safariWeb.setUrlArgs(urlArgs);
+		}
+
+		if (action != null && action.length() > 0) {
+			safariWeb.setAction(action);
+		}
+	}
+
+	private boolean checkSafariParams(String title, String[] urlArgs, String action) {
+		return (title != null && title.length() > 0) || (urlArgs != null && urlArgs.length > 0)
+				|| (action != null && action.length() > 0);
 	}
 
 	/**
@@ -272,21 +291,12 @@ public class NotificationBuilder {
 		Settings settings = null;
 		FirefoxWeb chromeWeb = null;
 
-		if ((title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
-				|| (secondsToLive != null) || (payload != null)) {
+		if (checkFirefoxAndChromeParams(title, iconUrl, secondsToLive, payload)) {
 			settings = new Settings();
 			chromeWeb = new FirefoxWeb();
 		}
 
-		if (title != null && title.length() > 0) {
-			chromeWeb.setTitle(title);
-		}
-		if (iconUrl != null && iconUrl.length() > 0) {
-			chromeWeb.setIconUrl(iconUrl);
-		}
-		if (secondsToLive != null) {
-			chromeWeb.setTimeToLive(secondsToLive);
-		}
+		setFirefoxWithParams(title, iconUrl, secondsToLive, chromeWeb);
 		if (payload != null) {
 			JsonNode jsonNodePayload=null;
 			try {
@@ -301,7 +311,7 @@ public class NotificationBuilder {
 		if (chromeWeb != null) {
 			settings.setFirefoxWeb(chromeWeb);
 
-			JSONObject firefoxSettings = generateJSON(settings);
+			final JSONObject firefoxSettings = generateJSON(settings);
 
 			if (!firefoxSettings.keySet().isEmpty()) {
 				JSONObject jasonSettings = null;
@@ -321,6 +331,23 @@ public class NotificationBuilder {
 			}
 		}
 		return this;
+	}
+
+	private void setFirefoxWithParams(String title, String iconUrl, Integer secondsToLive, FirefoxWeb chromeWeb) {
+		if (title != null && title.length() > 0) {
+			chromeWeb.setTitle(title);
+		}
+		if (iconUrl != null && iconUrl.length() > 0) {
+			chromeWeb.setIconUrl(iconUrl);
+		}
+		if (secondsToLive != null) {
+			chromeWeb.setTimeToLive(secondsToLive);
+		}
+	}
+
+	private boolean checkFirefoxAndChromeParams(String title, String iconUrl, Integer secondsToLive, JSONObject payload) {
+		return (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
+				|| (secondsToLive != null) || (payload != null);
 	}
 
 	/**
@@ -349,13 +376,39 @@ public class NotificationBuilder {
 		Settings settings = null;
 		ChromeAppExt chromeAppExt = null;
 
-		if ((collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null)
-				|| (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
-				|| (secondsToLive != null) || (payload != null)) {
+		if (checkChromAppExtParams(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, payload)) {
 			settings = new Settings();
 			chromeAppExt = new ChromeAppExt();
 		}
 
+		setChromAppExtWithParams(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, payload, chromeAppExt);
+
+		if (chromeAppExt != null) {
+			settings.setChromeAppExt(chromeAppExt);
+			final JSONObject chromExtSettings = generateJSON(settings);
+
+			if (!chromExtSettings.keySet().isEmpty()) {
+				JSONObject jasonSettings = null;
+				JSONObject jsonNotification = null;
+
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+
+					jasonSettings = mergeJasonObj(jsonNotification, chromExtSettings);
+				} else {
+
+					jasonSettings = chromExtSettings;
+				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
+			}
+		}
+		return this;
+	}
+
+	private void setChromAppExtWithParams(String collapseKey, Boolean delayWhileIdle, String title, String iconUrl,
+			Integer secondsToLive, JSONObject payload, ChromeAppExt chromeAppExt) {
 		if (collapseKey != null && collapseKey.length() > 0) {
 			chromeAppExt.setCollapseKey(collapseKey);
 		}
@@ -382,29 +435,13 @@ public class NotificationBuilder {
 			}
 			chromeAppExt.setPayload(jsonNodePayload);
 		}
+	}
 
-		if (chromeAppExt != null) {
-			settings.setChromeAppExt(chromeAppExt);
-			JSONObject chromExtSettings = generateJSON(settings);
-
-			if (!chromExtSettings.keySet().isEmpty()) {
-				JSONObject jasonSettings = null;
-				JSONObject jsonNotification = null;
-
-				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
-
-					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
-
-					jasonSettings = mergeJasonObj(jsonNotification, chromExtSettings);
-				} else {
-
-					jasonSettings = chromExtSettings;
-				}
-
-				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
-			}
-		}
-		return this;
+	private boolean checkChromAppExtParams(String collapseKey, Boolean delayWhileIdle, String title, String iconUrl,
+			Integer secondsToLive, JSONObject payload) {
+		return (collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null)
+				|| (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
+				|| (secondsToLive != null) || (payload != null);
 	}
 
 	/**
@@ -428,36 +465,18 @@ public class NotificationBuilder {
 		Settings settings = null;
 		ChromeWeb chromeWeb = null;
 
-		if ((title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
-				|| (secondsToLive != null) || (payload != null)) {
+		if (checkFirefoxAndChromeParams(title, iconUrl, secondsToLive, payload)) {
 			settings = new Settings();
 			chromeWeb = new ChromeWeb();
 		}
 
-		if (title != null && title.length() > 0) {
-			chromeWeb.setTitle(title);
-		}
-		if (iconUrl != null && iconUrl.length() > 0) {
-			chromeWeb.setIconUrl(iconUrl);
-		}
-		if (secondsToLive != null) {
-			chromeWeb.setTimeToLive(secondsToLive);
-		}
-		if (payload != null) {
-			JsonNode jsonNodePayload=null;
-			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-			chromeWeb.setPayload(jsonNodePayload);
-		}
+		setChromWithParams(title, iconUrl, secondsToLive, payload, chromeWeb);
 
 		if (chromeWeb != null) {
 			settings.setChromeWeb(chromeWeb);
 			if (settings != null && settings.getChromeWeb() != null) {
 
-				JSONObject chromSettings = generateJSON(settings);
+				final JSONObject chromSettings = generateJSON(settings);
 
 				if (!chromSettings.keySet().isEmpty()) {
 					JSONObject jasonSettings = null;
@@ -479,6 +498,28 @@ public class NotificationBuilder {
 			}
 		}
 		return this;
+	}
+
+	private void setChromWithParams(String title, String iconUrl, Integer secondsToLive, JSONObject payload,
+			ChromeWeb chromeWeb) {
+		if (title != null && title.length() > 0) {
+			chromeWeb.setTitle(title);
+		}
+		if (iconUrl != null && iconUrl.length() > 0) {
+			chromeWeb.setIconUrl(iconUrl);
+		}
+		if (secondsToLive != null) {
+			chromeWeb.setTimeToLive(secondsToLive);
+		}
+		if (payload != null) {
+			JsonNode jsonNodePayload=null;
+			try {
+			 jsonNodePayload = mapper.readTree(payload.toString());	
+			} catch (Exception exception) {
+				logger.log(Level.SEVERE, exception.toString(), exception);
+			}
+			chromeWeb.setPayload(jsonNodePayload);
+		}
 	}
 
 	/**
@@ -545,20 +586,77 @@ public class NotificationBuilder {
 
 		Apns apns = null;
 
-		if ((badge != null) || (category != null && category.length() > 0)
-				|| (iosActionKey != null && iosActionKey.length() > 0) || (payload != null)
-				|| (soundFile != null && soundFile.length() > 0) || (type != null)
-				|| (titleLockKey != null && titleLockKey.length() > 0) || (locKey != null && locKey.length() > 0)
-				|| (launchImage != null && launchImage.length() > 0)
-				|| (titleLocArgs != null && titleLocArgs.length > 0) || (locArgs != null && locArgs.length > 0)
-				|| (title != null && title.length() > 0) || (subtitle != null && subtitle.length() > 0)
-				|| (attachmentUrl != null && attachmentUrl.length() > 0)) {
+		if (checkAPNSParams(badge, category, iosActionKey, payload, soundFile, type, titleLockKey, locKey, launchImage,
+				titleLocArgs, locArgs, title, subtitle, attachmentUrl)) {
 
 			settings = new Settings();
 			apns = new Apns();
 
 		}
 
+		setAPNSWithPramsFirstHalf(badge, category, iosActionKey, payload, soundFile, type, titleLockKey, apns);
+
+		setAPNSWithParmasSecndHalf(locKey, launchImage, titleLocArgs, locArgs, title, subtitle, attachmentUrl, apns);
+
+		if (apns != null) {
+			settings.setApns(apns);
+
+			final JSONObject apnsSettings = generateJSON(settings);
+
+			if (!apnsSettings.keySet().isEmpty()) {
+				JSONObject jasonSettings = null;
+				JSONObject jsonNotification = null;
+
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+
+					jasonSettings = mergeJasonObj(jsonNotification, apnsSettings);
+				} else {
+
+					jasonSettings = apnsSettings;
+				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
+			}
+		}
+
+		return this;
+	}
+
+	private void setAPNSWithParmasSecndHalf(String locKey, String launchImage, String[] titleLocArgs, String[] locArgs,
+			String title, String subtitle, String attachmentUrl, Apns apns) {
+		if (locKey != null && locKey.length() > 0) {
+			apns.setLocKey(locKey);
+		}
+
+		if (launchImage != null && launchImage.length() > 0) {
+			apns.setLaunchImage(launchImage);
+		}
+
+		if (titleLocArgs != null && titleLocArgs.length > 0) {
+			apns.setTitleLocArgs(titleLocArgs);
+		}
+
+		if (locArgs != null && locArgs.length > 0) {
+			apns.setLocArgs(locArgs);
+		}
+
+		if (title != null && title.length() > 0) {
+			apns.setTitle(title);
+		}
+
+		if (subtitle != null && subtitle.length() > 0) {
+			apns.setSubtitle(subtitle);
+		}
+
+		if (attachmentUrl != null && attachmentUrl.length() > 0) {
+			apns.setAttachmentUrl(attachmentUrl);
+		}
+	}
+
+	private void setAPNSWithPramsFirstHalf(Integer badge, String category, String iosActionKey, JSONObject payload,
+			String soundFile, APNSNotificationType type, String titleLockKey, Apns apns) {
 		if (badge != null) {
 			apns.setBadge(badge.intValue());
 		}
@@ -592,59 +690,19 @@ public class NotificationBuilder {
 		if (titleLockKey != null && titleLockKey.length() > 0) {
 			apns.setTitleLocKey(titleLockKey);
 		}
+	}
 
-		if (locKey != null && locKey.length() > 0) {
-			apns.setLocKey(locKey);
-		}
-
-		if (launchImage != null && launchImage.length() > 0) {
-			apns.setLaunchImage(launchImage);
-		}
-
-		if (titleLocArgs != null && titleLocArgs.length > 0) {
-			apns.setTitleLocArgs(titleLocArgs);
-		}
-
-		if (locArgs != null && locArgs.length > 0) {
-			apns.setLocArgs(locArgs);
-		}
-
-		if (title != null && title.length() > 0) {
-			apns.setTitle(title);
-		}
-
-		if (subtitle != null && subtitle.length() > 0) {
-			apns.setSubtitle(subtitle);
-		}
-
-		if (attachmentUrl != null && attachmentUrl.length() > 0) {
-			apns.setAttachmentUrl(attachmentUrl);
-		}
-
-		if (apns != null) {
-			settings.setApns(apns);
-
-			JSONObject apnsSettings = generateJSON(settings);
-
-			if (!apnsSettings.keySet().isEmpty()) {
-				JSONObject jasonSettings = null;
-				JSONObject jsonNotification = null;
-
-				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
-
-					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
-
-					jasonSettings = mergeJasonObj(jsonNotification, apnsSettings);
-				} else {
-
-					jasonSettings = apnsSettings;
-				}
-
-				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
-			}
-		}
-
-		return this;
+	private boolean checkAPNSParams(Integer badge, String category, String iosActionKey, JSONObject payload,
+			String soundFile, APNSNotificationType type, String titleLockKey, String locKey, String launchImage,
+			String[] titleLocArgs, String[] locArgs, String title, String subtitle, String attachmentUrl) {
+		return (badge != null) || (category != null && category.length() > 0)
+				|| (iosActionKey != null && iosActionKey.length() > 0) || (payload != null)
+				|| (soundFile != null && soundFile.length() > 0) || (type != null)
+				|| (titleLockKey != null && titleLockKey.length() > 0) || (locKey != null && locKey.length() > 0)
+				|| (launchImage != null && launchImage.length() > 0)
+				|| (titleLocArgs != null && titleLocArgs.length > 0) || (locArgs != null && locArgs.length > 0)
+				|| (title != null && title.length() > 0) || (subtitle != null && subtitle.length() > 0)
+				|| (attachmentUrl != null && attachmentUrl.length() > 0);
 	}
 
 	/**
@@ -697,13 +755,42 @@ public class NotificationBuilder {
 		Settings settings = null;
 		Android android = null;
 
-		if ((collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null) || (payload != null)
-				|| (priority != null) || (soundFile != null && soundFile.length() > 0) || (secondsToLive != null)
-				|| (icon != null && icon.length() > 0) || (visibility != null) || (sync != null) || (style != null && style.length() > 0)) {
+		if (checkGCMParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility, sync,
+				style)) {
 			settings = new Settings();
 			android = new Android();
 		}
 
+		setGCMWithParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility,
+				sync, style, android);
+
+		if (android != null) {
+			settings.setGcm(android);
+
+			JSONObject gcmSettings = generateJSON(settings);
+
+			if (!gcmSettings.keySet().isEmpty()) {
+				JSONObject jsonSettings = null;
+				JSONObject jsonNotification = null;
+
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+
+					jsonSettings = mergeJasonObj(jsonNotification, gcmSettings);
+
+				} else {
+					jsonSettings = gcmSettings;
+				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jsonSettings);
+			}
+		}
+		return this;
+	}
+
+	private void setGCMWithParams(String collapseKey, Boolean delayWhileIdle, JSONObject payload, GCMPriority priority,
+			String soundFile, Integer secondsToLive, String icon, Visibility visibility, Boolean sync, JSONObject style,
+			Android android) {
 		if (collapseKey != null && collapseKey.length() > 0) {
 			android.setCollapseKey(collapseKey);
 		}
@@ -756,29 +843,14 @@ public class NotificationBuilder {
 			}
 			
 		}
+	}
 
-		if (android != null) {
-			settings.setGcm(android);
-
-			JSONObject gcmSettings = generateJSON(settings);
-
-			if (!gcmSettings.keySet().isEmpty()) {
-				JSONObject jsonSettings = null;
-				JSONObject jsonNotification = null;
-
-				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
-					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
-
-					jsonSettings = mergeJasonObj(jsonNotification, gcmSettings);
-
-				} else {
-					jsonSettings = gcmSettings;
-				}
-
-				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jsonSettings);
-			}
-		}
-		return this;
+	private boolean checkGCMParams(String collapseKey, Boolean delayWhileIdle, JSONObject payload, GCMPriority priority,
+			String soundFile, Integer secondsToLive, String icon, Visibility visibility, Boolean sync,
+			JSONObject style) {
+		return (collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null) || (payload != null)
+				|| (priority != null) || (soundFile != null && soundFile.length() > 0) || (secondsToLive != null)
+				|| (icon != null && icon.length() > 0) || (visibility != null) || (sync != null) || (style != null && style.length() > 0);
 	}
 
 	private static JSONObject generateJSON(Object obj)  {

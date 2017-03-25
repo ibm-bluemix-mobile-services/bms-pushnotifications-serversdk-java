@@ -103,7 +103,7 @@ public class NotificationBuilderTest {
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
 		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42,
-				"testIcon", Visibility.PUBLIC, true, new JSONObject());
+				"testIcon", Visibility.PUBLIC, true, new JSONObject().put("type", "testType"));
 
 		JSONObject notification = builder.build();
 
@@ -193,7 +193,7 @@ public class NotificationBuilderTest {
 				new String[] { "testTitleLocArgs1", "testTitleLocArgs2" },
 				new String[] { "testLocArgs1", "testLocArgs" }, "testTitle", "testSubtitle", "testAttachmentUrl");
 		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42,
-				"testIcon", Visibility.PUBLIC, true, new JSONObject());
+				"testIcon", Visibility.PUBLIC, true, new JSONObject().put("type", "testType"));
 
 		builder.setChromeSettings("testTitle", "testIconUrl", 42, new JSONObject());
 
@@ -352,7 +352,9 @@ public class NotificationBuilderTest {
 		assertTrue(gcm.has("sync"));
 		assertEquals("true", gcm.getString("sync"));
 
-		assertTrue(!gcm.has("style"));
+		assertTrue(gcm.has("style"));
+		JSONObject gcmJson = gcm.getJSONObject("style");
+		assertEquals("testType", gcmJson.get("type"));
 	}
 
 	private void checkAPNSSettings(JSONObject notification) {
