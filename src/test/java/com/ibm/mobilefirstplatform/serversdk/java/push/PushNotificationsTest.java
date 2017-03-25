@@ -22,8 +22,6 @@ import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 public class PushNotificationsTest {
 	@Before
 	public void cleanup(){
