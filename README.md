@@ -48,7 +48,10 @@ builder.setMessageURL(urlToBeIncludedWithThePushNotification)
 	.setChromeSettings(title, iconUrl, secondsToLive, jsonPayload)
 	.setChromeAppExtSettings(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, jsonPayload)
 	.setFirefoxWebSettings(title, iconUrl, secondsToLive, jsonPayload)
-	.setSafariWebSettings(title, urlArgs, action);
+	.setSafariWebSettings(title, urlArgs, action)
+	.setTarget(new String [] {"deviceId1","deviceId1"}, new String [] {"user1","user2"}, new PushNotificationsPlatform[] { PushNotificationsPlatform.APPEXTCHROME,
+				PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE, PushNotificationsPlatform.WEBCHROME,
+				PushNotificationsPlatform.WEBFIREFOX, PushNotificationsPlatform.WEBSAFARI }, new String[] {"tag1","tag2"});
 	
 ```
 (Note that you can chain the different calls to `NotificationBuilder`.)
