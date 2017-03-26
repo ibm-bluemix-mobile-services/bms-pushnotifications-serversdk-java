@@ -186,8 +186,7 @@ public final class PushMessageModel {
             private String iosActionKey;
             private String payload;
             private String category;
-            private String interactiveCategory;
-            private Type type;
+            private String type;
             private String titleLocKey;
             private String locKey;
             private String launchImage;
@@ -195,7 +194,6 @@ public final class PushMessageModel {
             private String [] locArgs;
             private String subtitle;
             private String title;
-            private String body;
             private String attachmentUrl;
 
             public final void setTitle(final String title) {
@@ -220,14 +218,6 @@ public final class PushMessageModel {
 
             public final String getSubtitle() {
                 return subtitle;
-            }
-
-            public final void setBody(final String body) {
-                this.body = body;
-            }
-
-            public final String getBody() {
-                return body;
             }
 
             public final void setBadge(final Integer badge) {
@@ -312,25 +302,15 @@ public final class PushMessageModel {
                 return category;
             }
 
-            public final void setInteractiveCategory(final String interactiveCategory) {
-                this.interactiveCategory = interactiveCategory;
-            }
-
-            public final String getInteractiveCategory() {
-                return interactiveCategory;
-            }
-
             public final void setType(final String type) {
-                this.type = Enum.valueOf(Type.class, type.toUpperCase());
+                this.type = type;
             }
 
-            public final Type getType() {
+            public final String getType() {
                 return type;
             }
 
-            public enum Type {
-                DEFAULT, SILENT, MIXED;
-            }
+            
         }
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public static class Gcm {
@@ -378,10 +358,9 @@ public final class PushMessageModel {
             private String sync;
             private String sound;
             private String category;
-            private String interactiveCategory;
-            private Priority priority;
+            private String priority;
             private Style style;
-            private Visibility visibility;
+            private String visibility;
             private String icon;
 
             
@@ -394,18 +373,18 @@ public final class PushMessageModel {
             }
 
             public void setPriority(final String priority) {
-                this.priority = Enum.valueOf(Priority.class, priority.toUpperCase());
+                this.priority = priority;
             }
 
-            public Priority getPriority() {
+            public String getPriority() {
                 return priority;
             }
 
             public void setVisibility(final String visibility) {
-                this.visibility = Enum.valueOf(Visibility.class, visibility.toUpperCase());
+                this.visibility = visibility;
             }
 
-            public Visibility getVisibility() {
+            public String getVisibility() {
                 return visibility;
             }
 
@@ -425,16 +404,6 @@ public final class PushMessageModel {
                 return category;
             }
 
-            public void setInteractiveCategory(final String interactiveCategory) {
-                this.interactiveCategory = interactiveCategory;
-            }
-
-            public String getInteractiveCategory() {
-                return interactiveCategory;
-            }
-
-         
-
             public void setSync(final String sync) {
                 this.sync = sync;
             }
@@ -450,37 +419,7 @@ public final class PushMessageModel {
             public Style getStyle() {
                 return style;
             }
-
-          
-            public enum Priority {
-                MAX(2), HIGH(1), DEFAULT(0), LOW(-1), MIN(-2);
-
-                private final int value;
-
-                Priority(final int value) {
-                    this.value = value;
-                }
-
-                public int getValue() {
-                    return value;
-                }
-            }
-
-            public enum Visibility {
-                PUBLIC(1), PRIVATE(0), SECRET(-1);
-
-                private final int value;
-
-                Visibility(final int value) {
-                    this.value = value;
-                }
-
-                public int getValue() {
-                    return value;
-                }
-            }
-
-            
+                    
         }
         @JsonInclude(JsonInclude.Include.NON_EMPTY)
         public static final class Style {

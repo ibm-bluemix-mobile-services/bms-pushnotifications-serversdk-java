@@ -40,11 +40,12 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
  * required. All other parameters are optional. Set them as needed.
  */
 public class NotificationBuilder {
-	
+
 	protected JSONObject notification;
 	private static ObjectMapper mapper = new ObjectMapper();
-	
+
 	public static final Logger logger = Logger.getLogger(NotificationBuilder.class.getName());
+
 	public enum PushNotificationsPlatform {
 		APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
 				"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
@@ -79,7 +80,7 @@ public class NotificationBuilder {
 	 * 
 	 * @param alert
 	 *            the message to be sent in the push notification
-	  */
+	 */
 	public NotificationBuilder(String alert) {
 		if (alert == null) {
 			throw new IllegalArgumentException(PushConstants.ALERTNOTNULLEXCEPTIOPN);
@@ -146,7 +147,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setTarget(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
-			String[] tagNames)  {
+			String[] tagNames) {
 		// JSONObject target = new JSONObject();
 
 		PushMessageModel model = null;
@@ -158,7 +159,7 @@ public class NotificationBuilder {
 		}
 
 		setTargetWithParams(deviceIds, userIds, platforms, tagNames, targetObj);
-		
+
 		if (targetObj != null) {
 			model.setTarget(targetObj);
 
@@ -211,8 +212,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
-	public NotificationBuilder setSafariWebSettings(String title, String[] urlArgs, String action)
-			 {
+	public NotificationBuilder setSafariWebSettings(String title, String[] urlArgs, String action) {
 
 		Settings settings = null;
 		SafariWeb safariWeb = null;
@@ -298,13 +298,13 @@ public class NotificationBuilder {
 
 		setFirefoxWithParams(title, iconUrl, secondsToLive, chromeWeb);
 		if (payload != null) {
-			JsonNode jsonNodePayload=null;
+			JsonNode jsonNodePayload = null;
 			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
+				jsonNodePayload = mapper.readTree(payload.toString());
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
-			
+
 			chromeWeb.setPayload(jsonNodePayload);
 		}
 
@@ -345,7 +345,8 @@ public class NotificationBuilder {
 		}
 	}
 
-	private boolean checkFirefoxAndChromeParams(String title, String iconUrl, Integer secondsToLive, JSONObject payload) {
+	private boolean checkFirefoxAndChromeParams(String title, String iconUrl, Integer secondsToLive,
+			JSONObject payload) {
 		return (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
 				|| (secondsToLive != null) || (payload != null);
 	}
@@ -371,7 +372,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 	public NotificationBuilder setChromeAppExtSettings(String collapseKey, Boolean delayWhileIdle, String title,
-			String iconUrl, Integer secondsToLive, JSONObject payload){
+			String iconUrl, Integer secondsToLive, JSONObject payload) {
 
 		Settings settings = null;
 		ChromeAppExt chromeAppExt = null;
@@ -427,9 +428,9 @@ public class NotificationBuilder {
 			chromeAppExt.setTimeToLive(secondsToLive);
 		}
 		if (payload != null) {
-			JsonNode jsonNodePayload=null;
+			JsonNode jsonNodePayload = null;
 			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
+				jsonNodePayload = mapper.readTree(payload.toString());
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
@@ -460,7 +461,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 	public NotificationBuilder setChromeSettings(String title, String iconUrl, Integer secondsToLive,
-			JSONObject payload)  {
+			JSONObject payload) {
 
 		Settings settings = null;
 		ChromeWeb chromeWeb = null;
@@ -474,27 +475,25 @@ public class NotificationBuilder {
 
 		if (chromeWeb != null) {
 			settings.setChromeWeb(chromeWeb);
-			if (settings != null && settings.getChromeWeb() != null) {
 
-				final JSONObject chromSettings = generateJSON(settings);
+			final JSONObject chromSettings = generateJSON(settings);
 
-				if (!chromSettings.keySet().isEmpty()) {
-					JSONObject jasonSettings = null;
-					JSONObject jsonNotification = null;
+			if (!chromSettings.keySet().isEmpty()) {
+				JSONObject jasonSettings = null;
+				JSONObject jsonNotification = null;
 
-					if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
 
-						jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
 
-						jasonSettings = mergeJasonObj(jsonNotification, chromSettings);
-					} else {
+					jasonSettings = mergeJasonObj(jsonNotification, chromSettings);
+				} else {
 
-						jasonSettings = chromSettings;
-					}
-
-					notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
-
+					jasonSettings = chromSettings;
 				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
+
 			}
 		}
 		return this;
@@ -512,9 +511,9 @@ public class NotificationBuilder {
 			chromeWeb.setTimeToLive(secondsToLive);
 		}
 		if (payload != null) {
-			JsonNode jsonNodePayload=null;
+			JsonNode jsonNodePayload = null;
 			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
+				jsonNodePayload = mapper.readTree(payload.toString());
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
@@ -579,8 +578,7 @@ public class NotificationBuilder {
 
 	public NotificationBuilder setAPNSSettings(Integer badge, String category, String iosActionKey, JSONObject payload,
 			String soundFile, APNSNotificationType type, String titleLockKey, String locKey, String launchImage,
-			String[] titleLocArgs, String[] locArgs, String title, String subtitle, String attachmentUrl)
-			{
+			String[] titleLocArgs, String[] locArgs, String title, String subtitle, String attachmentUrl) {
 
 		Settings settings = null;
 
@@ -670,9 +668,9 @@ public class NotificationBuilder {
 		}
 
 		if (payload != null) {
-			JsonNode jsonNodePayload=null;
+			JsonNode jsonNodePayload = null;
 			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
+				jsonNodePayload = mapper.readTree(payload.toString());
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
@@ -741,11 +739,10 @@ public class NotificationBuilder {
 	 * @param style
 	 *            Options to specify for Android expandable notifications. The
 	 *            types of expandable notifications are picture_notification,
-	 *            bigtext_notification, inbox_notification; the JSONObject
-	 *            should have same keys as attributes specified in the
-	 *            {@link Style} Class
-	 * @return
-	 * 			  the NotificationBuilder object so that calls can be chained.
+	 *            bigtext_notification, inbox_notification; the JSONObject can
+	 *            have the following keys :
+	 *            {@code String type; String url; String title; String text; String [] lines;}
+	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
 	public NotificationBuilder setGCMSettings(String collapseKey, Boolean delayWhileIdle, JSONObject payload,
@@ -755,8 +752,8 @@ public class NotificationBuilder {
 		Settings settings = null;
 		Android android = null;
 
-		if (checkGCMParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility, sync,
-				style)) {
+		if (checkGCMParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility,
+				sync, style)) {
 			settings = new Settings();
 			android = new Android();
 		}
@@ -800,9 +797,9 @@ public class NotificationBuilder {
 		}
 
 		if (payload != null) {
-			JsonNode jsonNodePayload=null;
+			JsonNode jsonNodePayload = null;
 			try {
-			 jsonNodePayload = mapper.readTree(payload.toString());	
+				jsonNodePayload = mapper.readTree(payload.toString());
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
@@ -818,7 +815,7 @@ public class NotificationBuilder {
 		}
 
 		if (secondsToLive != null) {
-			android.setTimeToLive(secondsToLive.intValue());
+			android.setTimeToLive(secondsToLive);
 		}
 
 		if (icon != null && icon.length() > 0) {
@@ -835,13 +832,13 @@ public class NotificationBuilder {
 
 		if (style != null && style.length() > 0) {
 			try {
-			JsonNode jsonNodeStyle = mapper.readTree(style.toString());	
-			Style sytleJsonNode = mapper.treeToValue(jsonNodeStyle, Style.class);
-			android.setStyle(sytleJsonNode);
+				JsonNode jsonNodeStyle = mapper.readTree(style.toString());
+				Style sytleJsonNode = mapper.treeToValue(jsonNodeStyle, Style.class);
+				android.setStyle(sytleJsonNode);
 			} catch (Exception exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
-			
+
 		}
 	}
 
@@ -850,19 +847,20 @@ public class NotificationBuilder {
 			JSONObject style) {
 		return (collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null) || (payload != null)
 				|| (priority != null) || (soundFile != null && soundFile.length() > 0) || (secondsToLive != null)
-				|| (icon != null && icon.length() > 0) || (visibility != null) || (sync != null) || (style != null && style.length() > 0);
+				|| (icon != null && icon.length() > 0) || (visibility != null) || (sync != null)
+				|| (style != null && style.length() > 0);
 	}
 
-	private static JSONObject generateJSON(Object obj)  {
+	private static JSONObject generateJSON(Object obj) {
 		String jsonString = null;
 		try {
 			jsonString = mapper.writeValueAsString(obj);
-					
+
 		} catch (JsonProcessingException exception) {
-			
+
 			logger.log(Level.SEVERE, exception.toString(), exception);
 		}
-		JSONObject jason = jsonString!=null?new JSONObject(jsonString):new JSONObject();	
+		JSONObject jason = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
 
 		return jason;
 	}
