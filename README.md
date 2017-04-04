@@ -109,7 +109,11 @@ Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory
 				.setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).setAction("testAction").build());			
 
 
-
+	// Target
+	PushMessageModel model = new PushMessageModel.PushMessageModelBuilder().setTargetBuilder(BuilderFactory.getBuilder(TargetBuilder.class)).build();
+		
+	builder.setTarget(model.getTargetBuilder().setDeviceIds(new String[] { "device1", "device2" }).setUserIds(new String[] { "userId1", "userId2" }).setPlatforms(new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE })
+				.setTagNames(new String[] { "tag1", "tag2" }).build());
 
 	
 ```
