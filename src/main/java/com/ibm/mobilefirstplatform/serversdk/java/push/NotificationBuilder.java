@@ -19,18 +19,24 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Android;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt.ChromeAppExtBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb.ChromeWebBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb.FirefoxWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Style;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb.SafariWebBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
 
 /**
  * The NotificationBuilder is used to create a new push notification that is
@@ -42,6 +48,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
 public class NotificationBuilder {
 
 	protected JSONObject notification;
+
 	private static ObjectMapper mapper = new ObjectMapper();
 
 	public static final Logger logger = Logger.getLogger(NotificationBuilder.class.getName());
@@ -72,6 +79,34 @@ public class NotificationBuilder {
 	public enum Visibility {
 		PUBLIC, PRIVATE, SECRET;
 	}
+	/**
+	 Determines the LED value in the notifications
+	 */
+	public enum GcmLED {
+	    
+	   BLACK,
+	   DARKGRAY,
+	   GRAY,
+	   LIGHTGRAY,
+	   WHITE,
+	   RED,
+	   GREEN,
+	   BLUE,
+	   YELLOW,
+	   CYAN,
+	   MAGENTA,
+	   TRANSPARENT
+	}
+	
+	/**
+	 * The available style type of the gcm notification message.
+	 */
+	public enum GcmStyleTypes {
+		
+		BIGTEST_NOTIFICATION,
+		INBOX_NOTIFICATION,
+		PICTURE_NOTIFICATION
+	}
 
 	/**
 	 * Create a new NotificationBuilder to help create a new push notification.
@@ -86,19 +121,17 @@ public class NotificationBuilder {
 			throw new IllegalArgumentException(PushConstants.ALERTNOTNULLEXCEPTIOPN);
 		}
 
-		final PushMessageModel model = new PushMessageModel();
-
-		final Message messageObj = new Message();
-		messageObj.setAlert(alert);
-		model.setMessage(messageObj);
+		final PushMessageModel model = new PushMessageModel.PushMessageModelBuilder()
+				.setMessageBuilder(BuilderFactory.getBuilder(MessageBuilder.class)).build();
+		final Message message = model.getMessageBuilder().setAlert(alert).build();
 
 		notification = new JSONObject();
 
-		final JSONObject message = generateJSON(model);
+		final JSONObject messageObj = generateJSON(message);
 		// message.put("alert", alert);
 
 		// An empty message is the minimum required.
-		notification = message;
+		notification.put(PushConstants.MESSAGE_OBJECT_KEY, messageObj);
 	}
 
 	/**
@@ -109,23 +142,21 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained
 	 */
 	public NotificationBuilder setMessageURL(String url) {
-		final JSONObject message;
-
+		JSONObject message;
 		message = notification.getJSONObject(PushConstants.MESSAGE_OBJECT_KEY);
 
 		if (url != null && url.length() > 0) {
 
-			Message messageObj = new Message();
-			messageObj.setUrl(url);
+			final PushMessageModel model = new PushMessageModel.PushMessageModelBuilder()
+					.setMessageBuilder(BuilderFactory.getBuilder(MessageBuilder.class)).build();
+			final Message messageObj = model.getMessageBuilder().setUrl(url).build();
 
 			final JSONObject jsonMessageObj = generateJSON(messageObj);
 			if (message != null) {
 				final JSONObject mergeMessage = mergeJasonObj(message, jsonMessageObj);
 				notification.put(PushConstants.MESSAGE_OBJECT_KEY, mergeMessage);
 			}
-
 		}
-
 		return this;
 	}
 
@@ -146,22 +177,22 @@ public class NotificationBuilder {
 	 *            receive the notification
 	 * @return the NotificationBuilder object so that calls can be chained
 	 */
+	@Deprecated
 	public NotificationBuilder setTarget(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
 			String[] tagNames) {
-		// JSONObject target = new JSONObject();
 
 		PushMessageModel model = null;
 		Target targetObj = null;
 
 		if (checkTargetParams(deviceIds, userIds, platforms, tagNames)) {
-			targetObj = new Target();
-			model = new PushMessageModel();
+
+			targetObj = new PushMessageModel.PushMessageModelBuilder()
+					.setTargetBuilder(BuilderFactory.getBuilder(TargetBuilder.class)).build().getTargetBuilder()
+					.setDeviceIds(deviceIds).setUserIds(userIds).setPlatforms(platforms).setTagNames(tagNames).build();
+			model = new PushMessageModel.PushMessageModelBuilder().setTarget(targetObj).build();
 		}
 
-		setTargetWithParams(deviceIds, userIds, platforms, tagNames, targetObj);
-
 		if (targetObj != null) {
-			model.setTarget(targetObj);
 
 			final JSONObject target = generateJSON(model);
 
@@ -174,23 +205,68 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setTargetWithParams(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
-			String[] tagNames, Target targetObj) {
-		if (deviceIds != null && deviceIds.length > 0) {
-			targetObj.setDeviceIds(deviceIds);
+	/**
+	 * Configure specific to Target. <br>
+	 * <br>
+	 * Accepts an argument of type {@link Target} class which has the following
+	 * members below:
+	 * <ul>
+	 * <li>deviceIds(String[])<code>:</code>&nbsp an optional array of device
+	 * ids specified as strings that the push notification will be sent to</li>
+	 * <li>userIds(String[])<code>:</code>&nbsp an optional array of user ids
+	 * specified as strings for whose devices the push notification will be sent
+	 * to</li>
+	 * <li>platforms(String[])<code>:</code>&nbsp an optional array of
+	 * {@link PushNotificationsPlatform} enums used to specify which platforms
+	 * to send to</li>
+	 * <li>tagNames(String[])<code>:</code>&nbsp an optional string array with
+	 * the list of tags that will receive the notification</li>
+	 * 
+	 * Below is the code snippet for usage of this method:<br>
+	 * 
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link PushMessageModel} object as mentioned below:
+	 * 
+	 * <pre>
+	 * PushMessageModel model = new PushMessageModel.PushMessageModelBuilder()
+	 * 		.setTargetBuilder(BuilderFactory.getBuilder(TargetBuilder.class)).build();
+	 * </pre>
+	 * 
+	 * Using above model object you can easily create {@link TargetBuilder}
+	 * which is will act as a builder for {@link Target} and set its all or only
+	 * members required by you in one go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setTarget(model.getTargetBuilder().setDeviceIds(new String[] {
+	 * "device1", "device2" }).setUserIds(new String[] { "userId1", "userId2"
+	 * }).setPlatforms(new PushNotificationsPlatform[] {
+	 * PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE })
+	 * .setTagNames(new String[] { "tag1", "tag2" }).build());//build() returns
+	 * Target Object
+	 * 
+	 * <ul>
+	 * 
+	 * @return the NotificationBuilder object so that calls can be chained.
+	 */
+
+	public NotificationBuilder setTarget(Target target) {
+
+		if (target != null) {
+
+			PushMessageModel model = new PushMessageModel.PushMessageModelBuilder().setTarget(target).build();
+			final JSONObject targetObj = generateJSON(model);
+
+			if (!targetObj.keySet().isEmpty()) {
+				notification = mergeJasonObj(targetObj, notification);
+
+			}
 		}
 
-		if (userIds != null && userIds.length > 0) {
-			targetObj.setUserIds(userIds);
-		}
-
-		if (platforms != null && platforms.length > 0) {
-			targetObj.setPlatforms(platforms);
-		}
-
-		if (tagNames != null && tagNames.length > 0) {
-			targetObj.setTagNames(tagNames);
-		}
+		return this;
 	}
 
 	private boolean checkTargetParams(String[] deviceIds, String[] userIds, PushNotificationsPlatform[] platforms,
@@ -200,33 +276,58 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific SafariWeb settings for SafariWeb Browser.
+	 * Configure specific to SafariWeb settings. <br>
+	 * <br>
+	 * Accepts an argument of type {@link SafariWeb} class which has the
+	 * following members below:
+	 * <ul>
+	 * <li>title (String)<code>:</code>&nbspSpecifies the title to be set for
+	 * the SafariWeb Push Notifications.</li>
 	 * 
-	 * @param title
-	 *            Specifies the title to be set for the Safari Push
-	 *            Notifications.
-	 * @param urlArgs
-	 *            The URL arguments that need to be used with this notification.
-	 * @param action
-	 *            The label of the action button.
+	 * <li>urlArgs (String [])<code>:</code>&nbspThe URL arguments that need to
+	 * be used with this notification. This has to provided in the form of a
+	 * JSON Array.</li>
+	 * 
+	 * <li>action (String)<code>:</code>&nbspThe label of the action
+	 * button.</li>
+	 * 
+	 * Below is the code snippet for usage of this method:<br>
+	 * 
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder()
+	 * 		.setSafariWebBuilder(BuilderFactory.getBuilder(SafariWebBuilder.class)).build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create
+	 * {@link SafariWebBuilder} which is will act as a builder for
+	 * {@link SafariWeb} and set its all or only members required by you in one
+	 * go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("testTitle")
+	 * 		.setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).setAction("testAction").build());// build()
+	 * 																										// returns
+	 * 																										// SafariWeb
+	 * 																										// Object
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
-	public NotificationBuilder setSafariWebSettings(String title, String[] urlArgs, String action) {
-
-		Settings settings = null;
-		SafariWeb safariWeb = null;
-
-		if (checkSafariParams(title, urlArgs, action)) {
-
-			settings = new Settings();
-			safariWeb = new SafariWeb();
-		}
-
-		setSafariWebWithParams(title, urlArgs, action, safariWeb);
+	public NotificationBuilder setSafariWebSettings(SafariWeb safariWeb) {
 
 		if (safariWeb != null) {
-			settings.setSafariWeb(safariWeb);
+
+			Settings settings = new Settings.SettingsBuilder().setSafariWeb(safariWeb).build();
 
 			final JSONObject safariSettings = generateJSON(settings);
 
@@ -250,66 +351,62 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setSafariWebWithParams(String title, String[] urlArgs, String action, SafariWeb safariWeb) {
-		if (title != null && title.length() > 0) {
-			safariWeb.setTitle(title);
-		}
-
-		if (urlArgs != null && urlArgs.length > 0) {
-			safariWeb.setUrlArgs(urlArgs);
-		}
-
-		if (action != null && action.length() > 0) {
-			safariWeb.setAction(action);
-		}
-	}
-
-	private boolean checkSafariParams(String title, String[] urlArgs, String action) {
-		return (title != null && title.length() > 0) || (urlArgs != null && urlArgs.length > 0)
-				|| (action != null && action.length() > 0);
-	}
-
 	/**
-	 * Configure specific FireFox settings for FireFox browser.
+	 * Configure specific to FirefoxWeb.<br>
+	 * <br>
+	 * Accepts an argument of type {@link FirefoxWeb} class which has the
+	 * following members below:
+	 * <ul>
+	 * <li>title (string)<code>:</code>&nbspSpecifies the title to be set for
+	 * the FirefoxWeb Push Notifications.</li>
 	 * 
-	 * @param title
-	 *            Specifies the title to be set for the WebPush Notification.
-	 * @param iconUrl
-	 *            The URL of the icon to be set for the WebPush Notification.
-	 * @param secondsToLive
-	 *            This parameter specifies how long (in seconds) the message
-	 *            should be kept in GCM storage if the device is offline.
-	 * @param payload
-	 *            Custom JSON payload that will be sent as part of the
-	 *            notification message.
+	 * <li>iconUrl (string)<code>:</code>&nbspThe URL of the icon to be set for
+	 * the WebPush Notification.</li>
+	 * 
+	 * <li>timeToLive (string)<code>:</code>&nbspThis parameter specifies how
+	 * long (in seconds) the message should be kept in GCM storage if the device
+	 * is offline.</li>
+	 * 
+	 * <li>payload (Object)<code>:</code>&nbspCustom JSON payload that will be
+	 * sent as part of the notification message.</li>
+	 * 
+	 * Below is the code snippet for usage of this method:<br>
+	 * 
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder()
+	 * 		.setFirefoxWebBuilder(BuilderFactory.getBuilder(FirefoxWebBuilder.class)).build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create
+	 * {@link FirefoxWebBuilder} which is will act as a builder for
+	 * {@link FirefoxWeb} and set its all or only members required by you in one
+	 * go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); // build()
+	 * 																	// returns
+	 * 																	// FirefoxWeb
+	 * 																	// object
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
-	 * 
 	 */
-	public NotificationBuilder setFirefoxWebSettings(String title, String iconUrl, Integer secondsToLive,
-			JSONObject payload) {
 
-		Settings settings = null;
-		FirefoxWeb chromeWeb = null;
+	public NotificationBuilder setFirefoxWebSettings(FirefoxWeb firefoxWeb) {
 
-		if (checkFirefoxAndChromeParams(title, iconUrl, secondsToLive, payload)) {
-			settings = new Settings();
-			chromeWeb = new FirefoxWeb();
-		}
+		if (firefoxWeb != null) {
 
-		setFirefoxWithParams(title, iconUrl, secondsToLive, chromeWeb);
-		if (payload != null) {
-			JsonNode jsonNodePayload = null;
-			try {
-				jsonNodePayload = mapper.readTree(payload.toString());
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-
-			chromeWeb.setPayload(jsonNodePayload);
-		}
-
-		if (chromeWeb != null) {
-			settings.setFirefoxWeb(chromeWeb);
+			Settings settings = new Settings.SettingsBuilder().setFirefoxWeb(firefoxWeb).build();
 
 			final JSONObject firefoxSettings = generateJSON(settings);
 
@@ -333,59 +430,57 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setFirefoxWithParams(String title, String iconUrl, Integer secondsToLive, FirefoxWeb chromeWeb) {
-		if (title != null && title.length() > 0) {
-			chromeWeb.setTitle(title);
-		}
-		if (iconUrl != null && iconUrl.length() > 0) {
-			chromeWeb.setIconUrl(iconUrl);
-		}
-		if (secondsToLive != null) {
-			chromeWeb.setTimeToLive(secondsToLive);
-		}
-	}
-
-	private boolean checkFirefoxAndChromeParams(String title, String iconUrl, Integer secondsToLive,
-			JSONObject payload) {
-		return (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
-				|| (secondsToLive != null) || (payload != null);
-	}
-
 	/**
-	 * Configure specific ChromAppExtension settings.
+	 * Configure specific to ChromeAppExt platform <br>
+	 * <br>
+	 * Accepts an argument of type {@link ChromeAppExt} class which has the
+	 * following members below:
+	 * <ul>
+	 * <li>title (string)<code>:</code>Specifies the title to be set for the
+	 * WebPush Notification ,</li>
+	 * <li>iconUrl (string)<code>:</code>The URL of the icon to be set for the
+	 * WebPush Notification ,</li>
+	 * <li>timeToLive (integer)<code>:</code>This parameter specifies how long
+	 * (in seconds) the message should be kept in GCM storage if the device is
+	 * offline. ,</li>
+	 * <li>payload (Object)<code>:</code>Custom JSON payload that will be sent
+	 * as part of the notification message. Below is the code snippet for usage
+	 * of this method:</li>
 	 * 
-	 * @param collapseKey
-	 *            This parameter identifies a group of messages.
-	 * @param delayWhileIdle
-	 *            When this parameter is set to true, it indicates that the
-	 *            message should not be sent until the device becomes active.
-	 * @param title
-	 *            Specifies the title to be set for the WebPush Notification.
-	 * @param iconUrl
-	 *            The URL of the icon to be set for the WebPush Notification.
-	 * @param secondsToLive
-	 *            This parameter specifies how long (in seconds) the message
-	 *            should be kept in GCM storage if the device is offline.
-	 * @param payload
-	 *            Custom JSON payload that will be sent as part of the
-	 *            notification message.
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder()
+	 * 		.setChromeAppExtBuilder(BuilderFactory.getBuilder(ChromeAppExtBuilder.class)).build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create
+	 * {@link ChromeAppExtBuilder} which is will act as a builder for
+	 * {@link ChromeAppExt} and set its all or only members required by you in
+	 * one go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("testCollapseKey")
+	 * 		.setDelayWhileIdle(true).setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
+	 * 		.setPayload(new JSONObject()).build()); // build() returns
+	 * 												// ChromeAppExt object
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
-	public NotificationBuilder setChromeAppExtSettings(String collapseKey, Boolean delayWhileIdle, String title,
-			String iconUrl, Integer secondsToLive, JSONObject payload) {
-
-		Settings settings = null;
-		ChromeAppExt chromeAppExt = null;
-
-		if (checkChromAppExtParams(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, payload)) {
-			settings = new Settings();
-			chromeAppExt = new ChromeAppExt();
-		}
-
-		setChromAppExtWithParams(collapseKey, delayWhileIdle, title, iconUrl, secondsToLive, payload, chromeAppExt);
+	public NotificationBuilder setChromeAppExtSettings(ChromeAppExt chromeAppExt) {
 
 		if (chromeAppExt != null) {
-			settings.setChromeAppExt(chromeAppExt);
+
+			Settings settings = new Settings.SettingsBuilder().setChromeAppExt(chromeAppExt).build();
+
 			final JSONObject chromExtSettings = generateJSON(settings);
 
 			if (!chromExtSettings.keySet().isEmpty()) {
@@ -408,73 +503,57 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setChromAppExtWithParams(String collapseKey, Boolean delayWhileIdle, String title, String iconUrl,
-			Integer secondsToLive, JSONObject payload, ChromeAppExt chromeAppExt) {
-		if (collapseKey != null && collapseKey.length() > 0) {
-			chromeAppExt.setCollapseKey(collapseKey);
-		}
-
-		if (delayWhileIdle != null) {
-			chromeAppExt.setDelayWhileIdle(delayWhileIdle.toString());
-		}
-
-		if (title != null && title.length() > 0) {
-			chromeAppExt.setTitle(title);
-		}
-		if (iconUrl != null && iconUrl.length() > 0) {
-			chromeAppExt.setIconUrl(iconUrl);
-		}
-		if (secondsToLive != null) {
-			chromeAppExt.setTimeToLive(secondsToLive);
-		}
-		if (payload != null) {
-			JsonNode jsonNodePayload = null;
-			try {
-				jsonNodePayload = mapper.readTree(payload.toString());
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-			chromeAppExt.setPayload(jsonNodePayload);
-		}
-	}
-
-	private boolean checkChromAppExtParams(String collapseKey, Boolean delayWhileIdle, String title, String iconUrl,
-			Integer secondsToLive, JSONObject payload) {
-		return (collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null)
-				|| (title != null && title.length() > 0) || (iconUrl != null && iconUrl.length() > 0)
-				|| (secondsToLive != null) || (payload != null);
-	}
-
 	/**
-	 * Configure specific ChromeWeb settings for ChromWeb browser.
+	 * Configure specific for Chrome Browser, <br>
+	 * <br>
+	 * Accepts an argument of type {@link ChromeWeb} class which has the
+	 * following members below:
+	 * <ul>
+	 * <li>title (string)<code>:</code>Specifies the title to be set for the
+	 * WebPush Notification ,</li>
+	 * <li>iconUrl (string)<code>:</code>The URL of the icon to be set for the
+	 * WebPush Notification ,</li>
+	 * <li>timeToLive (integer)</li><code>:</code>This parameter specifies how
+	 * long (in seconds) the message should be kept in GCM storage if the device
+	 * is offline. ,
+	 * <li>payload (string)<code>:</code>Custom JSON payload that will be sent
+	 * as part of the notification message. Below is the code snippet for usage
+	 * of this method:</li>
 	 * 
-	 * @param title
-	 *            Specifies the title to be set for the WebPush Notification.
-	 * @param iconUrl
-	 *            The URL of the icon to be set for the WebPush Notification .
-	 * @param secondsToLive
-	 *            This parameter specifies how long (in seconds) the message
-	 *            should be kept in GCM storage if the device is offline.
-	 * @param payload
-	 *            Custom JSON payload that will be sent as part of the
-	 *            notification message.
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder()
+	 * 		.setChromeWebBuilder(BuilderFactory.getBuilder(ChromeWebBuilder.class)).build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create
+	 * {@link ChromeWebBuilder} which is will act as a builder for
+	 * {@link ChromeWeb} and set its all or only members required by you in one
+	 * go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); // build()
+	 * 																	// returns
+	 * 																	// ChromeWeb
+	 * 																	// Object
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
-	public NotificationBuilder setChromeSettings(String title, String iconUrl, Integer secondsToLive,
-			JSONObject payload) {
-
-		Settings settings = null;
-		ChromeWeb chromeWeb = null;
-
-		if (checkFirefoxAndChromeParams(title, iconUrl, secondsToLive, payload)) {
-			settings = new Settings();
-			chromeWeb = new ChromeWeb();
-		}
-
-		setChromWithParams(title, iconUrl, secondsToLive, payload, chromeWeb);
+	public NotificationBuilder setChromeSettings(ChromeWeb chromeWeb) {
 
 		if (chromeWeb != null) {
-			settings.setChromeWeb(chromeWeb);
+
+			Settings settings = new Settings.SettingsBuilder().setChromeWeb(chromeWeb).build();
 
 			final JSONObject chromSettings = generateJSON(settings);
 
@@ -499,35 +578,13 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setChromWithParams(String title, String iconUrl, Integer secondsToLive, JSONObject payload,
-			ChromeWeb chromeWeb) {
-		if (title != null && title.length() > 0) {
-			chromeWeb.setTitle(title);
-		}
-		if (iconUrl != null && iconUrl.length() > 0) {
-			chromeWeb.setIconUrl(iconUrl);
-		}
-		if (secondsToLive != null) {
-			chromeWeb.setTimeToLive(secondsToLive);
-		}
-		if (payload != null) {
-			JsonNode jsonNodePayload = null;
-			try {
-				jsonNodePayload = mapper.readTree(payload.toString());
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-			chromeWeb.setPayload(jsonNodePayload);
-		}
-	}
-
 	/**
 	 * Configure specific Apple Push Notification Service (APNS) settings for
 	 * iOS devices.
 	 * 
 	 * @param badge
 	 *            the number to display as the badge of the application icon
-	 * @param category
+	 * @param interactiveCategory
 	 *            the category identifier to be used for intereactive push
 	 *            notifications
 	 * @param iosActionKey
@@ -542,62 +599,27 @@ public class NotificationBuilder {
 	 *            determines whether an alert is shown or the message is placed
 	 *            in the notification center; specified with the
 	 *            {@link APNSNotificationType} enum
-	 * @param titleLockKey
-	 *            The key to a title string in the Localizable.strings file for
-	 *            the current localization. The key string can be formatted with
-	 *            %@ and %n$@ specifiers to take the variables specified in the
-	 *            title-loc-args array.
-	 * @param locKey
-	 *            A key to an alert-message string in a Localizable.strings file
-	 *            for the current localization (which is set by the user’s
-	 *            language preference). The key string can be formatted with %@
-	 *            and %n$@ specifiers to take the variables specified in the
-	 *            loc-args array.
-	 * @param launchImage
-	 *            The filename of an image file in the app bundle, with or
-	 *            without the filename extension. The image is used as the
-	 *            launch image when users tap the action button or move the
-	 *            action slider.
-	 * @param titleLocArgs
-	 *            Variable string values to appear in place of the format
-	 *            specifiers in title-loc-key.
-	 * @param locArgs
-	 *            Variable string values to appear in place of the format
-	 *            specifiers in loc-key.
-	 * @param title
-	 *            The title of Rich Push notifications (Supported only on iOS 10
-	 *            and above)
-	 * @param subtitle
-	 *            The subtitle of the Rich Notifications. (Supported only on iOS
-	 *            10 and above).
-	 * @param attachmentUrl
-	 *            The link to the iOS notifications media (video, audio, GIF,
-	 *            images - Supported only on iOS 10 and above).
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
-
-	public NotificationBuilder setAPNSSettings(Integer badge, String category, String iosActionKey, JSONObject payload,
-			String soundFile, APNSNotificationType type, String titleLockKey, String locKey, String launchImage,
-			String[] titleLocArgs, String[] locArgs, String title, String subtitle, String attachmentUrl) {
+	@Deprecated
+	public NotificationBuilder setAPNSSettings(Integer badge, String interactiveCategory, String iosActionKey,
+			JSONObject payload, String soundFile, APNSNotificationType type) {
 
 		Settings settings = null;
 
 		Apns apns = null;
 
-		if (checkAPNSParams(badge, category, iosActionKey, payload, soundFile, type, titleLockKey, locKey, launchImage,
-				titleLocArgs, locArgs, title, subtitle, attachmentUrl)) {
+		if (checkAPNSParams(badge, interactiveCategory, iosActionKey, payload, soundFile, type)) {
 
-			settings = new Settings();
-			apns = new Apns();
+			apns = new Settings.SettingsBuilder().setApnsBuilder(new ApnsBuilder()).build().getApnsBuilder()
+					.setBadge(badge).setInteractiveCategory(interactiveCategory).setIosActionKey(iosActionKey)
+					.setPayload(payload).setSound(soundFile).setType(type).build();
+
+			settings = new Settings.SettingsBuilder().setApns(apns).build();
 
 		}
 
-		setAPNSWithPramsFirstHalf(badge, category, iosActionKey, payload, soundFile, type, titleLockKey, apns);
-
-		setAPNSWithParmasSecndHalf(locKey, launchImage, titleLocArgs, locArgs, title, subtitle, attachmentUrl, apns);
-
 		if (apns != null) {
-			settings.setApns(apns);
 
 			final JSONObject apnsSettings = generateJSON(settings);
 
@@ -622,85 +644,122 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setAPNSWithParmasSecndHalf(String locKey, String launchImage, String[] titleLocArgs, String[] locArgs,
-			String title, String subtitle, String attachmentUrl, Apns apns) {
-		if (locKey != null && locKey.length() > 0) {
-			apns.setLocKey(locKey);
-		}
-
-		if (launchImage != null && launchImage.length() > 0) {
-			apns.setLaunchImage(launchImage);
-		}
-
-		if (titleLocArgs != null && titleLocArgs.length > 0) {
-			apns.setTitleLocArgs(titleLocArgs);
-		}
-
-		if (locArgs != null && locArgs.length > 0) {
-			apns.setLocArgs(locArgs);
-		}
-
-		if (title != null && title.length() > 0) {
-			apns.setTitle(title);
-		}
-
-		if (subtitle != null && subtitle.length() > 0) {
-			apns.setSubtitle(subtitle);
-		}
-
-		if (attachmentUrl != null && attachmentUrl.length() > 0) {
-			apns.setAttachmentUrl(attachmentUrl);
-		}
-	}
-
-	private void setAPNSWithPramsFirstHalf(Integer badge, String category, String iosActionKey, JSONObject payload,
-			String soundFile, APNSNotificationType type, String titleLockKey, Apns apns) {
-		if (badge != null) {
-			apns.setBadge(badge.intValue());
-		}
-
-		if (category != null && category.length() > 0) {
-			apns.setCategory(category);
-		}
-
-		if (iosActionKey != null && iosActionKey.length() > 0) {
-			apns.setIosActionKey(iosActionKey);
-		}
-
-		if (payload != null) {
-			JsonNode jsonNodePayload = null;
-			try {
-				jsonNodePayload = mapper.readTree(payload.toString());
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-			apns.setPayload(jsonNodePayload);
-		}
-
-		if (soundFile != null && soundFile.length() > 0) {
-			apns.setSound(soundFile);
-		}
-
-		if (type != null) {
-			apns.setType(type.name());
-		}
-
-		if (titleLockKey != null && titleLockKey.length() > 0) {
-			apns.setTitleLocKey(titleLockKey);
-		}
-	}
-
 	private boolean checkAPNSParams(Integer badge, String category, String iosActionKey, JSONObject payload,
-			String soundFile, APNSNotificationType type, String titleLockKey, String locKey, String launchImage,
-			String[] titleLocArgs, String[] locArgs, String title, String subtitle, String attachmentUrl) {
+			String soundFile, APNSNotificationType type) {
 		return (badge != null) || (category != null && category.length() > 0)
 				|| (iosActionKey != null && iosActionKey.length() > 0) || (payload != null)
-				|| (soundFile != null && soundFile.length() > 0) || (type != null)
-				|| (titleLockKey != null && titleLockKey.length() > 0) || (locKey != null && locKey.length() > 0)
-				|| (launchImage != null && launchImage.length() > 0)
-				|| (titleLocArgs != null && titleLocArgs.length > 0) || (locArgs != null && locArgs.length > 0)
-				|| (title != null && title.length() > 0) || (subtitle != null && subtitle.length() > 0)
-				|| (attachmentUrl != null && attachmentUrl.length() > 0);
+				|| (soundFile != null && soundFile.length() > 0) || (type != null);
+	}
+
+	/**
+	 * Configure specific SafariWeb settings for APNS Platform, <br>
+	 * <br>
+	 * Accepts an argument of type {@link Apns} class which has the following
+	 * members below:
+	 * <ul>
+	 * <li>title<code>:</code>&nbspSpecifies the title to be set for the
+	 * SafariWeb Push Notifications.</li>
+	 * 
+	 * <li>badge (integer)<code>:</code>&nbspThe number to display as the badge
+	 * of the application icon ,
+	 * <li>interactiveCategory (string)<code>:</code>The category identifier to
+	 * be used for the interactive push notifications ,
+	 * <li>iosActionKey (string)</li><code>:</code>The title for the Action key
+	 * ,
+	 * <li>payload (object)</li><code>:</code>Custom JSON payload that will be
+	 * sent as part of the notification message. ,
+	 * <li>sound (string)</li><code>:</code>The name of the sound file in the
+	 * application bundle. The sound of this file is played as an alert. ,
+	 * <li>titleLocKey (string)</li><code>:</code>The key to a title string in
+	 * the Localizable.strings file for the current localization. The key string
+	 * can be formatted with %@ and %n$@ specifiers to take the variables
+	 * specified in the titleLocArgs array. ,
+	 * <li>locKey (string)</li><code>:</code>A key to an alert-message string in
+	 * a Localizable.strings file for the current localization (which is set by
+	 * the user’s language preference). The key string can be formatted with %@
+	 * and %n$@ specifiers to take the variables specified in the locArgs array.
+	 * ,
+	 * <li>launchImage (string)</li><code>:</code>The filename of an image file
+	 * in the app bundle, with or without the filename extension. The image is
+	 * used as the launch image when users tap the action button or move the
+	 * action slider. ,
+	 * <li>titleLocArgs (Array[string])</li><code>:</code>Variable string values
+	 * to appear in place of the format specifiers in title-loc-key. ,
+	 * <li>locArgs (Array[string])</li><code>:</code>Variable string values to
+	 * appear in place of the format specifiers in locKey. ,
+	 * <li>title (string)</li><code>:</code>The title of Rich Push notifications
+	 * (Supported only on iOS 10 and above) ,
+	 * <li>subtitle (string)</li><code>:</code>The subtitle of the Rich
+	 * Notifications. (Supported only on iOS 10 and above) ,
+	 * <li>attachmentUrl (string)</li><code>:</code>The link to the iOS
+	 * notifications media (video, audio, GIF, images - Supported only on iOS 10
+	 * and above) ,
+	 * <li>type (string) = ['DEFAULT', 'MIXED', 'SILENT']</li> Below is the code
+	 * snippet for usage of this method:<br>
+	 * 
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory.getBuilder(ApnsBuilder.class))
+	 * 		.build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create {@link ApnsBuilder}
+	 * which is will act as a builder for Apns and set its all or only members
+	 * required by you in one go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setAPNSSettings(settings.getApnsBuilder().setBadge(1).setInteractiveCategory("testInteractiveCategory")
+	 * 		.setIosActionKey("testiOSActionKey").setPayload(new JSONObject()).setSound("testSoundFile")
+	 * 		.setType(APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey").setLocKey("testLocKey")
+	 * 		.setLaunchImage("testLaunchImage")
+	 * 		.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
+	 * 		.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
+	 * 		.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl").build()); // build()
+	 * 																						// returns
+	 * 																						// the
+	 * 																						// Apns
+	 * 																						// object.
+	 * 
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
+	 * @return the NotificationBuilder object so that calls can be chained.
+	 */
+
+	public NotificationBuilder setAPNSSettings(Apns apns) {
+
+		if (apns != null) {
+
+			Settings settings = new Settings.SettingsBuilder().setApns(apns).build();
+
+			final JSONObject apnsSettings = generateJSON(settings);
+
+			if (!apnsSettings.keySet().isEmpty()) {
+				JSONObject jasonSettings = null;
+				JSONObject jsonNotification = null;
+
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+
+					jasonSettings = mergeJasonObj(jsonNotification, apnsSettings);
+				} else {
+
+					jasonSettings = apnsSettings;
+				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jasonSettings);
+			}
+		}
+
+		return this;
 	}
 
 	/**
@@ -724,45 +783,24 @@ public class NotificationBuilder {
 	 * @param secondsToLive
 	 *            specifies how long (in seconds) the message should be kept in
 	 *            GCM storage if the device is offline
-	 * @param icon
-	 *            Specify the name of the icon to be displayed for the
-	 *            notification. Make sure the icon is already packaged with the
-	 *            client application.
-	 * @param visibility
-	 *            private/public - Visibility of this notification, which
-	 *            affects how and when the notifications are revealed on a
-	 *            secure locked screen; specified with the {@link Visibility}
-	 *            enum
-	 * @param sync
-	 *            Device group messaging makes it possible for every app
-	 *            instance in a group to reflect the latest messaging state.
-	 * @param style
-	 *            Options to specify for Android expandable notifications. The
-	 *            types of expandable notifications are picture_notification,
-	 *            bigtext_notification, inbox_notification; the JSONObject can
-	 *            have the following keys :
-	 *            {@code String type; String url; String title; String text; String [] lines;}
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
-
+	@Deprecated
 	public NotificationBuilder setGCMSettings(String collapseKey, Boolean delayWhileIdle, JSONObject payload,
-			GCMPriority priority, String soundFile, Integer secondsToLive, String icon, Visibility visibility,
-			Boolean sync, JSONObject style) {
+			GCMPriority priority, String soundFile, Integer secondsToLive) {
 
 		Settings settings = null;
-		Android android = null;
+		Gcm gcm = null;
 
-		if (checkGCMParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility,
-				sync, style)) {
-			settings = new Settings();
-			android = new Android();
+		if (checkGCMParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive)) {
+
+			gcm = new Settings.SettingsBuilder().setGcmBuilder(new GcmBuilder()).build().getGcmBuilder()
+					.setCollapseKey(collapseKey).setDelayWhileIdle(delayWhileIdle).setPayload(payload)
+					.setPriority(priority).setSound(soundFile).setTimeToLive(secondsToLive).build();
+			settings = new Settings.SettingsBuilder().setGcm(gcm).build();
 		}
 
-		setGCMWithParams(collapseKey, delayWhileIdle, payload, priority, soundFile, secondsToLive, icon, visibility,
-				sync, style, android);
-
-		if (android != null) {
-			settings.setGcm(android);
+		if (gcm != null) {
 
 			JSONObject gcmSettings = generateJSON(settings);
 
@@ -785,73 +823,122 @@ public class NotificationBuilder {
 		return this;
 	}
 
-	private void setGCMWithParams(String collapseKey, Boolean delayWhileIdle, JSONObject payload, GCMPriority priority,
-			String soundFile, Integer secondsToLive, String icon, Visibility visibility, Boolean sync, JSONObject style,
-			Android android) {
-		if (collapseKey != null && collapseKey.length() > 0) {
-			android.setCollapseKey(collapseKey);
-		}
-
-		if (delayWhileIdle != null) {
-			android.setDelayWhileIdle(delayWhileIdle.toString());
-		}
-
-		if (payload != null) {
-			JsonNode jsonNodePayload = null;
-			try {
-				jsonNodePayload = mapper.readTree(payload.toString());
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-			android.setPayload(jsonNodePayload);
-		}
-
-		if (priority != null) {
-			android.setPriority(priority.name());
-		}
-
-		if (soundFile != null && soundFile.length() > 0) {
-			android.setSound(soundFile);
-		}
-
-		if (secondsToLive != null) {
-			android.setTimeToLive(secondsToLive);
-		}
-
-		if (icon != null && icon.length() > 0) {
-			android.setIcon(icon);
-		}
-
-		if (visibility != null) {
-			android.setVisibility(visibility.name());
-		}
-
-		if (sync != null) {
-			android.setSync(sync.toString());
-		}
-
-		if (style != null && style.length() > 0) {
-			try {
-				JsonNode jsonNodeStyle = mapper.readTree(style.toString());
-				Style sytleJsonNode = mapper.treeToValue(jsonNodeStyle, Style.class);
-				android.setStyle(sytleJsonNode);
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-
-		}
-	}
-
 	private boolean checkGCMParams(String collapseKey, Boolean delayWhileIdle, JSONObject payload, GCMPriority priority,
-			String soundFile, Integer secondsToLive, String icon, Visibility visibility, Boolean sync,
-			JSONObject style) {
+			String soundFile, Integer secondsToLive) {
 		return (collapseKey != null && collapseKey.length() > 0) || (delayWhileIdle != null) || (payload != null)
-				|| (priority != null) || (soundFile != null && soundFile.length() > 0) || (secondsToLive != null)
-				|| (icon != null && icon.length() > 0) || (visibility != null) || (sync != null)
-				|| (style != null && style.length() > 0);
+				|| (priority != null) || (soundFile != null && soundFile.length() > 0) || (secondsToLive != null);
 	}
 
-	private static JSONObject generateJSON(Object obj) {
+	/**
+	 * Configure specific to GCM platform, <br>
+	 * <br>
+	 * Accepts an argument of type {@link Gcm} class which has the following
+	 * members below:
+	 * <ul>
+	 * <li>collapseKey (string)<code>:</code>This parameter identifies a group
+	 * of messages ,</li>
+	 * <li>interactiveCategory (string)<code>:</code>The category identifier to
+	 * be used for the interactive push notifications ,</li>
+	 * <li>icon (string)<code>:</code>Specify the name of the icon to be
+	 * displayed for the notification. Make sure the icon is already packaged
+	 * with the client application. ,</li>
+	 * <li>delayWhileIdle (boolean)<code>:</code>When this parameter is set to
+	 * true, it indicates that the message should not be sent until the device
+	 * becomes active. ,</li>
+	 * <li>sync (boolean)<code>:</code>Device group messaging makes it possible
+	 * for every app instance in a group to reflect the latest messaging state
+	 * ,</li>
+	 * <li>visibility (string)<code>:</code>private/public - Visibility of this
+	 * notification, which affects how and when the notifications are revealed
+	 * on a secure locked screen. ,</li>
+	 * <li>payload (object)<code>:</code>Custom JSON payload that will be sent
+	 * as part of the notification message. ,</li>
+	 * <li>priority (string)<code>:</code>A string value that indicates the
+	 * priority of this notification. Allowed values are 'max', 'high',
+	 * 'default', 'low' and 'min'. High/Max priority notifications along with
+	 * 'sound' field may be used for Heads up notification in Android 5.0 or
+	 * higher.sampleval='low' ,</li>
+	 * <li>sound (string)<code>:</code>The sound file (on device) that will be
+	 * attempted to play when the notification arrives on the device ,</li>
+	 * <li>timeToLive (integer)<code>:</code>This parameter specifies how long
+	 * (in seconds) the message should be kept in GCM storage if the device is
+	 * offline. ,</li>
+	 * <li>lights (lights)<code>:</code>Allows setting the notification LED
+	 * color on receiving push notification . This should be in JSON and should
+	 * have following keys {{@code} {@link GcmLED} ledArgb; Integer ledOnMs; String
+	 * ledOffMs;}</li>
+	 * <li>style (style)<code>:</code>Options to specify for Android expandable
+	 * notifications. The types of expandable notifications are
+	 * picture_notification, bigtext_notification, inbox_notification.This
+	 * should be in JSON and should have following keys {{@code} {@link GcmStyleTypes} type;
+	 * String url; String title; String text; String [] lines;} Below is the
+	 * code snippet for usage of this method:</li>
+	 * 
+	 * <pre>
+	 * NotificationBuilder builder = new NotificationBuilder("Test");
+	 * </pre>
+	 * 
+	 * You need to create {@link Settings} object as mentioned below:
+	 * 
+	 * <pre>
+	 * Settings settings = new Settings.SettingsBuilder().setGcmBuilder(BuilderFactory.getBuilder(GcmBuilder.class))
+	 * 		.build();
+	 * </pre>
+	 * 
+	 * Using above settings object you can easily create {@link GcmBuilder}
+	 * which is will act as a builder for Gcm and set its all or only members
+	 * required by you in one go as shown below:
+	 * 
+	 * <pre>
+	 * 
+	 * builder.setGCMSettings(settings.getGcmBuilder().setCollapseKey("testCollapseKey").setDelayWhileIdle(true)
+	 * 		.setPayload(new JSONObject()).setPriority(GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42)
+	 * 		.setIcon("testIcon").setVisibility(Visibility.PUBLIC).setSync(true)
+	 * 		.setStyle(new JSONObject().put("type", "testType"))
+	 * 		.setLights(new JSONObject().put("ledArgb", "testLedArgb")).build()); // build()
+	 * 																				// returns
+	 * 																				// the
+	 * 																				// Gcm
+	 * 																				// object.
+	 * </pre>
+	 * 
+	 * <ul>
+	 * 
+	 * @return the NotificationBuilder object so that calls can be chained.
+	 */
+
+	public NotificationBuilder setGCMSettings(Gcm gcm) {
+
+		if (gcm != null) {
+
+			Settings settings = new Settings.SettingsBuilder().setGcm(gcm).build();
+
+			JSONObject gcmSettings = generateJSON(settings);
+
+			if (!gcmSettings.keySet().isEmpty()) {
+				JSONObject jsonSettings = null;
+				JSONObject jsonNotification = null;
+
+				if (notification.has(PushConstants.SETTINGS_OBJECT_KEY)) {
+					jsonNotification = notification.getJSONObject(PushConstants.SETTINGS_OBJECT_KEY);
+
+					jsonSettings = mergeJasonObj(jsonNotification, gcmSettings);
+
+				} else {
+					jsonSettings = gcmSettings;
+				}
+
+				notification.put(PushConstants.SETTINGS_OBJECT_KEY, jsonSettings);
+			}
+		}
+		return this;
+	}
+/**
+ * API converts object to json format.
+ * @param obj
+ * @return
+ */
+	public static JSONObject generateJSON(Object obj) {
 		String jsonString = null;
 		try {
 			jsonString = mapper.writeValueAsString(obj);
@@ -860,6 +947,7 @@ public class NotificationBuilder {
 
 			logger.log(Level.SEVERE, exception.toString(), exception);
 		}
+
 		JSONObject jason = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
 
 		return jason;

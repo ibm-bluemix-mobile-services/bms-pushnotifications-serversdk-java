@@ -20,9 +20,6 @@ public final class PushConstants {
 
 	public static final String MESSAGE_OBJECT_KEY = "message";
 	public static final String SETTINGS_OBJECT_KEY = "settings";
-	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
-	public static final String UK_REGION = ".eu-gb.bluemix.net";
-	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
 	public static final String BASEURL = "https://imfpush";
 	public static final String PORTURL = ":443/imfpush/v1/apps/";
 	public static final String PROJECT = "/messages";

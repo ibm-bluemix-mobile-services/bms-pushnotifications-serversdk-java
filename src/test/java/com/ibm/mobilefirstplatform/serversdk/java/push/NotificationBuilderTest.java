@@ -11,13 +11,29 @@ import org.junit.Test;
 
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GcmLED;
+import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GcmStyleTypes;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.Visibility;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt.ChromeAppExtBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb.ChromeWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb.FirefoxWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights.GcmLightsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle.GcmStyleBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb.SafariWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SettingsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
 
 public class NotificationBuilderTest {
 
 	@Test
-	public void shouldBuildWithJustAlert()  {
+	public void shouldBuildWithJustAlert() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
@@ -39,18 +55,31 @@ public class NotificationBuilderTest {
 		fail("Exception not thrown.");
 	}
 
-
 	@Test
-	public void shouldAllowAllOtherParametersToBeOptionalAndNotIncludeThemInTheNotificationIfNull()  {
+	public void shouldAllowAllOtherParametersToBeOptionalAndNotIncludeThemInTheNotificationIfNull() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
+		Settings settings = new Settings.SettingsBuilder().setApnsBuilder(new ApnsBuilder())
+				.setGcmBuilder(new GcmBuilder()).setChromeAppExtBuilder(new ChromeAppExtBuilder())
+				.setChromeWebBuilder(new ChromeWebBuilder()).setFirefoxWebBuilder(new FirefoxWebBuilder())
+				.setSafariWebBuilder(new SafariWebBuilder()).build();
+
 		builder.setMessageURL(null)
-				.setAPNSSettings(null, null, null, null, null, null, null, null, null, null, null, null, null, null)
-				.setGCMSettings(null, null, null, null, null, null, null, null, null, null)
-				.setChromeSettings(null, null, null, null).setChromeAppExtSettings(null, null, null, null, null, null)
-				.setFirefoxWebSettings(null, null, null, null).setSafariWebSettings(null, null, null)
-				.setTarget(null, null, null, null);
+				.setAPNSSettings(settings.getApnsBuilder().setBadge(null).setAttachmentUrl(null)
+						.setInteractiveCategory(null).setIosActionKey(null).setLaunchImage(null).setLocArgs(null)
+						.setLocKey(null).setPayload(null).setSound(null).setSubtitle(null).setTitle(null)
+						.setTitleLocArgs(null).setTitleLocKey(null).setType(null).build())
+				.setGCMSettings(settings.getGcmBuilder().setCollapseKey(null).setDelayWhileIdle(null).setIcon(null)
+						.setInteractiveCategory(null).setLights(null).setPayload(null).setPriority(null).setSound(null)
+						.setStyle(null).setSync(null).setTimeToLive(null).setVisibility(null).build())
+				.setChromeSettings(settings.getChromeWebBuilder().setIconUrl(null).setPayload(null).setTimeToLive(null)
+						.setTitle(null).build())
+				.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setIconUrl(null).setPayload(null)
+						.setTimeToLive(null).setTitle(null).build())
+				.setSafariWebSettings(
+						settings.getSafariWebBuilder().setAction(null).setTitle(null).setUrlArgs(null).build())
+				.setTarget(null);
 
 		JSONObject notification = builder.build();
 
@@ -60,7 +89,7 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldUpdateExistingMessageParameterToAddURL()  {
+	public void shouldUpdateExistingMessageParameterToAddURL() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
@@ -78,14 +107,22 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureAPNSSettings()  {
+	public void shouldAllowToConfigureAPNSSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
+		Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory.getBuilder(ApnsBuilder.class)).build();
 		builder.setAPNSSettings(1, "testCategory", "testiOSActionKey", new JSONObject(), "testSoundFile",
-				APNSNotificationType.DEFAULT, "testTitleLocKey", "testLocKey", "testLaunchImage",
-				new String[] { "testTitleLocArgs1", "testTitleLocArgs2" },
-				new String[] { "testLocArgs1", "testLocArgs" }, "testTitle", "testSubtitle", "testAttachmentUrl");
+				APNSNotificationType.DEFAULT);
+
+		
+		builder.setAPNSSettings(settings.getApnsBuilder().setBadge(1).setInteractiveCategory("testInteractiveCategory")
+				.setIosActionKey("testiOSActionKey").setPayload(new JSONObject()).setSound("testSoundFile")
+				.setType(APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey").setLocKey("testLocKey")
+				.setLaunchImage("testLaunchImage")
+				.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
+				.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
+				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl").build());
 
 		JSONObject notification = builder.build();
 
@@ -102,8 +139,22 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42,
-				"testIcon", Visibility.PUBLIC, true, new JSONObject().put("type", "testType"));
+		SettingsBuilder settingBuilder = new Settings.SettingsBuilder().setGcmBuilder(BuilderFactory.getBuilder(GcmBuilder.class));
+		Settings settings = settingBuilder.build();
+
+		Gcm gcm = settings.getGcmBuilder().setGcmStyleBuilder(BuilderFactory.getBuilder(GcmStyleBuilder.class)).setGcmLightsBuilder(BuilderFactory.getBuilder(GcmLightsBuilder.class)).build();
+		
+		
+		GcmStyle style = gcm.getGcmStyleBuilder().setType(GcmStyleTypes.BIGTEST_NOTIFICATION).build();		
+				
+		
+		GcmLights lights = gcm.getGcmLightsBuilder().setLedArgb(GcmLED.BLACK).build();
+		
+		builder.setGCMSettings(settings.getGcmBuilder().setCollapseKey("testCollapseKey").setDelayWhileIdle(true)
+				.setPayload(new JSONObject()).setPriority(GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42)
+				.setIcon("testIcon").setVisibility(Visibility.PUBLIC).setSync(true)
+				.setStyle(NotificationBuilder.generateJSON(style))
+				.setLights(NotificationBuilder.generateJSON(lights)).build());
 
 		JSONObject notification = builder.build();
 
@@ -116,11 +167,14 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureChromeSettings()  {
+	public void shouldAllowToConfigureChromeSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setChromeSettings("testTitle", "testIconUrl", 42, new JSONObject());
+		Settings settings = new Settings.SettingsBuilder().setChromeWebBuilder(BuilderFactory.getBuilder(ChromeWebBuilder.class)).build();
+
+		builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+				.setTimeToLive(42).setPayload(new JSONObject()).build());
 
 		JSONObject notification = builder.build();
 
@@ -133,11 +187,15 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureChromeExtSettings()  {
+	public void shouldAllowToConfigureChromeExtSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setChromeAppExtSettings("testCollapseKey", true, "testTitle", "testIconUrl", 42, new JSONObject());
+		Settings settings = new Settings.SettingsBuilder().setChromeAppExtBuilder(BuilderFactory.getBuilder(ChromeAppExtBuilder.class)).build();
+
+		builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("testCollapseKey")
+				.setDelayWhileIdle(true).setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
+				.setPayload(new JSONObject()).build());
 
 		JSONObject notification = builder.build();
 
@@ -150,11 +208,14 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureFirefoxSettings()  {
+	public void shouldAllowToConfigureFirefoxSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setFirefoxWebSettings("testTitle", "testIconUrl", 42, new JSONObject());
+		Settings settings = new Settings.SettingsBuilder().setFirefoxWebBuilder(BuilderFactory.getBuilder(FirefoxWebBuilder.class)).build();
+
+		builder.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+				.setTimeToLive(42).setPayload(new JSONObject()).build());
 
 		JSONObject notification = builder.build();
 
@@ -167,11 +228,14 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToConfigureSafariSettings()  {
+	public void shouldAllowToConfigureSafariSettings() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setSafariWebSettings("testTitle", new String[] { "testUrlArgs1", "testUrlArgs2" }, "testAction");
+		Settings settings = new Settings.SettingsBuilder().setSafariWebBuilder(BuilderFactory.getBuilder(SafariWebBuilder.class)).build();
+
+		builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("testTitle")
+				.setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).setAction("testAction").build());
 
 		JSONObject notification = builder.build();
 
@@ -187,21 +251,47 @@ public class NotificationBuilderTest {
 	public void shouldAllowToConfigureAllSettingsSimultaneouslyWithoutOverridingEachOther() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
+		
 
-		builder.setAPNSSettings(1, "testCategory", "testiOSActionKey", new JSONObject(), "testSoundFile",
-				APNSNotificationType.DEFAULT, "testTitleLocKey", "testLocKey", "testLaunchImage",
-				new String[] { "testTitleLocArgs1", "testTitleLocArgs2" },
-				new String[] { "testLocArgs1", "testLocArgs" }, "testTitle", "testSubtitle", "testAttachmentUrl");
-		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42,
-				"testIcon", Visibility.PUBLIC, true, new JSONObject().put("type", "testType"));
+		Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory.getBuilder(ApnsBuilder.class))
+				.setGcmBuilder(BuilderFactory.getBuilder(GcmBuilder.class)).setChromeAppExtBuilder(BuilderFactory.getBuilder(ChromeAppExtBuilder.class))
+				.setChromeWebBuilder(BuilderFactory.getBuilder(ChromeWebBuilder.class)).setFirefoxWebBuilder(BuilderFactory.getBuilder(FirefoxWebBuilder.class))
+				.setSafariWebBuilder(BuilderFactory.getBuilder(SafariWebBuilder.class)).build();
 
-		builder.setChromeSettings("testTitle", "testIconUrl", 42, new JSONObject());
+		builder.setAPNSSettings(settings.getApnsBuilder().setBadge(1).setInteractiveCategory("testInteractiveCategory")
+				.setIosActionKey("testiOSActionKey").setPayload(new JSONObject()).setSound("testSoundFile")
+				.setType(APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey").setLocKey("testLocKey")
+				.setLaunchImage("testLaunchImage")
+				.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
+				.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
+				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl").build());
 
-		builder.setChromeAppExtSettings("testCollapseKey", true, "testTitle", "testIconUrl", 42, new JSONObject());
+		Gcm gcm = settings.getGcmBuilder().setGcmStyleBuilder(BuilderFactory.getBuilder(GcmStyleBuilder.class)).setGcmLightsBuilder(BuilderFactory.getBuilder(GcmLightsBuilder.class)).build();
+		
+		
+		GcmStyle style = gcm.getGcmStyleBuilder().setType(GcmStyleTypes.BIGTEST_NOTIFICATION).build();		
+				
+		
+		GcmLights lights = gcm.getGcmLightsBuilder().setLedArgb(GcmLED.BLACK).build();
+		
+		builder.setGCMSettings(settings.getGcmBuilder().setCollapseKey("testCollapseKey").setDelayWhileIdle(true)
+				.setPayload(new JSONObject()).setPriority(GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42)
+				.setIcon("testIcon").setVisibility(Visibility.PUBLIC).setSync(true)
+				.setStyle(NotificationBuilder.generateJSON(style))
+				.setLights(NotificationBuilder.generateJSON(lights)).build());
 
-		builder.setFirefoxWebSettings("testTitle", "testIconUrl", 42, new JSONObject());
+		builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+				.setTimeToLive(42).setPayload(new JSONObject()).build());
 
-		builder.setSafariWebSettings("testTitle", new String[] { "testUrlArgs1", "testUrlArgs2" }, "testAction");
+		builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("testCollapseKey")
+				.setDelayWhileIdle(true).setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
+				.setPayload(new JSONObject()).build());
+
+		builder.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
+				.setTimeToLive(42).setPayload(new JSONObject()).build());
+
+		builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("testTitle")
+				.setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).setAction("testAction").build());
 
 		JSONObject notification = builder.build();
 
@@ -282,7 +372,7 @@ public class NotificationBuilderTest {
 		assertEquals("testCollapseKey", chromeAppExt.getString("collapseKey"));
 
 		assertTrue(chromeAppExt.has("delayWhileIdle"));
-		assertEquals("true", chromeAppExt.getString("delayWhileIdle"));
+		assertEquals(true, chromeAppExt.getBoolean("delayWhileIdle"));
 
 		assertTrue(chromeAppExt.has("title"));
 		assertEquals("testTitle", chromeAppExt.getString("title"));
@@ -328,7 +418,7 @@ public class NotificationBuilderTest {
 		assertEquals("testCollapseKey", gcm.getString("collapseKey"));
 
 		assertTrue(gcm.has("delayWhileIdle"));
-		assertEquals("true", gcm.getString("delayWhileIdle"));
+		assertEquals(true, gcm.getBoolean("delayWhileIdle"));
 
 		assertTrue(gcm.has("payload"));
 		assertNotNull(gcm.getJSONObject("payload"));
@@ -350,11 +440,15 @@ public class NotificationBuilderTest {
 		assertEquals(Visibility.PUBLIC.name(), gcm.getString("visibility"));
 
 		assertTrue(gcm.has("sync"));
-		assertEquals("true", gcm.getString("sync"));
+		assertEquals(true, gcm.getBoolean("sync"));
 
 		assertTrue(gcm.has("style"));
 		JSONObject gcmJson = gcm.getJSONObject("style");
-		assertEquals("testType", gcmJson.get("type"));
+		assertEquals(GcmStyleTypes.BIGTEST_NOTIFICATION.name(), gcmJson.get("type"));
+
+		assertTrue(gcm.has("lights"));
+		JSONObject gcmLightsJson = gcm.getJSONObject("lights");
+		assertEquals(GcmLED.BLACK.name(), gcmLightsJson.get("ledArgb"));
 	}
 
 	private void checkAPNSSettings(JSONObject notification) {
@@ -368,8 +462,8 @@ public class NotificationBuilderTest {
 		assertTrue(apnsSettings.has("badge"));
 		assertEquals(1, apnsSettings.getInt("badge"));
 
-		assertTrue(apnsSettings.has("category"));
-		assertEquals("testCategory", apnsSettings.getString("category"));
+		assertTrue(apnsSettings.has("interactiveCategory"));
+		assertEquals("testInteractiveCategory", apnsSettings.getString("interactiveCategory"));
 
 		assertTrue(apnsSettings.has("iosActionKey"));
 		assertEquals("testiOSActionKey", apnsSettings.getString("iosActionKey"));
@@ -412,15 +506,14 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldAllowToSetTarget()  {
+	public void shouldAllowToSetTarget() {
 
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 		PushNotificationsPlatform[] targetPlatforms = {};
-
-		builder.setTarget(new String[] { "device1", "device2" }, new String[] { "userId1", "userId2" },
-				new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE },
-				new String[] { "tag1", "tag2" });
+		PushMessageModel model = new PushMessageModel.PushMessageModelBuilder().setTargetBuilder(BuilderFactory.getBuilder(TargetBuilder.class)).build();
+		builder.setTarget(model.getTargetBuilder().setDeviceIds(new String[] { "device1", "device2" }).setUserIds(new String[] { "userId1", "userId2" }).setPlatforms(new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE })
+				.setTagNames(new String[] { "tag1", "tag2" }).build());
 
 		JSONObject notification = builder.build();
 
@@ -446,21 +539,53 @@ public class NotificationBuilderTest {
 	}
 
 	@Test
-	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNull()  {
+	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNull() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
 
-		builder.setAPNSSettings(null, null, null, null, null, null, null, null, null, null, null, null, null, null)
-				.setAPNSSettings(null, "", "", null, "", null, "", "", "", null, null, "", "", "")
-				.setGCMSettings(null, null, null, null, null, null, null, null, null, null)
-				.setGCMSettings("", null, null, null, "", null, "", null, null, null)
-				.setChromeSettings(null, null, null, null).setChromeSettings("", "", null, null)
-				.setChromeAppExtSettings(null, null, null, null, null, null)
-				.setChromeAppExtSettings("", null, "", "", null, null).setFirefoxWebSettings(null, null, null, null)
-				.setFirefoxWebSettings("", "", null, null).setSafariWebSettings(null, null, null)
-				.setSafariWebSettings("", null, "").setMessageURL(null).setMessageURL("")
-				.setTarget(null, null, null, null).setTarget(new String[] {}, new String[] {},
-						new NotificationBuilder.PushNotificationsPlatform[] {}, new String[] {});
+		Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory.getBuilder(ApnsBuilder.class))
+				.setGcmBuilder(BuilderFactory.getBuilder(GcmBuilder.class)).setChromeAppExtBuilder(BuilderFactory.getBuilder(ChromeAppExtBuilder.class))
+				.setChromeWebBuilder(BuilderFactory.getBuilder(ChromeWebBuilder.class)).setFirefoxWebBuilder(BuilderFactory.getBuilder(FirefoxWebBuilder.class))
+				.setSafariWebBuilder(BuilderFactory.getBuilder(SafariWebBuilder.class)).build();
+		
+		builder.setMessageURL(null)
+				.setAPNSSettings(settings.getApnsBuilder().setBadge(null).setAttachmentUrl(null)
+						.setInteractiveCategory(null).setIosActionKey(null).setLaunchImage(null).setLocArgs(null)
+						.setLocKey(null).setPayload(null).setSound(null).setSubtitle(null).setTitle(null)
+						.setTitleLocArgs(null).setTitleLocKey(null).setType(null).build())
+
+				.setAPNSSettings(settings.getApnsBuilder().setBadge(null).setAttachmentUrl("")
+						.setInteractiveCategory("").setIosActionKey("").setLaunchImage("").setLocArgs(null)
+						.setLocKey("").setPayload(null).setSound("").setSubtitle("").setTitle("").setTitleLocArgs(null)
+						.setTitleLocKey("").setType(null).build())
+
+				.setGCMSettings(settings.getGcmBuilder().setCollapseKey(null).setDelayWhileIdle(null).setIcon(null)
+						.setInteractiveCategory(null).setLights(null).setPayload(null).setPriority(null).setSound(null)
+						.setStyle(null).setSync(null).setTimeToLive(null).setVisibility(null).build())
+
+				.setGCMSettings(settings.getGcmBuilder().setCollapseKey("").setDelayWhileIdle(null).setIcon("")
+						.setInteractiveCategory("").setLights(null).setPayload(null).setPriority(null).setSound("")
+						.setStyle(null).setSync(null).setTimeToLive(null).setVisibility(null).build())
+
+				.setChromeSettings(settings.getChromeWebBuilder().setIconUrl(null).setPayload(null).setTimeToLive(null)
+						.setTitle(null).build())
+
+				.setChromeSettings(settings.getChromeWebBuilder().setIconUrl("").setPayload(null).setTimeToLive(null)
+						.setTitle("").build())
+
+				.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setIconUrl(null).setPayload(null)
+						.setTimeToLive(null).setTitle(null).build())
+
+				.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setIconUrl("").setPayload(null)
+						.setTimeToLive(null).setTitle("").build())
+
+				.setSafariWebSettings(
+						settings.getSafariWebBuilder().setAction(null).setTitle(null).setUrlArgs(null).build())
+
+				.setSafariWebSettings(
+						settings.getSafariWebBuilder().setAction("").setTitle("").setUrlArgs(null).build())
+
+				.setTarget(null);
 
 		JSONObject notification = builder.build();
 

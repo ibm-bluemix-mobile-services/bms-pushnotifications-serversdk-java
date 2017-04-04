@@ -33,9 +33,9 @@ import org.json.JSONObject;
  * using the Push Notification service in IBM® Bluemix.
  */
 public class PushNotifications {
-	public static final String US_SOUTH_REGION = PushConstants.US_SOUTH_REGION;
-	public static final String UK_REGION = PushConstants.UK_REGION;
-	public static final String SYDNEY_REGION = PushConstants.SYDNEY_REGION;
+	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
+	public static final String UK_REGION = ".eu-gb.bluemix.net";
+	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
 	
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName()); 
 	
