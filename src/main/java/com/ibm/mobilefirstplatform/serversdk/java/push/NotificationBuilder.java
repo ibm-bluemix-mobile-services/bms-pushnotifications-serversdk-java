@@ -221,7 +221,7 @@ public class NotificationBuilder {
 	 * to send to.</li>
 	 * <li>tagNames(String[])<code>:</code>&nbsp; an optional string array with
 	 * the list of tags that will receive the notification</li>
-	 * </ul>
+	 * 
 	 * Below is the code snippet for usage of this method:<br>
 	 * 
 	 * <pre>
@@ -247,8 +247,7 @@ public class NotificationBuilder {
 	 * PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE })
 	 * .setTagNames(new String[] { "tag1", "tag2" }).build());//build() returns
 	 * Target Object
-	 * 
-	 * 
+	 *  </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -281,14 +280,14 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link SafariWeb} class which has the
 	 * following members below:
 	 * <ul>
-	 * <li>title (String)<code>:</code>&nbspSpecifies the title to be set for
+	 * <li>title (String)<code>:</code>&nbsp;Specifies the title to be set for
 	 * the SafariWeb Push Notifications.</li>
 	 * 
-	 * <li>urlArgs (String [])<code>:</code>&nbspThe URL arguments that need to
+	 * <li>urlArgs (String [])<code>:</code>&nbsp;The URL arguments that need to
 	 * be used with this notification. This has to provided in the form of a
 	 * JSON Array.</li>
 	 * 
-	 * <li>action (String)<code>:</code>&nbspThe label of the action
+	 * <li>action (String)<code>:</code>&nbsp;The label of the action
 	 * button.</li>
 	 * 
 	 * Below is the code snippet for usage of this method:<br>
@@ -318,7 +317,7 @@ public class NotificationBuilder {
 	 * 																										// Object
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -357,17 +356,17 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link FirefoxWeb} class which has the
 	 * following members below:
 	 * <ul>
-	 * <li>title (string)<code>:</code>&nbspSpecifies the title to be set for
+	 * <li>title (string)<code>:</code>&nbsp;Specifies the title to be set for
 	 * the FirefoxWeb Push Notifications.</li>
 	 * 
-	 * <li>iconUrl (string)<code>:</code>&nbspThe URL of the icon to be set for
+	 * <li>iconUrl (string)<code>:</code>&nbsp;The URL of the icon to be set for
 	 * the WebPush Notification.</li>
 	 * 
-	 * <li>timeToLive (string)<code>:</code>&nbspThis parameter specifies how
+	 * <li>timeToLive (string)<code>:</code>&nbsp;This parameter specifies how
 	 * long (in seconds) the message should be kept in GCM storage if the device
 	 * is offline.</li>
 	 * 
-	 * <li>payload (Object)<code>:</code>&nbspCustom JSON payload that will be
+	 * <li>payload (Object)<code>:</code>&nbsp;Custom JSON payload that will be
 	 * sent as part of the notification message.</li>
 	 * 
 	 * Below is the code snippet for usage of this method:<br>
@@ -397,7 +396,7 @@ public class NotificationBuilder {
 	 * 																	// object
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -436,16 +435,16 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link ChromeAppExt} class which has the
 	 * following members below:
 	 * <ul>
-	 * <li>title (string)<code>:</code>Specifies the title to be set for the
-	 * WebPush Notification ,</li>
-	 * <li>iconUrl (string)<code>:</code>The URL of the icon to be set for the
+	 * <li>title (string)<code>:</code>&nbsp;Specifies the title to be set for the
+	 * WebPush Notification.</li>
+	 * <li>iconUrl (string)<code>:</code>&nbsp;The URL of the icon to be set for the
 	 * WebPush Notification ,if you set this setting then proper icon url should be provided or else chromeAppExtension would not work.</li>
-	 * <li>timeToLive (integer)<code>:</code>This parameter specifies how long
+	 * <li>timeToLive (integer)<code>:</code>&nbsp;This parameter specifies how long
 	 * (in seconds) the message should be kept in GCM storage if the device is
-	 * offline. ,</li>
-	 * <li>payload (Object)<code>:</code>Custom JSON payload that will be sent
+	 * offline.</li>
+	 * <li>payload (Object)<code>:</code>&nbsp;Custom JSON payload that will be sent
 	 * as part of the notification message. Below is the code snippet for usage
-	 * of this method:</li>
+	 * of this method:.</li>
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -471,7 +470,7 @@ public class NotificationBuilder {
 	 * 												// ChromeAppExt object
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -509,16 +508,16 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link ChromeWeb} class which has the
 	 * following members below:
 	 * <ul>
-	 * <li>title (string)<code>:</code>Specifies the title to be set for the
-	 * WebPush Notification ,</li>
-	 * <li>iconUrl (string)<code>:</code>The URL of the icon to be set for the
-	 * WebPush Notification ,</li>
-	 * <li>timeToLive (integer)</li><code>:</code>This parameter specifies how
+	 * <li>title (string)<code>:</code>&nbsp;Specifies the title to be set for the
+	 * WebPush Notification.</li>
+	 * <li>iconUrl (string)<code>:</code>&nbsp;The URL of the icon to be set for the
+	 * WebPush Notification.</li>
+	 * <li>timeToLive (integer)</li><code>:</code>&nbsp;This parameter specifies how
 	 * long (in seconds) the message should be kept in GCM storage if the device
-	 * is offline. ,
-	 * <li>payload (string)<code>:</code>Custom JSON payload that will be sent
+	 * is offline.</li>
+	 * <li>payload (string)<code>:</code>&nbsp;Custom JSON payload that will be sent
 	 * as part of the notification message. Below is the code snippet for usage
-	 * of this method:</li>
+	 * of this method:.</li>
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -545,7 +544,7 @@ public class NotificationBuilder {
 	 * 																	// Object
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -657,43 +656,41 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link Apns} class which has the following
 	 * members below:
 	 * <ul>
-	 * <li>title<code>:</code>&nbspSpecifies the title to be set for the
+	 * <li>title<code>:</code>&nbsp;Specifies the title to be set for the
 	 * SafariWeb Push Notifications.</li>
 	 * 
-	 * <li>badge (integer)<code>:</code>&nbspThe number to display as the badge
-	 * of the application icon ,
-	 * <li>interactiveCategory (string)<code>:</code>The category identifier to
-	 * be used for the interactive push notifications ,
-	 * <li>iosActionKey (string)</li><code>:</code>The title for the Action key
-	 * ,
-	 * <li>payload (object)</li><code>:</code>Custom JSON payload that will be
-	 * sent as part of the notification message. ,
-	 * <li>sound (string)</li><code>:</code>The name of the sound file in the
-	 * application bundle. The sound of this file is played as an alert. ,
-	 * <li>titleLocKey (string)</li><code>:</code>The key to a title string in
+	 * <li>badge (integer)<code>:</code>&nbsp;The number to display as the badge
+	 * of the application icon.</li>
+	 * <li>interactiveCategory (string)<code>:</code>&nbsp;The category identifier to
+	 * be used for the interactive push notifications.</li>
+	 * <li>iosActionKey (string)<code>:</code>&nbsp;The title for the Action key.</li>
+	 * <li>payload (object)<code>:</code>&nbsp;Custom JSON payload that will be
+	 * sent as part of the notification message.</li>
+	 * <li>sound (string)<code>:</code>&nbsp;The name of the sound file in the
+	 * application bundle. The sound of this file is played as an alert.</li>
+	 * <li>titleLocKey (string)<code>:</code>&nbsp;The key to a title string in
 	 * the Localizable.strings file for the current localization. The key string
 	 * can be formatted with %@ and %n$@ specifiers to take the variables
-	 * specified in the titleLocArgs array. ,
-	 * <li>locKey (string)</li><code>:</code>A key to an alert-message string in
+	 * specified in the titleLocArgs array.</li>
+	 * <li>locKey (string)<code>:</code>&nbsp;A key to an alert-message string in
 	 * a Localizable.strings file for the current localization (which is set by
 	 * the user’s language preference). The key string can be formatted with %@
-	 * and %n$@ specifiers to take the variables specified in the locArgs array.
-	 * ,
-	 * <li>launchImage (string)</li><code>:</code>The filename of an image file
+	 * and %n$@ specifiers to take the variables specified in the locArgs array.</li>
+	 * <li>launchImage (string)<code>:</code>&nbsp;The filename of an image file
 	 * in the app bundle, with or without the filename extension. The image is
 	 * used as the launch image when users tap the action button or move the
-	 * action slider. ,
-	 * <li>titleLocArgs (Array[string])</li><code>:</code>Variable string values
-	 * to appear in place of the format specifiers in title-loc-key. ,
-	 * <li>locArgs (Array[string])</li><code>:</code>Variable string values to
-	 * appear in place of the format specifiers in locKey. ,
-	 * <li>title (string)</li><code>:</code>The title of Rich Push notifications
-	 * (Supported only on iOS 10 and above) ,
-	 * <li>subtitle (string)</li><code>:</code>The subtitle of the Rich
-	 * Notifications. (Supported only on iOS 10 and above) ,
-	 * <li>attachmentUrl (string)</li><code>:</code>The link to the iOS
+	 * action slider.</li>
+	 * <li>titleLocArgs (Array[string])<code>:</code>&nbsp;Variable string values
+	 * to appear in place of the format specifiers in title-loc-key.</li>
+	 * <li>locArgs (Array[string])<code>:</code>&nbsp;Variable string values to
+	 * appear in place of the format specifiers in locKey.</li>
+	 * <li>title (string)<code>:</code>&nbsp;The title of Rich Push notifications
+	 * (Supported only on iOS 10 and above).</li>
+	 * <li>subtitle (string)<code>:</code>&nbsp;The subtitle of the Rich
+	 * Notifications. (Supported only on iOS 10 and above)</li>
+	 * <li>attachmentUrl (string)<code>:</code>&nbsp;The link to the iOS
 	 * notifications media (video, audio, GIF, images - Supported only on iOS 10
-	 * and above) ,
+	 * and above).</li>
 	 * <li>type (string) = ['DEFAULT', 'MIXED', 'SILENT']</li> Below is the code
 	 * snippet for usage of this method:<br>
 	 * 
@@ -728,7 +725,7 @@ public class NotificationBuilder {
 	 * 
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -835,44 +832,43 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link Gcm} class which has the following
 	 * members below:
 	 * <ul>
-	 * <li>collapseKey (string)<code>:</code>This parameter identifies a group
-	 * of messages ,</li>
-	 * <li>interactiveCategory (string)<code>:</code>The category identifier to
-	 * be used for the interactive push notifications ,</li>
-	 * <li>icon (string)<code>:</code>Specify the name of the icon to be
+	 * <li>collapseKey (string)<code>:</code>&nbsp;This parameter identifies a group
+	 * of messages.</li>
+	 * <li>interactiveCategory (string)<code>:</code>&nbsp;The category identifier to
+	 * be used for the interactive push notifications.</li>
+	 * <li>icon (string)<code>:</code>&nbsp;Specify the name of the icon to be
 	 * displayed for the notification. Make sure the icon is already packaged
-	 * with the client application. ,</li>
-	 * <li>delayWhileIdle (boolean)<code>:</code>When this parameter is set to
+	 * with the client application.</li>
+	 * <li>delayWhileIdle (boolean)<code>:</code>&nbsp;When this parameter is set to
 	 * true, it indicates that the message should not be sent until the device
-	 * becomes active. ,</li>
-	 * <li>sync (boolean)<code>:</code>Device group messaging makes it possible
-	 * for every app instance in a group to reflect the latest messaging state
-	 * ,</li>
-	 * <li>visibility (string)<code>:</code>private/public - Visibility of this
+	 * becomes active.</li>
+	 * <li>sync (boolean)<code>:</code>&nbsp;Device group messaging makes it possible
+	 * for every app instance in a group to reflect the latest messaging state</li>
+	 * <li>visibility (string)<code>:</code>&nbsp;private/public - Visibility of this
 	 * notification, which affects how and when the notifications are revealed
-	 * on a secure locked screen. ,</li>
-	 * <li>payload (object)<code>:</code>Custom JSON payload that will be sent
-	 * as part of the notification message. ,</li>
-	 * <li>priority (string)<code>:</code>A string value that indicates the
+	 * on a secure locked screen.</li>
+	 * <li>payload (object)<code>:</code>&nbsp;Custom JSON payload that will be sent
+	 * as part of the notification message.</li>
+	 * <li>priority (string)<code>:</code>&nbsp;A string value that indicates the
 	 * priority of this notification. Allowed values are 'max', 'high',
 	 * 'default', 'low' and 'min'. High/Max priority notifications along with
 	 * 'sound' field may be used for Heads up notification in Android 5.0 or
-	 * higher.sampleval='low' ,</li>
-	 * <li>sound (string)<code>:</code>The sound file (on device) that will be
-	 * attempted to play when the notification arrives on the device ,</li>
-	 * <li>timeToLive (integer)<code>:</code>This parameter specifies how long
+	 * higher.sampleval='low'.</li>
+	 * <li>sound (string)<code>:</code>&nbsp;The sound file (on device) that will be
+	 * attempted to play when the notification arrives on the device.</li>
+	 * <li>timeToLive (integer)<code>:</code>&nbsp;This parameter specifies how long
 	 * (in seconds) the message should be kept in GCM storage if the device is
-	 * offline. ,</li>
-	 * <li>lights (lights)<code>:</code>Allows setting the notification LED
+	 * offline.</li>
+	 * <li>lights (lights)<code>:</code>&nbsp;Allows setting the notification LED
 	 * color on receiving push notification . This should be in JSON and should
 	 * have following keys {{@code} {@link GcmLED} ledArgb; Integer ledOnMs; Integer
-	 * ledOffMs;}</li>
-	 * <li>style (style)<code>:</code>Options to specify for Android expandable
+	 * ledOffMs;}.</li>
+	 * <li>style (style)<code>:</code>&nbsp;Options to specify for Android expandable
 	 * notifications. The types of expandable notifications are
 	 * picture_notification, bigtext_notification, inbox_notification.This
 	 * should be in JSON and should have following keys {{@code} {@link GcmStyleTypes} type;
 	 * String url; String title; String text; String [] lines;} Below is the
-	 * code snippet for usage of this method:</li>
+	 * code snippet for usage of this method:.</li>
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -902,7 +898,7 @@ public class NotificationBuilder {
 	 * 																				// object.
 	 * </pre>
 	 * 
-	 * <ul>
+	 * </ul>
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
