@@ -996,7 +996,7 @@ public final class PushMessageModel {
 		public static final class GcmLights {
 			private GcmLED ledArgb;
 			private Integer ledOnMs;
-			private String ledOffMs;
+			private Integer ledOffMs;
 
 			public GcmLED getLedArgb() {
 				return ledArgb;
@@ -1006,7 +1006,7 @@ public final class PushMessageModel {
 				return ledOnMs;
 			}
 
-			public String getLedOffMs() {
+			public Integer getLedOffMs() {
 				return ledOffMs;
 			}
 
@@ -1020,7 +1020,7 @@ public final class PushMessageModel {
 
 				private GcmLED ledArgb;
 				private Integer ledOnMs;
-				private String ledOffMs;
+				private Integer ledOffMs;
 
 				public GcmLightsBuilder setLedArgb(GcmLED ledArgb) {
 					this.ledArgb = ledArgb;
@@ -1032,7 +1032,7 @@ public final class PushMessageModel {
 					return this;
 				}
 
-				public GcmLightsBuilder setLedOffMs(String ledOffMs) {
+				public GcmLightsBuilder setLedOffMs(Integer ledOffMs) {
 					this.ledOffMs = ledOffMs;
 					return this;
 				}
@@ -1067,10 +1067,6 @@ public final class PushMessageModel {
 
 			public String getText() {
 				return text;
-			}
-
-			public void setLines(final String[] lines) {
-				this.lines = lines;
 			}
 
 			public String[] getLines() {
@@ -1112,6 +1108,11 @@ public final class PushMessageModel {
 
 				public GcmStyleBuilder setText(final String text) {
 					this.text = text;
+					return this;
+				}
+				
+				public GcmStyleBuilder setLines(final String[] lines) {
+					this.lines = lines;
 					return this;
 				}
 				

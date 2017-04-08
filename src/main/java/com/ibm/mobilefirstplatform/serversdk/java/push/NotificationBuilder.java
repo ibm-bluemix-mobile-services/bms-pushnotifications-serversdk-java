@@ -103,7 +103,7 @@ public class NotificationBuilder {
 	 */
 	public enum GcmStyleTypes {
 		
-		BIGTEST_NOTIFICATION,
+		BIGTEXT_NOTIFICATION,
 		INBOX_NOTIFICATION,
 		PICTURE_NOTIFICATION
 	}
@@ -211,17 +211,17 @@ public class NotificationBuilder {
 	 * Accepts an argument of type {@link Target} class which has the following
 	 * members below:
 	 * <ul>
-	 * <li>deviceIds(String[])<code>:</code>&nbsp an optional array of device
-	 * ids specified as strings that the push notification will be sent to</li>
-	 * <li>userIds(String[])<code>:</code>&nbsp an optional array of user ids
+	 * <li>deviceIds(String[])<code>:</code>&nbsp; an optional array of device
+	 * ids specified as strings that the push notification will be sent to.</li>
+	 * <li>userIds(String[])<code>:</code>&nbsp; an optional array of user ids
 	 * specified as strings for whose devices the push notification will be sent
-	 * to</li>
-	 * <li>platforms(String[])<code>:</code>&nbsp an optional array of
+	 * to.</li>
+	 * <li>platforms(String[])<code>:</code>&nbsp; an optional array of
 	 * {@link PushNotificationsPlatform} enums used to specify which platforms
-	 * to send to</li>
-	 * <li>tagNames(String[])<code>:</code>&nbsp an optional string array with
+	 * to send to.</li>
+	 * <li>tagNames(String[])<code>:</code>&nbsp; an optional string array with
 	 * the list of tags that will receive the notification</li>
-	 * 
+	 * </ul>
 	 * Below is the code snippet for usage of this method:<br>
 	 * 
 	 * <pre>
@@ -248,12 +248,12 @@ public class NotificationBuilder {
 	 * .setTagNames(new String[] { "tag1", "tag2" }).build());//build() returns
 	 * Target Object
 	 * 
-	 * <ul>
+	 * 
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
-	public NotificationBuilder setTarget(Target target) {
+	public NotificationBuilder setTargetValues(Target target) {
 
 		if (target != null) {
 
@@ -312,7 +312,7 @@ public class NotificationBuilder {
 	 * <pre>
 	 * 
 	 * builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("testTitle")
-	 * 		.setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).setAction("testAction").build());// build()
+	 * 		.setUrlArgs(new String[] {"testUrlArgs1"}).setAction("testAction").build());// build()
 	 * 																										// returns
 	 * 																										// SafariWeb
 	 * 																										// Object
@@ -439,7 +439,7 @@ public class NotificationBuilder {
 	 * <li>title (string)<code>:</code>Specifies the title to be set for the
 	 * WebPush Notification ,</li>
 	 * <li>iconUrl (string)<code>:</code>The URL of the icon to be set for the
-	 * WebPush Notification ,</li>
+	 * WebPush Notification ,if you set this setting then proper icon url should be provided or else chromeAppExtension would not work.</li>
 	 * <li>timeToLive (integer)<code>:</code>This parameter specifies how long
 	 * (in seconds) the message should be kept in GCM storage if the device is
 	 * offline. ,</li>
@@ -733,7 +733,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
-	public NotificationBuilder setAPNSSettings(Apns apns) {
+	public NotificationBuilder setAPNSSettingsValues(Apns apns) {
 
 		if (apns != null) {
 
@@ -865,7 +865,7 @@ public class NotificationBuilder {
 	 * offline. ,</li>
 	 * <li>lights (lights)<code>:</code>Allows setting the notification LED
 	 * color on receiving push notification . This should be in JSON and should
-	 * have following keys {{@code} {@link GcmLED} ledArgb; Integer ledOnMs; String
+	 * have following keys {{@code} {@link GcmLED} ledArgb; Integer ledOnMs; Integer
 	 * ledOffMs;}</li>
 	 * <li>style (style)<code>:</code>Options to specify for Android expandable
 	 * notifications. The types of expandable notifications are
@@ -907,7 +907,7 @@ public class NotificationBuilder {
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
-	public NotificationBuilder setGCMSettings(Gcm gcm) {
+	public NotificationBuilder setGCMSettingsValues(Gcm gcm) {
 
 		if (gcm != null) {
 

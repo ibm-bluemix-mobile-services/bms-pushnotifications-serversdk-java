@@ -27,9 +27,12 @@ public class BuilderFactory {
 		T instance = null;
 		try {
 			instance = (T) clazz.newInstance();
-		} catch (InstantiationException | IllegalAccessException ex) {
+		} catch (InstantiationException ex) {
 			logger.log(Level.SEVERE, ex.toString(), ex);
-		} 
+		} catch (IllegalAccessException ex){
+			logger.log(Level.SEVERE, ex.toString(), ex);
+		}
+		
 		return instance;
 	}
 }
