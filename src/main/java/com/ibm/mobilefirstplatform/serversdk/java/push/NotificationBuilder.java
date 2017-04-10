@@ -40,7 +40,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.T
 
 /**
  * The NotificationBuilder is used to create a new push notification that is
- * going to be sent using the Push Notification service in IBM® Bluemix.
+ * going to be sent using the Push Notification service in IBMÂ® Bluemix.
  * 
  * The push notification's message that is passed in the constructor is
  * required. All other parameters are optional. Set them as needed.
@@ -206,8 +206,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific to Target. <br>
-	 * <br>
+	 * Configure specific to Target.
+	 * 
 	 * Accepts an argument of type {@link Target} class which has the following
 	 * members below:
 	 * <ul>
@@ -221,8 +221,9 @@ public class NotificationBuilder {
 	 * to send to.</li>
 	 * <li>tagNames(String[])<code>:</code>&nbsp; an optional string array with
 	 * the list of tags that will receive the notification</li>
-	 * 
-	 * Below is the code snippet for usage of this method:<br>
+	 * </ul>
+	 
+	 * Below is the code snippet for usage of this method:
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -245,12 +246,16 @@ public class NotificationBuilder {
 	 * "device1", "device2" }).setUserIds(new String[] { "userId1", "userId2"
 	 * }).setPlatforms(new PushNotificationsPlatform[] {
 	 * PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE })
-	 * .setTagNames(new String[] { "tag1", "tag2" }).build());//build() returns
-	 * Target Object
-	 *  </ul>
-	 * 
+	 * .setTagNames(new String[] { "tag1", "tag2" }).build());
+	 * //build() returns Target Object
+	 * </pre> 
+	 * @param target 
+	 *				target object with either deviceIds or userIds or platforms or tagNames.
+	 *
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
+	 
+	 
 
 	public NotificationBuilder setTargetValues(Target target) {
 
@@ -275,8 +280,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific to SafariWeb settings. <br>
-	 * <br>
+	 * Configure specific to SafariWeb settings.
+	 * 
 	 * Accepts an argument of type {@link SafariWeb} class which has the
 	 * following members below:
 	 * <ul>
@@ -289,8 +294,8 @@ public class NotificationBuilder {
 	 * 
 	 * <li>action (String)<code>:</code>&nbsp;The label of the action
 	 * button.</li>
-	 * 
-	 * Below is the code snippet for usage of this method:<br>
+	 * </ul>
+	 * Below is the code snippet for usage of this method:
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -311,14 +316,12 @@ public class NotificationBuilder {
 	 * <pre>
 	 * 
 	 * builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("testTitle")
-	 * 		.setUrlArgs(new String[] {"testUrlArgs1"}).setAction("testAction").build());// build()
-	 * 																										// returns
-	 * 																										// SafariWeb
-	 * 																										// Object
+	 * 		.setUrlArgs(new String[] {"testUrlArgs1"}).setAction("testAction").build());
+	 * // build() returns SafariWeb Object
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param safariWeb
+	 * 				  safariWeb object with safariWeb settings.
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -351,8 +354,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific to FirefoxWeb.<br>
-	 * <br>
+	 * Configure specific to FirefoxWeb.
+	 * 
 	 * Accepts an argument of type {@link FirefoxWeb} class which has the
 	 * following members below:
 	 * <ul>
@@ -368,8 +371,8 @@ public class NotificationBuilder {
 	 * 
 	 * <li>payload (Object)<code>:</code>&nbsp;Custom JSON payload that will be
 	 * sent as part of the notification message.</li>
-	 * 
-	 * Below is the code snippet for usage of this method:<br>
+	 * </ul>
+	 * Below is the code snippet for usage of this method:
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -390,14 +393,11 @@ public class NotificationBuilder {
 	 * <pre>
 	 * 
 	 * builder.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
-	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); // build()
-	 * 																	// returns
-	 * 																	// FirefoxWeb
-	 * 																	// object
+	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); // build() returns FirefoxWeb object
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param firefoxWeb
+	 * 				 	 firefoxWeb object with firefoxWeb settings.	
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -430,8 +430,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific to ChromeAppExt platform <br>
-	 * <br>
+	 * Configure specific to ChromeAppExt platform.
+	 * 
 	 * Accepts an argument of type {@link ChromeAppExt} class which has the
 	 * following members below:
 	 * <ul>
@@ -443,8 +443,9 @@ public class NotificationBuilder {
 	 * (in seconds) the message should be kept in GCM storage if the device is
 	 * offline.</li>
 	 * <li>payload (Object)<code>:</code>&nbsp;Custom JSON payload that will be sent
-	 * as part of the notification message. Below is the code snippet for usage
-	 * of this method:.</li>
+	 * as part of the notification message.</li>
+	 * </ul>
+	 * Below is the code snippet for usage of this method:.
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -466,12 +467,11 @@ public class NotificationBuilder {
 	 * 
 	 * builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("testCollapseKey")
 	 * 		.setDelayWhileIdle(true).setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
-	 * 		.setPayload(new JSONObject()).build()); // build() returns
-	 * 												// ChromeAppExt object
+	 * 		.setPayload(new JSONObject()).build()); // build() returns ChromeAppExt object
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param chromeAppExt
+	 * 		 			   chromeAppExt object with chromeAppExtension settings.
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 	public NotificationBuilder setChromeAppExtSettings(ChromeAppExt chromeAppExt) {
@@ -503,8 +503,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific for Chrome Browser, <br>
-	 * <br>
+	 * Configure specific for Chrome Browser.
+	 * 
 	 * Accepts an argument of type {@link ChromeWeb} class which has the
 	 * following members below:
 	 * <ul>
@@ -512,12 +512,13 @@ public class NotificationBuilder {
 	 * WebPush Notification.</li>
 	 * <li>iconUrl (string)<code>:</code>&nbsp;The URL of the icon to be set for the
 	 * WebPush Notification.</li>
-	 * <li>timeToLive (integer)</li><code>:</code>&nbsp;This parameter specifies how
+	 * <li>timeToLive (integer)<code>:</code>&nbsp;This parameter specifies how
 	 * long (in seconds) the message should be kept in GCM storage if the device
 	 * is offline.</li>
 	 * <li>payload (string)<code>:</code>&nbsp;Custom JSON payload that will be sent
-	 * as part of the notification message. Below is the code snippet for usage
-	 * of this method:.</li>
+	 * as part of the notification message.</li>
+	 * </ul>
+	 * Below is the code snippet for usage of this method:.
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -538,14 +539,12 @@ public class NotificationBuilder {
 	 * <pre>
 	 * 
 	 * builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("testTitle").setIconUrl("testIconUrl")
-	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); // build()
-	 * 																	// returns
-	 * 																	// ChromeWeb
-	 * 																	// Object
+	 * 		.setTimeToLive(42).setPayload(new JSONObject()).build()); 
+	 * // build() returns ChromeWeb Object
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param chromeWeb
+	 * 					chromeWeb object with chromeWeb settings.
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 	public NotificationBuilder setChromeSettings(ChromeWeb chromeWeb) {
@@ -651,8 +650,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific SafariWeb settings for APNS Platform, <br>
-	 * <br>
+	 * Configure specific SafariWeb settings for APNS Platform.
+	 * 
 	 * Accepts an argument of type {@link Apns} class which has the following
 	 * members below:
 	 * <ul>
@@ -674,7 +673,7 @@ public class NotificationBuilder {
 	 * specified in the titleLocArgs array.</li>
 	 * <li>locKey (string)<code>:</code>&nbsp;A key to an alert-message string in
 	 * a Localizable.strings file for the current localization (which is set by
-	 * the user�s language preference). The key string can be formatted with %@
+	 * the users language preference). The key string can be formatted with %@
 	 * and %n$@ specifiers to take the variables specified in the locArgs array.</li>
 	 * <li>launchImage (string)<code>:</code>&nbsp;The filename of an image file
 	 * in the app bundle, with or without the filename extension. The image is
@@ -691,8 +690,9 @@ public class NotificationBuilder {
 	 * <li>attachmentUrl (string)<code>:</code>&nbsp;The link to the iOS
 	 * notifications media (video, audio, GIF, images - Supported only on iOS 10
 	 * and above).</li>
-	 * <li>type (string) = ['DEFAULT', 'MIXED', 'SILENT']</li> Below is the code
-	 * snippet for usage of this method:<br>
+	 * <li>type (string) = ['DEFAULT', 'MIXED', 'SILENT']</li> 
+	 * </ul>
+	 * Below is the code snippet for usage of this method:
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -717,16 +717,13 @@ public class NotificationBuilder {
 	 * 		.setLaunchImage("testLaunchImage")
 	 * 		.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
 	 * 		.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
-	 * 		.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl").build()); // build()
-	 * 																						// returns
-	 * 																						// the
-	 * 																						// Apns
-	 * 																						// object.
+	 * 		.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl").build()); 
+	 * // build() returns the Apns object.
 	 * 
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param apns
+	 * 				apns object with apns settings.
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -827,8 +824,8 @@ public class NotificationBuilder {
 	}
 
 	/**
-	 * Configure specific to GCM platform, <br>
-	 * <br>
+	 * Configure specific to GCM platform.
+	 * 
 	 * Accepts an argument of type {@link Gcm} class which has the following
 	 * members below:
 	 * <ul>
@@ -867,8 +864,9 @@ public class NotificationBuilder {
 	 * notifications. The types of expandable notifications are
 	 * picture_notification, bigtext_notification, inbox_notification.This
 	 * should be in JSON and should have following keys {{@code} {@link GcmStyleTypes} type;
-	 * String url; String title; String text; String [] lines;} Below is the
-	 * code snippet for usage of this method:.</li>
+	 * String url; String title; String text; String [] lines;}</li> 
+	 * </ul>
+	 * Below is the code snippet for usage of this method:.
 	 * 
 	 * <pre>
 	 * NotificationBuilder builder = new NotificationBuilder("Test");
@@ -891,15 +889,12 @@ public class NotificationBuilder {
 	 * 		.setPayload(new JSONObject()).setPriority(GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42)
 	 * 		.setIcon("testIcon").setVisibility(Visibility.PUBLIC).setSync(true)
 	 * 		.setStyle(new JSONObject().put("type", "testType"))
-	 * 		.setLights(new JSONObject().put("ledArgb", "testLedArgb")).build()); // build()
-	 * 																				// returns
-	 * 																				// the
-	 * 																				// Gcm
-	 * 																				// object.
+	 * 		.setLights(new JSONObject().put("ledArgb", "testLedArgb")).build()); 
+	 * // build() returns the Gcm object.
 	 * </pre>
 	 * 
-	 * </ul>
-	 * 
+	 * @param gcm
+	 * 			  gcm object with gcm settings.	
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -933,6 +928,7 @@ public class NotificationBuilder {
  * API converts object to json format.
  * @param obj
  * @return
+ *        Return a JSONOject for the passed object.
  */
 	public static JSONObject generateJSON(Object obj) {
 		String jsonString = null;

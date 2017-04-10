@@ -96,7 +96,7 @@ Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory
 		builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("title").setIconUrl("iconUrl")
 				.setTimeToLive(42).setPayload(new JSONObject()).build());
 
-		// ChromeAppExtension settings		
+		// ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
 		builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("collapseKey")
 				.setDelayWhileIdle(true).setTitle("title").setIconUrl("iconUrl").setTimeToLive(42)
 				.setPayload(new JSONObject()).build());
