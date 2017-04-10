@@ -65,7 +65,8 @@ Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory
 
 	// Set all optional settings using settings,no need to set all attribute of a setting , only which is required you can set using builder, for example if you require only apns badge attribute as an optional setting , other settings not need to be set.
 	
-	// For APns Settings
+	// For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
+	
 	builder.setAPNSSettingsValues(settings.getApnsBuilder().setBadge(1).setInteractiveCategory("interactiveCategory")
 				.setIosActionKey("iOSActionKey").setPayload(new JSONObject()).setSound("soundFile")
 				.setType(APNSNotificationType.DEFAULT).setTitleLocKey("titleLocKey").setLocKey("locKey")
