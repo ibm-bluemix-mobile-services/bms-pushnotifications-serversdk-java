@@ -22,12 +22,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GcmLED;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GcmStyleTypes;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.Visibility;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt.ChromeAppExtBuilder;
@@ -50,7 +44,7 @@ public final class PushMessageModel {
 	private Message message;
 	private Target target;
 	private Settings settings;
-	
+
 	private MessageBuilder messageBuilder;
 	private TargetBuilder targetBuilder;
 	private SettingsBuilder settingsBuilder;
@@ -66,7 +60,7 @@ public final class PushMessageModel {
 	public Settings getSettings() {
 		return settings;
 	}
-	
+
 	public TargetBuilder getTargetBuilder() {
 		return targetBuilder;
 	}
@@ -74,12 +68,12 @@ public final class PushMessageModel {
 	public SettingsBuilder getSettingsBuilder() {
 		return settingsBuilder;
 	}
-	
+
 	public MessageBuilder getMessageBuilder() {
 		return messageBuilder;
 	}
 
-	private PushMessageModel(PushMessageModelBuilder builder){
+	private PushMessageModel(PushMessageModelBuilder builder) {
 		this.message = builder.message;
 		this.settings = builder.settings;
 		this.target = builder.target;
@@ -88,60 +82,79 @@ public final class PushMessageModel {
 		this.messageBuilder = builder.messageBuilder;
 	}
 
-	public static class PushMessageModelBuilder{
+	public static class PushMessageModelBuilder {
 		private Message message;
 		private Target target;
 		private Settings settings;
 		private MessageBuilder messageBuilder;
 		private TargetBuilder targetBuilder;
 		private SettingsBuilder settingsBuilder;
-		
+		private boolean checkBlankObject = false;
+
 		public PushMessageModelBuilder setMessage(final Message message) {
+			if (message != null) {
+				checkBlankObject = true;
+			}
 			this.message = message;
 			return this;
 		}
 
 		public PushMessageModelBuilder setTarget(final Target target) {
+			if (target != null) {
+				checkBlankObject = true;
+			}
 			this.target = target;
 			return this;
 		}
 
 		public PushMessageModelBuilder setSettings(final Settings settings) {
+			if (settings != null) {
+				checkBlankObject = true;
+			}
 			this.settings = settings;
 			return this;
 		}
 
 		public PushMessageModelBuilder setTargetBuilder(TargetBuilder targetBuilder) {
+			if (targetBuilder != null && targetBuilder.build() != null) {
+				checkBlankObject = true;
+			}
 			this.targetBuilder = targetBuilder;
 			return this;
 		}
 
 		public PushMessageModelBuilder setSettingsBuilder(SettingsBuilder settingsBuilder) {
+			if (settingsBuilder != null && settingsBuilder.build() != null) {
+				checkBlankObject = true;
+			}
 			this.settingsBuilder = settingsBuilder;
 			return this;
 		}
-		
+
 		public PushMessageModelBuilder setMessageBuilder(MessageBuilder messageBuilder) {
+			if (messageBuilder != null && messageBuilder.build() != null) {
+				checkBlankObject = true;
+			}
 			this.messageBuilder = messageBuilder;
 			return this;
 		}
 
-		public PushMessageModel build(){
-			return new PushMessageModel(this);
+		public PushMessageModel build() {
+			if (checkBlankObject) {
+				return new PushMessageModel(this);
+			} else {
+				return null;
+			}
 		}
-		
-		
 
 	}
-	
 
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	public static final class Message {
 
 		private String alert;
 		private String url;
-		
-		
+
 		public String getAlert() {
 			return alert;
 		}
@@ -149,41 +162,41 @@ public final class PushMessageModel {
 		public String getUrl() {
 			return url;
 		}
-		
-		private Message(MessageBuilder builder){
+
+		private Message(MessageBuilder builder) {
 			this.alert = builder.alert;
 			this.url = builder.url;
-			
+
 		}
-		public static class MessageBuilder{
+
+		public static class MessageBuilder {
 			private String alert;
 			private String url;
 			private boolean checkBlankObject = false;
-			
+
 			public MessageBuilder setAlert(final String alert) {
-				if(alert!=null && alert.length()>0){
+				if (alert != null && alert.length() > 0) {
 					checkBlankObject = true;
 				}
 				this.alert = alert;
 				return this;
 			}
-			
+
 			public MessageBuilder setUrl(final String url) {
-				if(url != null && url.length() >0){
-					checkBlankObject=true;
+				if (url != null && url.length() > 0) {
+					checkBlankObject = true;
 				}
 				this.url = url;
 				return this;
 			}
-			
-			public Message build(){
-				if(checkBlankObject){
-					return new Message(this);	
-				}
-				else{
+
+			public Message build() {
+				if (checkBlankObject) {
+					return new Message(this);
+				} else {
 					return null;
 				}
-				
+
 			}
 		}
 	}
@@ -211,33 +224,48 @@ public final class PushMessageModel {
 		public String[] getPlatforms() {
 			return platforms;
 		}
-		
-		private Target(TargetBuilder builder){
+
+		private Target(TargetBuilder builder) {
 			this.deviceIds = builder.deviceIds;
 			this.platforms = builder.platforms;
 			this.tagNames = builder.tagNames;
 			this.userIds = builder.userIds;
 		}
-		
-		public static class TargetBuilder{
-		
+
+		public static class TargetBuilder {
+
+			public enum PushNotificationsPlatform {
+				APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
+						"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
+
+				private String platformCode;
+
+				PushNotificationsPlatform(String code) {
+					this.platformCode = code;
+				}
+
+				public String getValue() {
+					return platformCode;
+				}
+			}
+
 			private String[] deviceIds = null;
 			private String[] userIds = null;
 			private String[] platforms = null;
 			private String[] tagNames = null;
 			private boolean checkBlankObject = false;
-			
+
 			public TargetBuilder setDeviceIds(final String[] deviceIds) {
-				if(deviceIds!=null && deviceIds.length>0){
+				if (deviceIds != null && deviceIds.length > 0) {
 					checkBlankObject = true;
 				}
-				
+
 				this.deviceIds = deviceIds;
 				return this;
 			}
-			
+
 			public TargetBuilder setUserIds(final String[] userIds) {
-				if(userIds != null && userIds.length>0){
+				if (userIds != null && userIds.length > 0) {
 					checkBlankObject = true;
 				}
 				this.userIds = userIds;
@@ -245,7 +273,7 @@ public final class PushMessageModel {
 			}
 
 			public TargetBuilder setTagNames(final String[] tagNames) {
-				if(tagNames!= null && tagNames.length > 0){
+				if (tagNames != null && tagNames.length > 0) {
 					checkBlankObject = true;
 				}
 				this.tagNames = tagNames;
@@ -254,24 +282,27 @@ public final class PushMessageModel {
 
 			public TargetBuilder setPlatforms(final PushNotificationsPlatform[] platforms) {
 
-				if(platforms!=null && platforms.length>0){
-					checkBlankObject=true;
-				}
-				String[] platformArray = new String[platforms.length];
+				String[] platformArray = null;
 
-				for (int i = 0; i < platforms.length; i++) {
-					platformArray[i] = platforms[i].getValue();
+				if (platforms != null && platforms.length > 0) {
+
+					checkBlankObject = true;
+
+					platformArray = new String[platforms.length];
+
+					for (int i = 0; i < platforms.length; i++) {
+						platformArray[i] = platforms[i].getValue();
+					}
 				}
 
 				this.platforms = platformArray;
 				return this;
 			}
 
-			public Target build(){
-				if(checkBlankObject){
-				return new Target(this);
-				}
-				else{
+			public Target build() {
+				if (checkBlankObject) {
+					return new Target(this);
+				} else {
 					return null;
 				}
 			}
@@ -288,13 +319,6 @@ public final class PushMessageModel {
 		private ChromeWeb chromeWeb;
 		private SafariWeb safariWeb;
 		private ChromeAppExt chromeAppExt;
-
-		private ApnsBuilder apnsBuilder;
-		private GcmBuilder gcmBuilder;
-		private FirefoxWebBuilder firefoxWebBuilder;
-		private ChromeWebBuilder chromeWebBuilder;
-		private SafariWebBuilder safariWebBuilder;
-		private ChromeAppExtBuilder chromeAppExtBuilder;
 
 		public Apns getApns() {
 			return apns;
@@ -320,57 +344,19 @@ public final class PushMessageModel {
 			return chromeAppExt;
 		}
 
-		public ApnsBuilder getApnsBuilder() {
-			return apnsBuilder;
-		}
-
-		public GcmBuilder getGcmBuilder() {
-			return gcmBuilder;
-		}
-
-		public FirefoxWebBuilder getFirefoxWebBuilder() {
-			return firefoxWebBuilder;
-		}
-
-		public ChromeWebBuilder getChromeWebBuilder() {
-			return chromeWebBuilder;
-		}
-
-		public SafariWebBuilder getSafariWebBuilder() {
-			return safariWebBuilder;
-		}
-
-		public ChromeAppExtBuilder getChromeAppExtBuilder() {
-			return chromeAppExtBuilder;
-		}
-
 		private Settings(SettingsBuilder builder) {
 
-			this.apns = builder.apns;
-			this.gcm = builder.gcm;
-			this.firefoxWeb = builder.firefoxWeb;
-			this.chromeWeb = builder.chromeWeb;
-			this.safariWeb = builder.safariWeb;
-			this.chromeAppExt = builder.chromeAppExt;
-
-			this.apnsBuilder = builder.apnsBuilder;
-			this.gcmBuilder = builder.gcmBuilder;
-			this.firefoxWebBuilder = builder.firefoxWebBuilder;
-			this.chromeWebBuilder = builder.chromeWebBuilder;
-			this.safariWebBuilder = builder.safariWebBuilder;
-			this.chromeAppExtBuilder = builder.chromeAppExtBuilder;
+			this.apns = builder.apnsBuilder != null ? builder.apnsBuilder.build() : null;
+			this.gcm = builder.gcmBuilder != null ? builder.gcmBuilder.build() : null;
+			this.firefoxWeb = builder.firefoxWebBuilder != null ? builder.firefoxWebBuilder.build() : null;
+			this.chromeWeb = builder.chromeWebBuilder != null ? builder.chromeWebBuilder.build() : null;
+			this.safariWeb = builder.safariWebBuilder != null ? builder.safariWebBuilder.build() : null;
+			this.chromeAppExt = builder.chromeAppExtBuilder != null ? builder.chromeAppExtBuilder.build() : null;
 
 		}
 
 		// Builder for Settings
 		public static class SettingsBuilder {
-
-			private Apns apns;
-			private Gcm gcm;
-			private FirefoxWeb firefoxWeb;
-			private ChromeWeb chromeWeb;
-			private SafariWeb safariWeb;
-			private ChromeAppExt chromeAppExt;
 
 			private ApnsBuilder apnsBuilder;
 			private GcmBuilder gcmBuilder;
@@ -378,69 +364,67 @@ public final class PushMessageModel {
 			private ChromeWebBuilder chromeWebBuilder;
 			private SafariWebBuilder safariWebBuilder;
 			private ChromeAppExtBuilder chromeAppExtBuilder;
-
-			public SettingsBuilder setApns(Apns apns) {
-				this.apns = apns;
-				return this;
-			}
-
-			public SettingsBuilder setGcm(Gcm gcm) {
-				this.gcm = gcm;
-				return this;
-			}
-
-			public SettingsBuilder setFirefoxWeb(FirefoxWeb firefoxWeb) {
-				this.firefoxWeb = firefoxWeb;
-				return this;
-			}
-
-			public SettingsBuilder setChromeWeb(ChromeWeb chromeWeb) {
-				this.chromeWeb = chromeWeb;
-				return this;
-			}
-
-			public SettingsBuilder setSafariWeb(SafariWeb safariWeb) {
-				this.safariWeb = safariWeb;
-				return this;
-			}
-
-			public SettingsBuilder setChromeAppExt(ChromeAppExt chromeAppExt) {
-				this.chromeAppExt = chromeAppExt;
-				return this;
-			}
+			private boolean checkBlankObject = false;
 
 			public SettingsBuilder setApnsBuilder(ApnsBuilder apnsBuilder) {
+
+				if (apnsBuilder != null && apnsBuilder.build() != null) {
+					checkBlankObject = true;
+				}
 				this.apnsBuilder = apnsBuilder;
 				return this;
 			}
 
 			public SettingsBuilder setGcmBuilder(GcmBuilder gcmBuilder) {
+				if (gcmBuilder != null && gcmBuilder.build() != null) {
+					checkBlankObject = true;
+				}
+
 				this.gcmBuilder = gcmBuilder;
 				return this;
 			}
 
 			public SettingsBuilder setFirefoxWebBuilder(FirefoxWebBuilder firefoxWebBuilder) {
+
+				if (firefoxWebBuilder != null && firefoxWebBuilder.build() != null) {
+					checkBlankObject = true;
+				}
+
 				this.firefoxWebBuilder = firefoxWebBuilder;
 				return this;
 			}
 
 			public SettingsBuilder setChromeWebBuilder(ChromeWebBuilder chromeWebBuilder) {
+
+				if (chromeWebBuilder != null && chromeWebBuilder.build() != null) {
+					checkBlankObject = true;
+				}
 				this.chromeWebBuilder = chromeWebBuilder;
 				return this;
 			}
 
 			public SettingsBuilder setSafariWebBuilder(SafariWebBuilder safariWebBuilder) {
+				if (safariWebBuilder != null && safariWebBuilder.build() != null) {
+					checkBlankObject = true;
+				}
 				this.safariWebBuilder = safariWebBuilder;
 				return this;
 			}
 
 			public SettingsBuilder setChromeAppExtBuilder(ChromeAppExtBuilder chromeAppExtBuilder) {
+				if (chromeAppExtBuilder != null && chromeAppExtBuilder.build() != null) {
+					checkBlankObject = true;
+				}
 				this.chromeAppExtBuilder = chromeAppExtBuilder;
 				return this;
 			}
 
 			public Settings build() {
-				return new Settings(this);
+				if (checkBlankObject) {
+					return new Settings(this);
+				} else {
+					return null;
+				}
 			}
 
 		}
@@ -453,7 +437,7 @@ public final class PushMessageModel {
 			private String iosActionKey;
 			private JsonNode payload;
 			private String interactiveCategory;
-			private APNSNotificationType type;
+			private ApnsBuilder.APNSNotificationType type;
 			private String titleLocKey;
 			private String locKey;
 			private String launchImage;
@@ -517,7 +501,7 @@ public final class PushMessageModel {
 				return interactiveCategory;
 			}
 
-			public final APNSNotificationType getType() {
+			public final ApnsBuilder.APNSNotificationType getType() {
 				return type;
 			}
 
@@ -541,6 +525,10 @@ public final class PushMessageModel {
 
 			// Builder for Apns
 			public static class ApnsBuilder {
+
+				public enum APNSNotificationType {
+					DEFAULT, MIXED, SILENT
+				}
 
 				private Integer badge;
 				private String sound;
@@ -731,15 +719,13 @@ public final class PushMessageModel {
 			private Boolean sync;
 			private String sound;
 			private String interactiveCategory;
-			private GCMPriority priority;
-			private JsonNode style;
-			private Visibility visibility;
+			private GcmBuilder.GCMPriority priority;
+			private GcmStyle style;
+			private GcmBuilder.Visibility visibility;
 			private String icon;
-			private JsonNode lights;
+			private GcmLights lights;
 			private GcmStyleBuilder gcmStyleBuilder;
 			private GcmLightsBuilder gcmLightsBuilder;
-			
-			
 
 			public GcmStyleBuilder getGcmStyleBuilder() {
 				return gcmStyleBuilder;
@@ -778,16 +764,15 @@ public final class PushMessageModel {
 				return interactiveCategory;
 			}
 
-			public final GCMPriority getPriority() {
+			public final GcmBuilder.GCMPriority getPriority() {
 				return priority;
 			}
 
-			@JsonRawValue
-			public final JsonNode getStyle() {
+			public final GcmStyle getStyle() {
 				return style;
 			}
 
-			public final Visibility getVisibility() {
+			public final GcmBuilder.Visibility getVisibility() {
 				return visibility;
 			}
 
@@ -795,8 +780,7 @@ public final class PushMessageModel {
 				return icon;
 			}
 
-			@JsonRawValue
-			public final JsonNode getLights() {
+			public final GcmLights getLights() {
 				return lights;
 			}
 
@@ -821,6 +805,14 @@ public final class PushMessageModel {
 
 			public static class GcmBuilder {
 
+				public enum GCMPriority {
+					DEFAULT, MIN, LOW, HIGH, MAX
+				}
+
+				public enum Visibility {
+					PUBLIC, PRIVATE, SECRET;
+				}
+
 				private Boolean delayWhileIdle;
 				private Integer timeToLive;
 				private String collapseKey;
@@ -830,16 +822,14 @@ public final class PushMessageModel {
 				private String sound;
 				private String interactiveCategory;
 				private GCMPriority priority;
-				private JsonNode style;
+				private GcmStyle style;
 				private Visibility visibility;
 				private String icon;
-				private JsonNode lights;
+				private GcmLights lights;
 				private GcmStyleBuilder gcmStyleBuilder;
 				private GcmLightsBuilder gcmLightsBuilder;
-				
+
 				private boolean checkBlankObject = false;
-				
-				
 
 				public GcmBuilder setGcmStyleBuilder(GcmStyleBuilder gcmStyleBuilder) {
 					if (gcmStyleBuilder != null) {
@@ -936,16 +926,12 @@ public final class PushMessageModel {
 					return this;
 				}
 
-				public final GcmBuilder setStyle(JSONObject style) {
-					try {
-						if (style != null) {
-							checkBlankObject = true;
-							this.style = mapper.readTree(String.valueOf(style));
-						}
-					} catch (Exception exception) {
-						logger.log(Level.SEVERE, exception.toString(), exception);
-					}
+				public final GcmBuilder setStyle(GcmStyle style) {
 
+					if (style != null) {
+						checkBlankObject = true;
+					}
+					this.style = style;
 					return this;
 				}
 
@@ -965,18 +951,12 @@ public final class PushMessageModel {
 					return this;
 				}
 
-				public final GcmBuilder setLights(JSONObject lights) {
+				public final GcmBuilder setLights(GcmLights lights) {
 
-					try {
-						if (lights != null) {
-							checkBlankObject = true;
-							this.lights = mapper.readTree(String.valueOf(lights));
-							 
-						}
-					} catch (Exception exception) {
-						logger.log(Level.SEVERE, exception.toString(), exception);
+					if (lights != null) {
+						checkBlankObject = true;
 					}
-
+					this.lights = lights;
 					return this;
 				}
 
@@ -994,14 +974,14 @@ public final class PushMessageModel {
 
 		@JsonInclude(JsonInclude.Include.NON_EMPTY)
 		public static final class GcmLights {
-			private GcmLED ledArgb;
+			private GcmLightsBuilder.GcmLED ledArgb;
 			private Integer ledOnMs;
 			private Integer ledOffMs;
 
-			public GcmLED getLedArgb() {
+			public GcmLightsBuilder.GcmLED getLedArgb() {
 				return ledArgb;
 			}
-			
+
 			public Integer getLedOnMs() {
 				return ledOnMs;
 			}
@@ -1010,13 +990,21 @@ public final class PushMessageModel {
 				return ledOffMs;
 			}
 
-			private GcmLights(GcmLightsBuilder builder){
+			private GcmLights(GcmLightsBuilder builder) {
 				this.ledArgb = builder.ledArgb;
 				this.ledOnMs = builder.ledOnMs;
 				this.ledOffMs = builder.ledOffMs;
 			}
-			
+
 			public static class GcmLightsBuilder {
+
+				/**
+				 * Determines the LED value in the notifications
+				 */
+				public enum GcmLED {
+
+					BLACK, DARKGRAY, GRAY, LIGHTGRAY, WHITE, RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, TRANSPARENT
+				}
 
 				private GcmLED ledArgb;
 				private Integer ledOnMs;
@@ -1036,8 +1024,8 @@ public final class PushMessageModel {
 					this.ledOffMs = ledOffMs;
 					return this;
 				}
-				
-				public GcmLights build(){
+
+				public GcmLights build() {
 					return new GcmLights(this);
 				}
 
@@ -1046,14 +1034,13 @@ public final class PushMessageModel {
 
 		@JsonInclude(JsonInclude.Include.NON_EMPTY)
 		public static final class GcmStyle {
-			private GcmStyleTypes type;
+			private GcmStyleBuilder.GcmStyleTypes type;
 			private String url;
 			private String title;
 			private String text;
 			private String[] lines;
 
-			
-			public GcmStyleTypes getType() {
+			public GcmStyleBuilder.GcmStyleTypes getType() {
 				return type;
 			}
 
@@ -1072,25 +1059,32 @@ public final class PushMessageModel {
 			public String[] getLines() {
 				return lines;
 			}
-			
-			private GcmStyle(GcmStyleBuilder builder){
+
+			private GcmStyle(GcmStyleBuilder builder) {
 				this.type = builder.type;
 				this.url = builder.url;
 				this.title = builder.title;
 				this.text = builder.text;
 				this.lines = builder.lines;
-				
+
 			}
-			
+
 			public static class GcmStyleBuilder {
-				
+
+				/**
+				 * The available style type of the gcm notification message.
+				 */
+				public enum GcmStyleTypes {
+
+					BIGTEXT_NOTIFICATION, INBOX_NOTIFICATION, PICTURE_NOTIFICATION
+				}
+
 				private GcmStyleTypes type;
 				private String url;
 				private String title;
 				private String text;
 				private String[] lines;
 
-				
 				public GcmStyleBuilder setType(final GcmStyleTypes type) {
 					this.type = type;
 					return this;
@@ -1110,14 +1104,14 @@ public final class PushMessageModel {
 					this.text = text;
 					return this;
 				}
-				
+
 				public GcmStyleBuilder setLines(final String[] lines) {
 					this.lines = lines;
 					return this;
 				}
-				
-				public GcmStyle build(){
-					
+
+				public GcmStyle build() {
+
 					return new GcmStyle(this);
 				}
 

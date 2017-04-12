@@ -22,7 +22,7 @@ You can get the SDK from Maven Central. For example, to get it with Maven, inclu
 To send a push notification, first initialize the SDK with the Bluemix region of your application, and optionally, your credentials:
 
 ```
-PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION);
+PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 ```
 
 However, if your server is running on Bluemix as well, you can initialize it with just the region. 
@@ -36,7 +36,9 @@ PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 Then create a new notification using `NotificationBuilder`:
 
 ```
-NotificationBuilder builder = new NotificationBuilder("This is the notification's text!");
+// Older approach
+NotificationBuilder builder = new NotificationBuilder("This is the notification's text!"); // Deprecated
+
 ```
 You can also configure the notification with some other optional settings.
 
@@ -54,73 +56,92 @@ builder.setMessageURL(urlToBeIncludedWithThePushNotification)
 	.setTarget(new String [] {"deviceId1","deviceId1"}, new String [] {"user1","user2"}, new PushNotificationsPlatform[] { PushNotificationsPlatform.APPEXTCHROME,
 				PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE}, new String[] {"tag1","tag2"}); // This approach is deprecated
 
-// Below approach has been introduced
 
-// Set up the builders (apns, gcm , firefox etc) in the SettingsBuilder of Settings as shown below, you also can only set builders for those platforms which you require. 
+// Below New approach has been introduced
 
-Settings settings = new Settings.SettingsBuilder().setApnsBuilder(BuilderFactory.getBuilder(ApnsBuilder.class))
-				.setGcmBuilder(BuilderFactory.getBuilder(GcmBuilder.class)).setChromeAppExtBuilder(BuilderFactory.getBuilder(ChromeAppExtBuilder.class))
-				.setChromeWebBuilder(BuilderFactory.getBuilder(ChromeWebBuilder.class)).setFirefoxWebBuilder(BuilderFactory.getBuilder(FirefoxWebBuilder.class))
-				.setSafariWebBuilder(BuilderFactory.getBuilder(SafariWebBuilder.class)).build();
+Create a new Notification using 'NotificationBuilder':
 
-	// Set all optional settings using settings,no need to set all attribute of a setting , only which is required you can set using builder, for example if you require only apns badge attribute as an optional setting , other settings not need to be set.
+NotificationBuilder builder = new NotificationBuilder();
+
+// Use MessageBuilder to set message alert and url
+
+MessageBuilder messageBuilder = new MessageBuilder();
+messageBuilder.setAlert("This is the notification's text!");
+messageBuilder.setUrl("www.example.com");
+
+
+// Builders are introduced which sets the optional settings for a particualr platform : ApnsBuilder (Apns), GcmBuilder (Gcm), ChromeAppExtBuilder (ChromeAppExtension), ChromeWebBuilder (ChromeWeb), 
+FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
+
+
+// For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
-	// For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
-	
-	builder.setAPNSSettingsValues(settings.getApnsBuilder().setBadge(1).setInteractiveCategory("interactiveCategory")
-				.setIosActionKey("iOSActionKey").setPayload(new JSONObject()).setSound("soundFile")
-				.setType(APNSNotificationType.DEFAULT).setTitleLocKey("titleLocKey").setLocKey("locKey")
-				.setLaunchImage("launchImage")
-				.setTitleLocArgs(new String[] {"titleLocArgs1"})
-				.setLocArgs(new String[] {"locArgs1"}).setTitle("title")
-				.setSubtitle("subtitle").setAttachmentUrl("attachmentUrl").build());
+ApnsBuilder apnsBuilder = new ApnsBuilder();
+apnsBuilder.setBadge(1).setInteractiveCategory("testInteractiveCategory").setIosActionKey("testiOSActionKey")
+.setPayload(new JSONObject()).setSound("testSoundFile")
+.setType(ApnsBuilder.APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey")
+.setLocKey("testLocKey").setLaunchImage("testLaunchImage")
+.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
+.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
+.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
 
 
-		// style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
-				
-		Gcm gcm = settings.getGcmBuilder().setGcmStyleBuilder(BuilderFactory.getBuilder(GcmStyleBuilder.class)).setGcmLightsBuilder(BuilderFactory.getBuilder(GcmLightsBuilder.class)).build();
+// style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
+
+GcmStyleBuilder gcmStyleBuilder = new GcmStyleBuilder();
+GcmStyle style = gcmStyleBuilder.setType(GcmStyleBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
+				.setUrl("url").setLines(new String[] { "line1" }).build();
 		
+GcmLightsBuilder gcmLightsBuilder = new GcmLightsBuilder();
+GcmLights lights = gcmLightsBuilder.setLedArgb(GcmLightsBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1).build();
 		
-		GcmStyle style = gcm.getGcmStyleBuilder().setType(GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title").setUrl("url").setLines(new String[] {"line1"}).build();		
-				
+// Gcm Settings	
+GcmBuilder gcmBuilder = new GcmBuilder();
+gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
+.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
+.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(style)
+.setLights(lights);
+
+// Chrome Settings		
+ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
+chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+
+// ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
+ChromeAppExtBuilder chromeAppExtBuilder = new ChromeAppExtBuilder();
+chromeAppExtBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setTitle("testTitle")
+.setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+
+// Firefox Settings		
+FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
+firefoxWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
+.setPayload(new JSONObject());
+
+// Safari Settings. For safari all the three settings are mandatory to set.		
+SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
+safariWebBuilder.setTitle("testTitle").setUrlArgs(new String[] {"testUrlArgs1"})
+.setAction("testAction");
+
+// Now we set builders created above in SettingsBuilder as shown below: 			
+SettingsBuilder settingsBuilder = new SettingsBuilder();
+settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder)
+.setChromeAppExtBuilder(chromeAppExtBuilder).setChromeWebBuilder(chromeWebBuilder)
+.setFirefoxWebBuilder(firefoxWebBuilder).setSafariWebBuilder(safariWebBuilder);
+
+// Target.**Note : We should provide either deviceIds or userIds or platforms or tagnames
+TargetBuilder targetBuilder = new TargetBuilder();
+targetBuilder.setDeviceIds(null)
+.setUserIds(null)
+.setPlatforms(new TargetBuilder.PushNotificationsPlatform[] {
+TargetBuilder.PushNotificationsPlatform.APPLE, TargetBuilder.PushNotificationsPlatform.GOOGLE,
+TargetBuilder.PushNotificationsPlatform.APPEXTCHROME,
+TargetBuilder.PushNotificationsPlatform.WEBCHROME,
+TargetBuilder.PushNotificationsPlatform.WEBFIREFOX,
+TargetBuilder.PushNotificationsPlatform.WEBSAFARI })
+.setTagNames(null);
 		
-		GcmLights lights = gcm.getGcmLightsBuilder().setLedArgb(GcmLED.BLACK).build();
-		
-		// Gcm Settings	
-		builder.setGCMSettingsValues(settings.getGcmBuilder().setCollapseKey("collapseKey").setDelayWhileIdle(true)
-				.setPayload(new JSONObject()).setPriority(GCMPriority.MIN).setSound("soundFile").setTimeToLive(42)
-				.setIcon("icon").setVisibility(Visibility.PUBLIC).setSync(true)
-				.setStyle(NotificationBuilder.generateJSON(style))
-				.setLights(NotificationBuilder.generateJSON(lights)).build());
+// Now we create notification json using messageBuilder , settingsBuilder and targetBuilder created above :
 
-		// Chrome Settings		
-		builder.setChromeSettings(settings.getChromeWebBuilder().setTitle("title").setIconUrl("iconUrl")
-				.setTimeToLive(42).setPayload(new JSONObject()).build());
-
-		// ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
-		builder.setChromeAppExtSettings(settings.getChromeAppExtBuilder().setCollapseKey("collapseKey")
-				.setDelayWhileIdle(true).setTitle("title").setIconUrl("iconUrl").setTimeToLive(42)
-				.setPayload(new JSONObject()).build());
-
-		// Firefox Settings		
-		builder.setFirefoxWebSettings(settings.getFirefoxWebBuilder().setTitle("title").setIconUrl("iconUrl")
-				.setTimeToLive(42).setPayload(new JSONObject()).build());
-
-		// Safari Settings. For safari all the three settings are mandatory to set.		
-		builder.setSafariWebSettings(settings.getSafariWebBuilder().setTitle("title")
-				.setUrlArgs(new String[] {"urlArgs"}).setAction("action").build());			
-
-
-	// Target
-	PushMessageModel model = new PushMessageModel.PushMessageModelBuilder().setTargetBuilder(BuilderFactory.getBuilder(TargetBuilder.class)).build();
-		
-	// **Note : We should provide either deviceIds or userIds or platforms or tagnames
-		
-	builder.setTargetValues(model.getTargetBuilder().setDeviceIds(new String[] { "device1", "device2" }).setUserIds(new String[] { "userId1", "userId2" }).setPlatforms(new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE,
-						PushNotificationsPlatform.GOOGLE, PushNotificationsPlatform.APPEXTCHROME,
-						PushNotificationsPlatform.WEBCHROME, PushNotificationsPlatform.WEBFIREFOX, PushNotificationsPlatform.WEBSAFARI })
-				.setTagNames(new String[] { "tag1", "tag2" }).build());
-
+JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder).build();
 	
 ```
 (Note that you can chain the different calls to `NotificationBuilder`.)
