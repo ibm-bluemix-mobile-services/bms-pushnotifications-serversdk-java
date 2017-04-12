@@ -301,7 +301,7 @@ public class NotificationBuilderTest {
 				.setTitle(null).setTitleLocArgs(null).setTitleLocKey(null).setType(null);
 
 		GcmBuilder gcmBuilder = new GcmBuilder();
-		;
+		
 		gcmBuilder.setCollapseKey(null).setDelayWhileIdle(null).setIcon(null).setInteractiveCategory(null)
 				.setLights(null).setPayload(null).setPriority(null).setSound(null).setStyle(null).setSync(null)
 				.setTimeToLive(null).setVisibility(null);
