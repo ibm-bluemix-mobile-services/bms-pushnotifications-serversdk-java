@@ -75,7 +75,7 @@ public class PushNotifications {
 			init(tenantId,pushSecret,bluemixRegion);
 		}
 		else{
-			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSHINITEXCEPTION);
+			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
 		}
@@ -128,7 +128,7 @@ public class PushNotifications {
 	 */
 	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
 		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
-			Throwable exception = new RuntimeException(PushConstants.NOTPROPERLYINITIALIZEDEXCEPTION);
+			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			
 			if(listener != null){
@@ -138,7 +138,7 @@ public class PushNotifications {
 		}
 		
 		if(notification == null){
-			Throwable exception = new IllegalArgumentException(PushConstants.NULLNOTIFICATIONEXCEPTION);
+			Throwable exception = new IllegalArgumentException(PushConstants.NULL_NOTIFICATION_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			if(listener != null){
 				listener.onFailure(null, null, exception);

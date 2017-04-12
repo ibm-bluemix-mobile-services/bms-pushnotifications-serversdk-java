@@ -118,7 +118,7 @@ public class NotificationBuilder {
 	 */
 	public NotificationBuilder(String alert) {
 		if (alert == null) {
-			throw new IllegalArgumentException(PushConstants.ALERTNOTNULLEXCEPTIOPN);
+			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
 		}
 
 		final PushMessageModel model = new PushMessageModel.PushMessageModelBuilder()

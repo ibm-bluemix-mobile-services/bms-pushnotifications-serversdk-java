@@ -23,17 +23,17 @@ public final class PushConstants {
 	public static final String BASEURL = "https://imfpush";
 	public static final String PORTURL = ":443/imfpush/v1/apps/";
 	public static final String PROJECT = "/messages";
-	public static final String PUSHINITEXCEPTION = "PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.";
+	public static final String PUSH_INIT_EXCEPTION = "PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.";
 	public static final String VCAP_SERVICES = "VCAP_SERVICES";
 	public static final String IMFPUSH = "imfpush";
 	public static final String CREDENTIALS = "credentials";
 	public static final String APPGUID = "appGuid";
 	public static final String APPSECRET = "appSecret";
-	public static final String NOTPROPERLYINITIALIZEDEXCEPTION = "PushNotifications has not been properly initialized.";
-	public static final String NULLNOTIFICATIONEXCEPTION = "Cannot send a null push notification.";
+	public static final String NOT_PROPERLY_INITIALIZED_EXCEPTION = "PushNotifications has not been properly initialized.";
+	public static final String NULL_NOTIFICATION_EXCEPTION = "Cannot send a null push notification.";
 	public static final String CONTENTTYPE = "application/json";
 	public static final String UTFEIGHT = "UTF-8";
-	public static final String ALERTNOTNULLEXCEPTIOPN = "The alert cannot be null.";
+	public static final String ALERT_NOT_NULL_EXCEPTIOPN = "The alert cannot be null.";
 	
 	private PushConstants() {
 
