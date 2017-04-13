@@ -276,7 +276,7 @@ public class NotificationBuilderTest {
 
 			MessageBuilder messageBuilder = new MessageBuilder();
 			messageBuilder.setAlert(null);
-			new NotificationBuilder().messageBuilder(messageBuilder);
+			new NotificationBuilder().messageBuilder(messageBuilder).build();
 		} catch (Throwable t) {
 			// Return to mark as successful
 			return;

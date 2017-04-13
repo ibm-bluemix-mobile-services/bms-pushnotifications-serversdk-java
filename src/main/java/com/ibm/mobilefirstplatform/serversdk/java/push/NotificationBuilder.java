@@ -286,13 +286,7 @@ public class NotificationBuilder {
 	public NotificationBuilder messageBuilder(MessageBuilder messageBuilder) {
 
 		this.messageBuilder = messageBuilder;
-
-		if (messageBuilder == null) {
-			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
-		}
-		if (messageBuilder != null && messageBuilder.build().getAlert() == null) {
-			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
-		}
+		
 		return this;
 	}
 
@@ -356,6 +350,13 @@ public class NotificationBuilder {
 
 		PushMessageModel model = new PushMessageModel();
 
+		if (messageBuilder == null) {
+			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+		}
+		if (messageBuilder != null && messageBuilder.build().getAlert() == null) {
+			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+		}
+		
 		model.setMessage(messageBuilder != null ? messageBuilder.build() : null);
 
 		model.setTarget(targetBuilder != null ? targetBuilder.build() : null);
