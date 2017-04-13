@@ -34,7 +34,6 @@ public class NotificationBuilderTest {
 
 		JSONObject notification = builder.build();
 
-		assertEquals(1, notification.keySet().size());
 		assertTrue(notification.has("message"));
 		assertTrue(notification.getJSONObject("message").has("alert"));
 		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
@@ -134,7 +133,7 @@ public class NotificationBuilderTest {
 	public void shouldallowtoconfiguregcmsettingsold() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
+  
 		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42);
 
 		JSONObject notification = builder.build();
