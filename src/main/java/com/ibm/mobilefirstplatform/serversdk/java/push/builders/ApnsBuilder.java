@@ -75,11 +75,12 @@ public final class ApnsBuilder {
 		this.payload = jsonNodePayload;
 		return this;
 	}
+
 	public final ApnsBuilder setCategory(String category) {
 		this.category = category;
 		return this;
 	}
-	
+
 	public final ApnsBuilder setInteractiveCategory(String interactiveCategory) {
 		this.interactiveCategory = interactiveCategory;
 		return this;
@@ -134,8 +135,8 @@ public final class ApnsBuilder {
 		Apns apns = new Apns();
 		apns.setBadge(badge).setAttachmentUrl(attachmentUrl).setInteractiveCategory(interactiveCategory)
 				.setIosActionKey(iosActionKey).setLaunchImage(launchImage).setLocArgs(locArgs).setLocKey(locKey)
-				.setPayload(payload).setSound(sound).setSubtitle(subtitle).setTitle(title)
-				.setTitleLocArgs(titleLocArgs).setTitleLocKey(titleLocKey).setType(type).setCategory(category);
+				.setPayload(payload).setSound(sound).setSubtitle(subtitle).setTitle(title).setTitleLocArgs(titleLocArgs)
+				.setTitleLocKey(titleLocKey).setType(type).setCategory(category);
 		return apns;
 	}
 }

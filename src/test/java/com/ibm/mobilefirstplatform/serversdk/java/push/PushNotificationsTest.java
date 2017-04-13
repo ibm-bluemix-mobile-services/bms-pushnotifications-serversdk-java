@@ -24,16 +24,18 @@ import org.junit.Test;
 
 public class PushNotificationsTest {
 	@Before
-	public void cleanup(){
+	public void cleanup() {
 		PushNotifications.pushMessageEndpointURL = null;
 		PushNotifications.secret = null;
 	}
 
 	@Test
-	public void shouldCreateEndpointURLAndStoreSecretWhenInitializing(){
+	public void shouldCreateEndpointURLAndStoreSecretWhenInitializing() {
 		PushNotifications.init("testTenantId", "testPushSecret", PushNotifications.US_SOUTH_REGION);
 
-		assertEquals("https://imfpush" + PushNotifications.US_SOUTH_REGION + ":443/imfpush/v1/apps/testTenantId/messages", PushNotifications.pushMessageEndpointURL);
+		assertEquals(
+				"https://imfpush" + PushNotifications.US_SOUTH_REGION + ":443/imfpush/v1/apps/testTenantId/messages",
+				PushNotifications.pushMessageEndpointURL);
 		assertEquals("testPushSecret", PushNotifications.secret);
 	}
 
@@ -72,12 +74,11 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldFailInitializingWhenCredentialsAreNotInEnvironmentVariables(){
-		try{
+	public void shouldFailInitializingWhenCredentialsAreNotInEnvironmentVariables() {
+		try {
 			PushNotifications.init("bluemixRegion");
-		}
-		catch(Throwable e){
-			//Did fail; test was successful.
+		} catch (Throwable e) {
+			// Did fail; test was successful.
 			return;
 		}
 
@@ -85,7 +86,7 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldFailSendingMessageWhenNotInitialized(){
+	public void shouldFailSendingMessageWhenNotInitialized() {
 		PushNotifications.send(null, new PushNotificationsResponseListener() {
 			@Override
 			public void onSuccess(int statusCode, String responseBody) {
@@ -100,7 +101,7 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldFailSendingMessageWhenNotificationIsNull(){
+	public void shouldFailSendingMessageWhenNotificationIsNull() {
 		PushNotifications.init("a", "b", "c");
 
 		PushNotifications.send(null, new PushNotificationsResponseListener() {
@@ -117,11 +118,11 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldSendResponseToListener(){
+	public void shouldSendResponseToListener() {
 		CloseableHttpResponse responseMock = mock(CloseableHttpResponse.class);
 
 		when(responseMock.getEntity()).thenReturn(null);
-		when(responseMock.getStatusLine()).thenReturn(new StatusLine(){
+		when(responseMock.getStatusLine()).thenReturn(new StatusLine() {
 			@Override
 			public ProtocolVersion getProtocolVersion() {
 				return null;
@@ -148,7 +149,7 @@ public class PushNotificationsTest {
 
 			@Override
 			public void onFailure(Integer statusCode, String responseBody, Throwable t) {
-				fail("Should not have called failure callback when the Status Code is the correct one.");				
+				fail("Should not have called failure callback when the Status Code is the correct one.");
 			}
 		};
 
@@ -168,13 +169,13 @@ public class PushNotificationsTest {
 			@Override
 			public void onFailure(Integer statusCode, String responseBody, Throwable t) {
 				assertNull(statusCode);
-				
-				//The response body is empty if mocked:
+
+				// The response body is empty if mocked:
 				assertTrue(responseBody == null || responseBody.length() == 0);
 			}
 		};
 
-		//Return null status code
+		// Return null status code
 		when(responseMock.getStatusLine()).thenReturn(null);
 		when(responseMock.getEntity()).thenReturn(mock(HttpEntity.class));
 
@@ -182,21 +183,21 @@ public class PushNotificationsTest {
 			PushNotifications.sendResponseToListener(responseMock, failureListener);
 		} catch (IOException e) {
 			fail("Should not fail because the response is null.");
-		}	
+		}
 	}
-	
+
 	@Test
-	public void shouldCallSuccessCallbackWhenTheResponseIsCorrect() throws Throwable{
+	public void shouldCallSuccessCallbackWhenTheResponseIsCorrect() throws Throwable {
 		CloseableHttpClient clientMock = mock(CloseableHttpClient.class);
 		CloseableHttpResponse responseMock = mock(CloseableHttpResponse.class);
-		
+
 		when(responseMock.getStatusLine()).thenReturn(new StatusLine() {
-			
+
 			@Override
 			public int getStatusCode() {
 				return HttpStatus.SC_ACCEPTED;
 			}
-			
+
 			@Override
 			public String getReasonPhrase() {
 				return null;
@@ -225,7 +226,8 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldCallFailureCallbackIfExceptionOccursWhenExecutingRequest() throws ClientProtocolException, IOException{
+	public void shouldCallFailureCallbackIfExceptionOccursWhenExecutingRequest()
+			throws ClientProtocolException, IOException {
 		CloseableHttpClient clientMock = mock(CloseableHttpClient.class);
 
 		when(clientMock.execute(any(HttpUriRequest.class))).thenThrow(new ClientProtocolException());

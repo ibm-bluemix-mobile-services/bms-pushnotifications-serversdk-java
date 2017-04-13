@@ -16,52 +16,54 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class SettingsBuilder {
 
-		private ApnsBuilder apnsBuilder;
-		private GcmBuilder gcmBuilder;
-		private FirefoxWebBuilder firefoxWebBuilder;
-		private ChromeWebBuilder chromeWebBuilder;
-		private SafariWebBuilder safariWebBuilder;
-		private ChromeAppExtBuilder chromeAppExtBuilder;
+	private ApnsBuilder apnsBuilder;
+	private GcmBuilder gcmBuilder;
+	private FirefoxWebBuilder firefoxWebBuilder;
+	private ChromeWebBuilder chromeWebBuilder;
+	private SafariWebBuilder safariWebBuilder;
+	private ChromeAppExtBuilder chromeAppExtBuilder;
 
-		public SettingsBuilder setApnsBuilder(ApnsBuilder apnsBuilder) {
-			this.apnsBuilder = apnsBuilder;
-			return this;
-		}
-
-		public SettingsBuilder setGcmBuilder(GcmBuilder gcmBuilder) {
-			this.gcmBuilder = gcmBuilder;
-			return this;
-		}
-
-		public SettingsBuilder setFirefoxWebBuilder(FirefoxWebBuilder firefoxWebBuilder) {
-			this.firefoxWebBuilder = firefoxWebBuilder;
-			return this;
-		}
-
-		public SettingsBuilder setChromeWebBuilder(ChromeWebBuilder chromeWebBuilder) {
-			this.chromeWebBuilder = chromeWebBuilder;
-			return this;
-		}
-
-		public SettingsBuilder setSafariWebBuilder(SafariWebBuilder safariWebBuilder) {
-			this.safariWebBuilder = safariWebBuilder;
-			return this;
-		}
-
-		public SettingsBuilder setChromeAppExtBuilder(ChromeAppExtBuilder chromeAppExtBuilder) {
-			this.chromeAppExtBuilder = chromeAppExtBuilder;
-			return this;
-		}
-
-		public Settings build() {
-			
-			Settings settings = new Settings();
-			settings.setApns(apnsBuilder!=null?apnsBuilder.build():null).setChromeAppExt(chromeAppExtBuilder!=null?chromeAppExtBuilder.build():null)
-			.setChromeWeb(chromeWebBuilder!=null?chromeWebBuilder.build():null).setFirefoxWeb(firefoxWebBuilder!=null?firefoxWebBuilder.build():null)
-			.setSafariWeb(safariWebBuilder!=null?safariWebBuilder.build():null).setGcm(gcmBuilder!=null?gcmBuilder.build():null);
-			
-			return settings;
-		}
-
+	public SettingsBuilder setApnsBuilder(ApnsBuilder apnsBuilder) {
+		this.apnsBuilder = apnsBuilder;
+		return this;
 	}
 
+	public SettingsBuilder setGcmBuilder(GcmBuilder gcmBuilder) {
+		this.gcmBuilder = gcmBuilder;
+		return this;
+	}
+
+	public SettingsBuilder setFirefoxWebBuilder(FirefoxWebBuilder firefoxWebBuilder) {
+		this.firefoxWebBuilder = firefoxWebBuilder;
+		return this;
+	}
+
+	public SettingsBuilder setChromeWebBuilder(ChromeWebBuilder chromeWebBuilder) {
+		this.chromeWebBuilder = chromeWebBuilder;
+		return this;
+	}
+
+	public SettingsBuilder setSafariWebBuilder(SafariWebBuilder safariWebBuilder) {
+		this.safariWebBuilder = safariWebBuilder;
+		return this;
+	}
+
+	public SettingsBuilder setChromeAppExtBuilder(ChromeAppExtBuilder chromeAppExtBuilder) {
+		this.chromeAppExtBuilder = chromeAppExtBuilder;
+		return this;
+	}
+
+	public Settings build() {
+
+		Settings settings = new Settings();
+		settings.setApns(apnsBuilder != null ? apnsBuilder.build() : null)
+				.setChromeAppExt(chromeAppExtBuilder != null ? chromeAppExtBuilder.build() : null)
+				.setChromeWeb(chromeWebBuilder != null ? chromeWebBuilder.build() : null)
+				.setFirefoxWeb(firefoxWebBuilder != null ? firefoxWebBuilder.build() : null)
+				.setSafariWeb(safariWebBuilder != null ? safariWebBuilder.build() : null)
+				.setGcm(gcmBuilder != null ? gcmBuilder.build() : null);
+
+		return settings;
+	}
+
+}

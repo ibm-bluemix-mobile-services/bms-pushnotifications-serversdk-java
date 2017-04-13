@@ -25,49 +25,46 @@ public final class ChromeWebBuilder {
 
 	public static final Logger logger = Logger.getLogger(ChromeAppExtBuilder.class.getName());
 
-		private String title;
-		private String iconUrl;
-		private Integer timeToLive;
-		private JsonNode payload;
-		
-		public final ChromeWebBuilder setTitle(String title) {
-			this.title = title;
-			return this;
-		}
+	private String title;
+	private String iconUrl;
+	private Integer timeToLive;
+	private JsonNode payload;
 
-		public final ChromeWebBuilder setIconUrl(String iconUrl) {
-			this.iconUrl = iconUrl;
-			return this;
-		}
-
-		public final ChromeWebBuilder setTimeToLive(Integer timeToLive) {
-			this.timeToLive = timeToLive;
-			return this;
-		}
-
-		public final ChromeWebBuilder setPayload(JSONObject payload) {
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode jsonNodePayload = null;
-
-			try {
-				if (payload != null) {
-					jsonNodePayload = mapper.readTree(payload.toString());
-				}
-			} catch (Exception exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
-			}
-
-			this.payload = jsonNodePayload;
-			return this;
-		}
-
-		public ChromeWeb build() {
-			ChromeWeb chromeWeb = new ChromeWeb();
-			chromeWeb.setIconUrl(iconUrl).setPayload(payload).setTimeToLive(timeToLive).setTitle(title);
-			return chromeWeb;
-
-		}
+	public final ChromeWebBuilder setTitle(String title) {
+		this.title = title;
+		return this;
 	}
 
+	public final ChromeWebBuilder setIconUrl(String iconUrl) {
+		this.iconUrl = iconUrl;
+		return this;
+	}
 
+	public final ChromeWebBuilder setTimeToLive(Integer timeToLive) {
+		this.timeToLive = timeToLive;
+		return this;
+	}
 
+	public final ChromeWebBuilder setPayload(JSONObject payload) {
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode jsonNodePayload = null;
+
+		try {
+			if (payload != null) {
+				jsonNodePayload = mapper.readTree(payload.toString());
+			}
+		} catch (Exception exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
+
+		this.payload = jsonNodePayload;
+		return this;
+	}
+
+	public ChromeWeb build() {
+		ChromeWeb chromeWeb = new ChromeWeb();
+		chromeWeb.setIconUrl(iconUrl).setPayload(payload).setTimeToLive(timeToLive).setTitle(title);
+		return chromeWeb;
+
+	}
+}

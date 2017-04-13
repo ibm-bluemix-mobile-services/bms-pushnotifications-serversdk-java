@@ -35,7 +35,7 @@ public final class PushConstants {
 	public static final String UTFEIGHT = "UTF-8";
 	public static final String ALERT_NOT_NULL_EXCEPTIOPN = "The alert cannot be null.";
 	public static final String ALERT_NOT_NULL_EXCEPTIOPN_NEW = "The alert cannot be null. Please use MessageBuilder to set alert";
-	
+
 	private PushConstants() {
 
 	}

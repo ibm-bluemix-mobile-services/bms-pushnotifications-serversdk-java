@@ -29,52 +29,65 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
 /**
- * This class is used to send push notifications from a Java server to mobile devices
- * using the Push Notification service in IBM® Bluemix.
+ * This class is used to send push notifications from a Java server to mobile
+ * devices using the Push Notification service in IBM® Bluemix.
  */
 public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
-	
-	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName()); 
-	
+
+	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
+
 	protected static String secret;
-	
+
 	protected static String pushMessageEndpointURL;
-	
+
 	/**
-	 * Specify the credentials and Bluemix region for your push notification service.
-	 *  
-	 * @param tenantId the tenant ID for the Bluemix application that the Push Notifications service is bound to
-	 * @param pushSecret the credential required for Push Notifications service authorization
-	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
+	 * Specify the credentials and Bluemix region for your push notification
+	 * service.
+	 * 
+	 * @param tenantId
+	 *            the tenant ID for the Bluemix application that the Push
+	 *            Notifications service is bound to
+	 * @param pushSecret
+	 *            the credential required for Push Notifications service
+	 *            authorization
+	 * @param bluemixRegion
+	 *            the Bluemix region where the Push Notifications service is
+	 *            hosted, such as {@link PushNotifications#US_SOUTH_REGION}
 	 */
-	public static void init(String tenantId, String pushSecret, String bluemixRegion){
+	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
 		secret = pushSecret;
-		
-		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.PORTURL + tenantId + PushConstants.PROJECT;
+
+		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.PORTURL + tenantId
+				+ PushConstants.PROJECT;
 	}
-	
+
 	/**
-	 * If your application server is running on Bluemix, and your push notification service is bound to your application,
-	 * you can use this method for initialization which will get the credentials from Bluemix's environment variables.
+	 * If your application server is running on Bluemix, and your push
+	 * notification service is bound to your application, you can use this
+	 * method for initialization which will get the credentials from Bluemix's
+	 * environment variables.
 	 * 
-	 * @param bluemixRegion the Bluemix region where the Push Notifications service is hosted, such as {@link PushNotifications#US_SOUTH_REGION}
+	 * @param bluemixRegion
+	 *            the Bluemix region where the Push Notifications service is
+	 *            hosted, such as {@link PushNotifications#US_SOUTH_REGION}
 	 * 
-	 * @throws IllegalArgumentException if either the push application ID or the secret are not found in the environment variables 
+	 * @throws IllegalArgumentException
+	 *             if either the push application ID or the secret are not found
+	 *             in the environment variables
 	 */
-	public static void init(String bluemixRegion){
+	public static void init(String bluemixRegion) {
 		String tenantId = null;
 		String pushSecret = null;
-		
+
 		tenantId = getApplicationIdFromVCAP();
 		pushSecret = getPushSecretFromVCAP();
-		
-		if(tenantId != null && pushSecret != null){
-			init(tenantId,pushSecret,bluemixRegion);
-		}
-		else{
+
+		if (tenantId != null && pushSecret != null) {
+			init(tenantId, pushSecret, bluemixRegion);
+		} else {
 			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
@@ -83,14 +96,15 @@ public class PushNotifications {
 
 	protected static String getApplicationIdFromVCAP() {
 		String vcapServicesAsString = getEnvironmentVariable(PushConstants.VCAP_SERVICES);
-		
-		if(vcapServicesAsString != null){
+
+		if (vcapServicesAsString != null) {
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
-			
-			if(vcapServices.has(PushConstants.IMFPUSH)){
-				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0).optJSONObject(PushConstants.CREDENTIALS);
-				
-				if(imfPushCredentials != null){
+
+			if (vcapServices.has(PushConstants.IMFPUSH)) {
+				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0)
+						.optJSONObject(PushConstants.CREDENTIALS);
+
+				if (imfPushCredentials != null) {
 					return imfPushCredentials.optString(PushConstants.APPGUID);
 				}
 			}
@@ -104,50 +118,55 @@ public class PushNotifications {
 
 	protected static String getPushSecretFromVCAP() {
 		String vcapServicesAsString = getEnvironmentVariable(PushConstants.VCAP_SERVICES);
-		
-		if(vcapServicesAsString != null){
+
+		if (vcapServicesAsString != null) {
 			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
-			
-			if(vcapServices.has(PushConstants.IMFPUSH)){
-				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0).optJSONObject(PushConstants.CREDENTIALS);
-				
-				if(imfPushCredentials != null){
+
+			if (vcapServices.has(PushConstants.IMFPUSH)) {
+				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0)
+						.optJSONObject(PushConstants.CREDENTIALS);
+
+				if (imfPushCredentials != null) {
 					return imfPushCredentials.optString(PushConstants.APPSECRET);
 				}
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
-	 * Send the given push notification, as configured, to devices using the Push Notification service. 
+	 * Send the given push notification, as configured, to devices using the
+	 * Push Notification service.
 	 * 
-	 * @param notification the push notification to be sent
-	 * @param listener an optional {@link PushNotificationsResponseListener} to listen to the result of this operation
+	 * @param notification
+	 *            the push notification to be sent
+	 * @param listener
+	 *            an optional {@link PushNotificationsResponseListener} to
+	 *            listen to the result of this operation
 	 */
-	public static void send(JSONObject notification, PushNotificationsResponseListener listener){
-		if(pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0){
+	public static void send(JSONObject notification, PushNotificationsResponseListener listener) {
+		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
 			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			
-			if(listener != null){
+
+			if (listener != null) {
 				listener.onFailure(null, null, exception);
 			}
 			return;
 		}
-		
-		if(notification == null){
+
+		if (notification == null) {
 			Throwable exception = new IllegalArgumentException(PushConstants.NULL_NOTIFICATION_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			if(listener != null){
+			if (listener != null) {
 				listener.onFailure(null, null, exception);
 			}
 			return;
 		}
-		
+
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		
+
 		HttpPost pushPost = createPushPostRequest(notification);
 
 		executePushPostRequest(pushPost, httpClient, listener);
@@ -155,39 +174,38 @@ public class PushNotifications {
 
 	protected static HttpPost createPushPostRequest(JSONObject notification) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
-		
+
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENTTYPE);
 		pushPost.addHeader(PushConstants.APPSECRET, secret);
-		
+
 		StringEntity body = new StringEntity(notification.toString(), PushConstants.UTFEIGHT);
 		pushPost.setEntity(body);
-		
+
 		return pushPost;
 	}
 
-	protected static void executePushPostRequest(HttpPost pushPost,
-			CloseableHttpClient httpClient, PushNotificationsResponseListener listener) {
+	protected static void executePushPostRequest(HttpPost pushPost, CloseableHttpClient httpClient,
+			PushNotificationsResponseListener listener) {
 		CloseableHttpResponse response = null;
-		
+
 		try {
 			response = httpClient.execute(pushPost);
-			
-			if(listener != null){
+
+			if (listener != null) {
 				sendResponseToListener(response, listener);
 			}
 		} catch (ClientProtocolException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			if(listener != null){
+			if (listener != null) {
 				listener.onFailure(null, null, e);
 			}
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
-			if(listener != null){
+			if (listener != null) {
 				listener.onFailure(null, null, e);
 			}
-		}
-		finally {
-			if(response != null){
+		} finally {
+			if (response != null) {
 				try {
 					response.close();
 				} catch (IOException e) {
@@ -200,24 +218,23 @@ public class PushNotifications {
 	protected static void sendResponseToListener(CloseableHttpResponse response,
 			PushNotificationsResponseListener listener) throws IOException {
 		String responseBody = null;
-		
-		if(response.getEntity() != null){
+
+		if (response.getEntity() != null) {
 			ByteArrayOutputStream outputAsByteArray = new ByteArrayOutputStream();
 			response.getEntity().writeTo(outputAsByteArray);
-			
+
 			responseBody = new String(outputAsByteArray.toByteArray());
 		}
-		
+
 		Integer statusCode = null;
-		
-		if(response.getStatusLine() != null){
+
+		if (response.getStatusLine() != null) {
 			statusCode = response.getStatusLine().getStatusCode();
 		}
-		
-		if(statusCode != null && statusCode == HttpStatus.SC_ACCEPTED){
+
+		if (statusCode != null && statusCode == HttpStatus.SC_ACCEPTED) {
 			listener.onSuccess(statusCode, responseBody);
-		}
-		else{
+		} else {
 			listener.onFailure(statusCode, responseBody, null);
 		}
 	}

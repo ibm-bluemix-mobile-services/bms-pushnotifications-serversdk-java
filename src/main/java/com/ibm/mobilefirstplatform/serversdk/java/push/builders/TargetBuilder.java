@@ -16,64 +16,63 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class TargetBuilder {
 
-		public enum PushNotificationsPlatform {
-			APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
-					"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
+	public enum PushNotificationsPlatform {
+		APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
+				"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
 
-			private String platformCode;
+		private String platformCode;
 
-			PushNotificationsPlatform(String code) {
-				this.platformCode = code;
-			}
-
-			public String getValue() {
-				return platformCode;
-			}
+		PushNotificationsPlatform(String code) {
+			this.platformCode = code;
 		}
 
-		private String[] deviceIds = null;
-		private String[] userIds = null;
-		private String[] platforms = null;
-		private String[] tagNames = null;
-
-		public TargetBuilder setDeviceIds(final String[] deviceIds) {
-			this.deviceIds = deviceIds;
-			return this;
+		public String getValue() {
+			return platformCode;
 		}
-
-		public TargetBuilder setUserIds(final String[] userIds) {
-			this.userIds = userIds;
-			return this;
-		}
-
-		public TargetBuilder setTagNames(final String[] tagNames) {
-			this.tagNames = tagNames;
-			return this;
-		}
-
-		public TargetBuilder setPlatforms(final PushNotificationsPlatform[] platforms) {
-
-			String[] platformArray = null;
-
-			if (platforms != null && platforms.length > 0) {
-
-				platformArray = new String[platforms.length];
-
-				for (int i = 0; i < platforms.length; i++) {
-					platformArray[i] = platforms[i].getValue();
-				}
-			}
-
-			this.platforms = platformArray;
-			return this;
-		}
-
-		public Target build() {
-			
-			Target target = new Target();
-			target.setDeviceIds(deviceIds).setPlatforms(platforms).setTagNames(tagNames).setUserIds(userIds);
-			return target;
-		}
-
 	}
 
+	private String[] deviceIds = null;
+	private String[] userIds = null;
+	private String[] platforms = null;
+	private String[] tagNames = null;
+
+	public TargetBuilder setDeviceIds(final String[] deviceIds) {
+		this.deviceIds = deviceIds;
+		return this;
+	}
+
+	public TargetBuilder setUserIds(final String[] userIds) {
+		this.userIds = userIds;
+		return this;
+	}
+
+	public TargetBuilder setTagNames(final String[] tagNames) {
+		this.tagNames = tagNames;
+		return this;
+	}
+
+	public TargetBuilder setPlatforms(final PushNotificationsPlatform[] platforms) {
+
+		String[] platformArray = null;
+
+		if (platforms != null && platforms.length > 0) {
+
+			platformArray = new String[platforms.length];
+
+			for (int i = 0; i < platforms.length; i++) {
+				platformArray[i] = platforms[i].getValue();
+			}
+		}
+
+		this.platforms = platformArray;
+		return this;
+	}
+
+	public Target build() {
+
+		Target target = new Target();
+		target.setDeviceIds(deviceIds).setPlatforms(platforms).setTagNames(tagNames).setUserIds(userIds);
+		return target;
+	}
+
+}

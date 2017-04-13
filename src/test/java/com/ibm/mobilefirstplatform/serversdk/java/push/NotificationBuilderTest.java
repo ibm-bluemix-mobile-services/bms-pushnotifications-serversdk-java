@@ -22,8 +22,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SafariWebBuilder
 import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SettingsBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
 
-
-
 public class NotificationBuilderTest {
 
 	// Old test cases for deprecated API'S
@@ -300,7 +298,7 @@ public class NotificationBuilderTest {
 				.setTitle(null).setTitleLocArgs(null).setTitleLocKey(null).setType(null);
 
 		GcmBuilder gcmBuilder = new GcmBuilder();
-		
+
 		gcmBuilder.setCollapseKey(null).setDelayWhileIdle(null).setIcon(null).setInteractiveCategory(null)
 				.setLights(null).setPayload(null).setPriority(null).setSound(null).setStyle(null).setSync(null)
 				.setTimeToLive(null).setVisibility(null);
@@ -369,10 +367,9 @@ public class NotificationBuilderTest {
 		MessageBuilder messageBuilder = new MessageBuilder();
 		messageBuilder.setAlert(testAlert);
 
-
 		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
-		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-		.setUrl("url").setLines(new String[] { "line1" });
+		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title").setUrl("url")
+				.setLines(new String[] { "line1" });
 
 		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
 		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
@@ -380,8 +377,7 @@ public class NotificationBuilderTest {
 		GcmBuilder gcmBuilder = new GcmBuilder();
 		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
 				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
-				.setLights(gcmLights);
+				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle).setLights(gcmLights);
 
 		SettingsBuilder settingsBuilder = new SettingsBuilder();
 		settingsBuilder.setGcmBuilder(gcmBuilder);
@@ -513,19 +509,17 @@ public class NotificationBuilderTest {
 				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
 
 		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
-		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-		.setUrl("url").setLines(new String[] { "line1" });
+		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title").setUrl("url")
+				.setLines(new String[] { "line1" });
 
 		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
 		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
 
-		
 		GcmBuilder gcmBuilder = new GcmBuilder();
-		
+
 		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
 				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
-				.setLights(gcmLights);
+				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle).setLights(gcmLights);
 
 		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
 		chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
@@ -871,7 +865,8 @@ public class NotificationBuilderTest {
 		TargetBuilder targetBuilder = new TargetBuilder();
 		targetBuilder.setDeviceIds(null).setPlatforms(null).setTagNames(null).setUserIds(null);
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder).build();
+		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder)
+				.targetBuilder(targetBuilder).build();
 
 		assertTrue(notification.has("message"));
 		assertTrue(notification.getJSONObject("message").has("alert"));

@@ -72,7 +72,7 @@ public final class PushMessageModel {
 			this.url = url;
 			return this;
 		}
-		
+
 	}
 
 	public static final class Target {
@@ -117,7 +117,7 @@ public final class PushMessageModel {
 			this.tagNames = tagNames;
 			return this;
 		}
-		
+
 	}
 
 	public static final class Settings {
@@ -177,13 +177,11 @@ public final class PushMessageModel {
 			this.chromeAppExt = chromeAppExt;
 			return this;
 		}
-		
 
 		public Settings setGcm(Gcm gcm) {
 			this.gcm = gcm;
 			return this;
 		}
-
 
 		public static class Apns {
 
@@ -285,7 +283,6 @@ public final class PushMessageModel {
 				return this;
 			}
 
-			
 			public Apns setCategory(String category) {
 				this.category = category;
 				return this;
@@ -345,7 +342,6 @@ public final class PushMessageModel {
 
 		public static final class Gcm {
 
-		
 			private Boolean delayWhileIdle;
 			private Integer timeToLive;
 			private String collapseKey;
@@ -388,7 +384,7 @@ public final class PushMessageModel {
 			public final String getCategory() {
 				return category;
 			}
-			
+
 			public final String getInteractiveCategory() {
 				return interactiveCategory;
 			}
@@ -417,7 +413,7 @@ public final class PushMessageModel {
 				this.category = category;
 				return this;
 			}
-			
+
 			public Gcm setInteractiveCategory(String interactiveCategory) {
 				this.interactiveCategory = interactiveCategory;
 				return this;
@@ -477,10 +473,9 @@ public final class PushMessageModel {
 				this.lights = lights;
 				return this;
 			}
-			
+
 		}
 
-		
 		public static final class ChromeWeb {
 
 			private String title;
@@ -527,7 +522,7 @@ public final class PushMessageModel {
 
 		}
 
-		public static final class SafariWeb{
+		public static final class SafariWeb {
 
 			private String title;
 			private String action;
@@ -554,12 +549,12 @@ public final class PushMessageModel {
 				this.urlArgs = urlArgs;
 				return this;
 			}
-			
+
 			public SafariWeb setAction(final String action) {
 				this.action = action;
 				return this;
 			}
-			
+
 		}
 
 		public static final class FirefoxWeb {

@@ -28,7 +28,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel;
 import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel.Message;
 
-
 /**
  * The NotificationBuilder is used to create a new push notification that is
  * going to be sent using the Push Notification service in IBMÂ® Bluemix.
@@ -279,7 +278,7 @@ public class NotificationBuilder {
 	 * Sets the MessageBuilder to the NotificationBuilder.
 	 * 
 	 * @param messageBuilder
-	 * 						builder object with all message attributes set.
+	 *            builder object with all message attributes set.
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -287,14 +286,15 @@ public class NotificationBuilder {
 	public NotificationBuilder messageBuilder(MessageBuilder messageBuilder) {
 
 		this.messageBuilder = messageBuilder;
-		
+
 		return this;
 	}
 
 	/**
 	 * Sets the TargetBuilder to the NotificationBuilder.
+	 * 
 	 * @param targetBuilder
-	 * 						builder object with all target attributes set.
+	 *            builder object with all target attributes set.
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -308,7 +308,7 @@ public class NotificationBuilder {
 	 * Sets the SettingsBuilder to the NotificationBuilder.
 	 * 
 	 * @param settingsBuilder
-	 * 						  builder object with all settings attributes set.
+	 *            builder object with all settings attributes set.
 	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
@@ -350,17 +350,16 @@ public class NotificationBuilder {
 	public JSONObject build() {
 
 		PushMessageModel model = new PushMessageModel();
-		
+
 		if (messageBuilder != null) {
-		    Message msg = messageBuilder.build();
-		    if(msg.getAlert() == null) {
+			Message msg = messageBuilder.build();
+			if (msg.getAlert() == null) {
 				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
-		    }
-		    model.setMessage(msg);
+			}
+			model.setMessage(msg);
 		} else {
 			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
 		}
-		
 
 		model.setTarget(targetBuilder != null ? targetBuilder.build() : null);
 
