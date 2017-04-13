@@ -330,6 +330,8 @@ public class NotificationBuilder {
 	 * API converts object to json format.
 	 * 
 	 * @param obj
+	 * 			  The object which needs to be serialized as json string.
+	 * 
 	 * @return Return a JSONOject for the passed object.
 	 */
 	public static JSONObject generateJSON(Object obj) {
