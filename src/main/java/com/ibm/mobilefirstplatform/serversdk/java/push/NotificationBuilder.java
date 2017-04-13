@@ -17,15 +17,15 @@ import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.PushMessageModelBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Apns.ApnsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Gcm.GcmBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Message.MessageBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Settings.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Target.TargetBuilder;
-
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ApnsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.MessageBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SettingsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel;
 
 
 /**
@@ -330,6 +330,7 @@ public class NotificationBuilder {
 	 */
 	public static JSONObject generateJSON(Object obj) {
 		String jsonString = null;
+		mapper.setSerializationInclusion(Include.NON_EMPTY);
 		try {
 			jsonString = mapper.writeValueAsString(obj);
 
@@ -353,15 +354,15 @@ public class NotificationBuilder {
 	 */
 	public JSONObject build() {
 
-		PushMessageModelBuilder modelBuilder = new PushMessageModelBuilder();
+		PushMessageModel model = new PushMessageModel();
 
-		modelBuilder.setMessage(messageBuilder != null ? messageBuilder.build() : null);
+		model.setMessage(messageBuilder != null ? messageBuilder.build() : null);
 
-		modelBuilder.setTarget(targetBuilder != null ? targetBuilder.build() : null);
+		model.setTarget(targetBuilder != null ? targetBuilder.build() : null);
 
-		modelBuilder.setSettings(settingsBuilder != null ? settingsBuilder.build() : null);
+		model.setSettings(settingsBuilder != null ? settingsBuilder.build() : null);
 
-		return generateJSON(modelBuilder.build());
+		return generateJSON(model);
 	}
 
 }

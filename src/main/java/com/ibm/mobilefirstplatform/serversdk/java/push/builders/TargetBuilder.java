@@ -1,39 +1,20 @@
+/*
+ *     Copyright 2017 IBM Corp.
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
 package com.ibm.mobilefirstplatform.serversdk.java.push.builders;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel.Target;
 
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public final class Target {
-
-	private String[] deviceIds = null;
-	private String[] userIds = null;
-	private String[] platforms = null;
-	private String[] tagNames = null;
-
-	public String[] getDeviceIds() {
-		return deviceIds;
-	}
-
-	public String[] getUserIds() {
-		return userIds;
-	}
-
-	public String[] getTagNames() {
-		return tagNames;
-	}
-
-	public String[] getPlatforms() {
-		return platforms;
-	}
-
-	private Target(TargetBuilder builder) {
-		this.deviceIds = builder.deviceIds;
-		this.platforms = builder.platforms;
-		this.tagNames = builder.tagNames;
-		this.userIds = builder.userIds;
-	}
-
-	public static class TargetBuilder {
+public final class TargetBuilder {
 
 		public enum PushNotificationsPlatform {
 			APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
@@ -54,29 +35,18 @@ public final class Target {
 		private String[] userIds = null;
 		private String[] platforms = null;
 		private String[] tagNames = null;
-		private boolean checkBlankObject = false;
 
 		public TargetBuilder setDeviceIds(final String[] deviceIds) {
-			if (deviceIds != null && deviceIds.length > 0) {
-				checkBlankObject = true;
-			}
-
 			this.deviceIds = deviceIds;
 			return this;
 		}
 
 		public TargetBuilder setUserIds(final String[] userIds) {
-			if (userIds != null && userIds.length > 0) {
-				checkBlankObject = true;
-			}
 			this.userIds = userIds;
 			return this;
 		}
 
 		public TargetBuilder setTagNames(final String[] tagNames) {
-			if (tagNames != null && tagNames.length > 0) {
-				checkBlankObject = true;
-			}
 			this.tagNames = tagNames;
 			return this;
 		}
@@ -86,8 +56,6 @@ public final class Target {
 			String[] platformArray = null;
 
 			if (platforms != null && platforms.length > 0) {
-
-				checkBlankObject = true;
 
 				platformArray = new String[platforms.length];
 
@@ -101,13 +69,11 @@ public final class Target {
 		}
 
 		public Target build() {
-			if (checkBlankObject) {
-				return new Target(this);
-			} else {
-				return null;
-			}
+			
+			Target target = new Target();
+			target.setDeviceIds(deviceIds).setPlatforms(platforms).setTagNames(tagNames).setUserIds(userIds);
+			return target;
 		}
 
 	}
 
-}

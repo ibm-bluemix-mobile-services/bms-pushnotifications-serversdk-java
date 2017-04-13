@@ -12,15 +12,16 @@ import org.junit.Test;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Apns.ApnsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeAppExt.ChromeAppExtBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeWeb.ChromeWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.FirefoxWeb.FirefoxWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Gcm.GcmBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Message.MessageBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SafariWeb.SafariWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Settings.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Target.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ApnsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeAppExtBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.FirefoxWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.MessageBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SafariWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SettingsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
+
 
 
 public class NotificationBuilderTest {
@@ -245,7 +246,6 @@ public class NotificationBuilderTest {
 
 		JSONObject notification = builder.build();
 
-		assertEquals(1, notification.keySet().size());
 		assertTrue(notification.has("message"));
 		assertTrue(notification.getJSONObject("message").has("alert"));
 		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
@@ -873,7 +873,6 @@ public class NotificationBuilderTest {
 
 		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder).build();
 
-		assertEquals(1, notification.keySet().size());
 		assertTrue(notification.has("message"));
 		assertTrue(notification.getJSONObject("message").has("alert"));
 		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
