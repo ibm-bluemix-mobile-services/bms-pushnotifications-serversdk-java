@@ -23,7 +23,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class ApnsBuilder {
 
-	private static ObjectMapper mapper = new ObjectMapper();
 	public static final Logger logger = Logger.getLogger(ApnsBuilder.class.getName());
 
 	public enum APNSNotificationType {
@@ -62,6 +61,7 @@ public final class ApnsBuilder {
 	}
 
 	public final ApnsBuilder setPayload(JSONObject payload) {
+		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNodePayload = null;
 
 		try {

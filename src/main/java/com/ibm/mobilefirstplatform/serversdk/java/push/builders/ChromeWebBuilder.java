@@ -23,7 +23,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class ChromeWebBuilder {
 
-	private static ObjectMapper mapper = new ObjectMapper();
 	public static final Logger logger = Logger.getLogger(ChromeAppExtBuilder.class.getName());
 
 		private String title;
@@ -47,7 +46,7 @@ public final class ChromeWebBuilder {
 		}
 
 		public final ChromeWebBuilder setPayload(JSONObject payload) {
-
+			ObjectMapper mapper = new ObjectMapper();
 			JsonNode jsonNodePayload = null;
 
 			try {

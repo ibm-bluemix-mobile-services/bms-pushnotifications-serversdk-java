@@ -24,7 +24,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class GcmBuilder {
 
-	private static ObjectMapper mapper = new ObjectMapper();
 	public static final Logger logger = Logger.getLogger(ChromeAppExtBuilder.class.getName());
 
 	public enum GCMPriority {
@@ -81,6 +80,7 @@ public final class GcmBuilder {
 	}
 
 	public final GcmBuilder setPayload(JSONObject payload) {
+		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNodePayload = null;
 
 		try {

@@ -26,6 +26,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.builders.MessageBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SettingsBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel;
+import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel.Message;
 
 
 /**
@@ -349,15 +350,17 @@ public class NotificationBuilder {
 	public JSONObject build() {
 
 		PushMessageModel model = new PushMessageModel();
-
-		if (messageBuilder == null) {
-			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
-		}
-		if (messageBuilder != null && messageBuilder.build().getAlert() == null) {
+		
+		if (messageBuilder != null) {
+		    Message msg = messageBuilder.build();
+		    if(msg.getAlert() == null) {
+				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
+		    }
+		    model.setMessage(msg);
+		} else {
 			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
 		}
 		
-		model.setMessage(messageBuilder != null ? messageBuilder.build() : null);
 
 		model.setTarget(targetBuilder != null ? targetBuilder.build() : null);
 

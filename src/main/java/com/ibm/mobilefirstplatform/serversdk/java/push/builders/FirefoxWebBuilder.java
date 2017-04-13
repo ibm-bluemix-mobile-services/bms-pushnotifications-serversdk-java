@@ -23,7 +23,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class FirefoxWebBuilder {
 
-	private static ObjectMapper mapper = new ObjectMapper();
 	public static final Logger logger = Logger.getLogger(ChromeAppExtBuilder.class.getName());
 
 	private String title;
@@ -47,6 +46,7 @@ public final class FirefoxWebBuilder {
 	}
 
 	public final FirefoxWebBuilder setPayload(JSONObject payload) {
+		ObjectMapper mapper = new ObjectMapper();
 		JsonNode jsonNodePayload = null;
 
 		try {

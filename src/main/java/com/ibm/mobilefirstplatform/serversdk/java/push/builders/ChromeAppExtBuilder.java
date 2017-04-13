@@ -25,7 +25,6 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.internal.PushMessageModel
 
 public final class ChromeAppExtBuilder {
 	
-	private static ObjectMapper mapper = new ObjectMapper();
 	public static final Logger logger = Logger.getLogger(ChromeAppExtBuilder.class.getName());
 
 		private String collapseKey;
@@ -62,7 +61,7 @@ public final class ChromeAppExtBuilder {
 
 		public final ChromeAppExtBuilder setPayload(JSONObject payload) {
 			JsonNode jsonNodePayload = null;
-
+			ObjectMapper mapper = new ObjectMapper();
 			try {
 				if (payload != null) {
 					jsonNodePayload = mapper.readTree(payload.toString());
