@@ -351,10 +351,10 @@ public class NotificationBuilder {
 		PushMessageModel model = new PushMessageModel();
 
 		if (messageBuilder == null) {
-			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
 		}
 		if (messageBuilder != null && messageBuilder.build().getAlert() == null) {
-			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN_NEW);
 		}
 		
 		model.setMessage(messageBuilder != null ? messageBuilder.build() : null);
