@@ -43,9 +43,9 @@ public class NotificationBuilder {
 
 	public static final Logger logger = Logger.getLogger(NotificationBuilder.class.getName());
 
-	private MessageBuilder messageBuilder = new MessageBuilder();
-	private TargetBuilder targetBuilder = new TargetBuilder();
-	private SettingsBuilder settingsBuilder = new SettingsBuilder();
+	private MessageBuilder messageBuilder;
+	private TargetBuilder targetBuilder;
+	private SettingsBuilder settingsBuilder;
 
 	@Deprecated
 	public enum PushNotificationsPlatform {
@@ -90,6 +90,7 @@ public class NotificationBuilder {
 		if (alert == null) {
 			throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
 		}
+		messageBuilder = new MessageBuilder();
 		messageBuilder.setAlert(alert);
 	}
 
@@ -103,6 +104,9 @@ public class NotificationBuilder {
 	@Deprecated
 	public NotificationBuilder setMessageURL(String url) {
 		if (url != null && url.length() > 0) {
+			if (messageBuilder == null) {
+				messageBuilder = new MessageBuilder();
+			}
 			messageBuilder.setUrl(url);
 		}
 
@@ -142,6 +146,7 @@ public class NotificationBuilder {
 				}
 			}
 
+			targetBuilder = new TargetBuilder();
 			if (deviceIds.length > 0) {
 				targetBuilder.setDeviceIds(deviceIds);
 			}
@@ -202,7 +207,9 @@ public class NotificationBuilder {
 					finalType = apnsType;
 				}
 			}
-
+			if (settingsBuilder == null) {
+				settingsBuilder = new SettingsBuilder();
+			}
 			ApnsBuilder apnsBuilder = new ApnsBuilder();
 			apnsBuilder.setBadge(badge).setInteractiveCategory(interactiveCategory).setIosActionKey(iosActionKey)
 					.setPayload(payload).setSound(soundFile).setType(finalType);
@@ -257,7 +264,9 @@ public class NotificationBuilder {
 					finalPriority = gcmPriority;
 				}
 			}
-
+			if (settingsBuilder == null) {
+				settingsBuilder = new SettingsBuilder();
+			}
 			GcmBuilder gcmBuilder = new GcmBuilder();
 			gcmBuilder.setCollapseKey(collapseKey).setDelayWhileIdle(delayWhileIdle).setPayload(payload)
 					.setPriority(finalPriority).setSound(soundFile).setTimeToLive(secondsToLive);
@@ -325,15 +334,15 @@ public class NotificationBuilder {
 	 */
 	public static JSONObject generateJSON(Object obj) {
 		String jsonString = null;
-		mapper.setSerializationInclusion(Include.NON_EMPTY);
 		try {
+			mapper.setSerializationInclusion(Include.NON_EMPTY);
 			jsonString = mapper.writeValueAsString(obj);
 
 		} catch (JsonProcessingException exception) {
 
 			logger.log(Level.SEVERE, exception.toString(), exception);
 		}
-
+        
 		JSONObject json = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
 
 		return json;
