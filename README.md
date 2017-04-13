@@ -71,7 +71,7 @@ messageBuilder.setUrl("www.example.com");
 
 
 // Builders are introduced which sets the optional settings for a particualr platform : ApnsBuilder (Apns), GcmBuilder (Gcm), ChromeAppExtBuilder (ChromeAppExtension), ChromeWebBuilder (ChromeWeb), 
-FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
+// FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
 
 
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
@@ -88,19 +88,19 @@ apnsBuilder.setBadge(1).setInteractiveCategory("testInteractiveCategory").setIos
 
 // style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
-GcmStyleBuilder gcmStyleBuilder = new GcmStyleBuilder();
-GcmStyle style = gcmStyleBuilder.setType(GcmStyleBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-				.setUrl("url").setLines(new String[] { "line1" }).build();
-		
-GcmLightsBuilder gcmLightsBuilder = new GcmLightsBuilder();
-GcmLights lights = gcmLightsBuilder.setLedArgb(GcmLightsBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1).build();
+GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
+gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
+.setUrl("url").setLines(new String[] { "line1" });
+
+GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
+gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
 		
 // Gcm Settings	
 GcmBuilder gcmBuilder = new GcmBuilder();
 gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
 .setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(style)
-.setLights(lights);
+.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
+.setLights(gcmLights);
 
 // Chrome Settings		
 ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
@@ -129,15 +129,12 @@ settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder)
 
 // Target.**Note : We should provide either deviceIds or userIds or platforms or tagnames
 TargetBuilder targetBuilder = new TargetBuilder();
-targetBuilder.setDeviceIds(null)
-.setUserIds(null)
-.setPlatforms(new TargetBuilder.PushNotificationsPlatform[] {
-TargetBuilder.PushNotificationsPlatform.APPLE, TargetBuilder.PushNotificationsPlatform.GOOGLE,
-TargetBuilder.PushNotificationsPlatform.APPEXTCHROME,
-TargetBuilder.PushNotificationsPlatform.WEBCHROME,
-TargetBuilder.PushNotificationsPlatform.WEBFIREFOX,
-TargetBuilder.PushNotificationsPlatform.WEBSAFARI })
-.setTagNames(null);
+		targetBuilder.setPlatforms(new TargetBuilder.PushNotificationsPlatform[] {
+		TargetBuilder.PushNotificationsPlatform.APPLE, TargetBuilder.PushNotificationsPlatform.GOOGLE,
+		TargetBuilder.PushNotificationsPlatform.APPEXTCHROME,
+		TargetBuilder.PushNotificationsPlatform.WEBCHROME,
+		TargetBuilder.PushNotificationsPlatform.WEBFIREFOX,
+		TargetBuilder.PushNotificationsPlatform.WEBSAFARI });
 		
 // Now we create notification json using messageBuilder , settingsBuilder and targetBuilder created above :
 

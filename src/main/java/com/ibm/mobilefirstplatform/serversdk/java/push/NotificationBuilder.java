@@ -19,12 +19,14 @@ import org.json.JSONObject;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.PushMessageModelBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Apns.ApnsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Gcm.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Message.MessageBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Settings.SettingsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Target.TargetBuilder;
+
+
 
 /**
  * The NotificationBuilder is used to create a new push notification that is
@@ -249,10 +251,10 @@ public class NotificationBuilder {
 
 			GcmBuilder.GCMPriority finalPriority = null;
 
-			for (GcmBuilder.GCMPriority prior : GcmBuilder.GCMPriority.values()) {
+			for (GcmBuilder.GCMPriority gcmPriority : GcmBuilder.GCMPriority.values()) {
 
-				if (prior.name().equalsIgnoreCase(priority.name())) {
-					finalPriority = prior;
+				if (gcmPriority.name().equalsIgnoreCase(priority.name())) {
+					finalPriority = gcmPriority;
 				}
 			}
 
@@ -276,6 +278,8 @@ public class NotificationBuilder {
 	 * Sets the MessageBuilder to the NotificationBuilder.
 	 * 
 	 * @param messageBuilder
+	 * 						builder object with all message attributes set.
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -295,6 +299,8 @@ public class NotificationBuilder {
 	/**
 	 * Sets the TargetBuilder to the NotificationBuilder.
 	 * @param targetBuilder
+	 * 						builder object with all target attributes set.
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 
@@ -307,6 +313,8 @@ public class NotificationBuilder {
 	 * Sets the SettingsBuilder to the NotificationBuilder.
 	 * 
 	 * @param settingsBuilder
+	 * 						  builder object with all settings attributes set.
+	 * 
 	 * @return the NotificationBuilder object so that calls can be chained.
 	 */
 	public NotificationBuilder settingsBuilder(SettingsBuilder settingsBuilder) {

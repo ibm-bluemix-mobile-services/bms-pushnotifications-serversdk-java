@@ -12,17 +12,16 @@ import org.junit.Test;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt.ChromeAppExtBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb.ChromeWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb.FirefoxWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights.GcmLightsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle.GcmStyleBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb.SafariWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Apns.ApnsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeAppExt.ChromeAppExtBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeWeb.ChromeWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.FirefoxWeb.FirefoxWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Gcm.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Message.MessageBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SafariWeb.SafariWebBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Settings.SettingsBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.builders.Target.TargetBuilder;
+
 
 public class NotificationBuilderTest {
 
@@ -370,18 +369,19 @@ public class NotificationBuilderTest {
 		MessageBuilder messageBuilder = new MessageBuilder();
 		messageBuilder.setAlert(testAlert);
 
-		GcmStyleBuilder gcmStyleBuilder = new GcmStyleBuilder();
-		gcmStyleBuilder.setType(GcmStyleBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-				.setUrl("url").setLines(new String[] { "line1" });
 
-		GcmLightsBuilder gcmLightsBuilder = new GcmLightsBuilder();
-		gcmLightsBuilder.setLedArgb(GcmLightsBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
+		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
+		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
+		.setUrl("url").setLines(new String[] { "line1" });
+
+		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
+		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
 
 		GcmBuilder gcmBuilder = new GcmBuilder();
 		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
 				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyleBuilder.build())
-				.setLights(gcmLightsBuilder.build());
+				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
+				.setLights(gcmLights);
 
 		SettingsBuilder settingsBuilder = new SettingsBuilder();
 		settingsBuilder.setGcmBuilder(gcmBuilder);
@@ -512,21 +512,20 @@ public class NotificationBuilderTest {
 				.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
 				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
 
-		GcmStyleBuilder gcmStyleBuilder = new GcmStyleBuilder();
-		gcmStyleBuilder.setType(GcmStyleBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-				.setUrl("url").setLines(new String[] { "line1" });
+		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
+		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
+		.setUrl("url").setLines(new String[] { "line1" });
 
-		
-		GcmLightsBuilder gcmLightsBuilder = new GcmLightsBuilder();
-		gcmLightsBuilder.setLedArgb(GcmLightsBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
+		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
+		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
 
 		
 		GcmBuilder gcmBuilder = new GcmBuilder();
 		
 		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
 				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyleBuilder.build())
-				.setLights(gcmLightsBuilder.build());
+				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
+				.setLights(gcmLights);
 
 		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
 		chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
@@ -699,7 +698,7 @@ public class NotificationBuilderTest {
 
 		assertTrue(gcm.has("style"));
 		JSONObject gcmJson = gcm.getJSONObject("style");
-		assertEquals(GcmStyleBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION.name(), gcmJson.get("type"));
+		assertEquals(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION.name(), gcmJson.get("type"));
 		assertEquals("text", gcmJson.get("text"));
 		assertEquals("title", gcmJson.get("title"));
 		assertEquals("url", gcmJson.get("url"));
@@ -710,7 +709,7 @@ public class NotificationBuilderTest {
 
 		assertTrue(gcm.has("lights"));
 		JSONObject gcmLightsJson = gcm.getJSONObject("lights");
-		assertEquals(GcmLightsBuilder.GcmLED.BLACK.name(), gcmLightsJson.get("ledArgb"));
+		assertEquals(GcmBuilder.GcmLED.BLACK.name(), gcmLightsJson.get("ledArgb"));
 		assertEquals(1, gcmLightsJson.get("ledOffMs"));
 		assertEquals(1, gcmLightsJson.get("ledOnMs"));
 	}
