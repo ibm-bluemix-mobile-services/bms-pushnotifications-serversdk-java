@@ -75,7 +75,7 @@ GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).led
 
 Gcm gcm = new Gcm.GcmBuilder().collapseKey("myCollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "myJsonPayLoad"))
 		  .priority(GCMPriority.MIN).sound("mySoundFile").timeToLive(42).icon("myIcon")
-	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(myLights).build();
+	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
