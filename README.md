@@ -95,7 +95,7 @@ FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("myTitle").icon
 // Safari Settings. For safari all the three settings are mandatory to set.	
 	
 SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("myTitle")
-					 .urlArgs(new String[] { "myUrlArgs1", "myUrlArgs2" }).action("myAction").build();
+					 .urlArgs(new String[] { "myUrlArgs1"}).action("myAction").build();
 
 
 
