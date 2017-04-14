@@ -22,8 +22,11 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmLights;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmStyle;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.Visibility;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SettingsBuilder;
 import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
 
@@ -40,27 +43,27 @@ public final class PushMessageModel {
 	private TargetBuilder targetBuilder;
 	private SettingsBuilder settingsBuilder;
 
-	public Message getMessage() {
+	public final Message getMessage() {
 		return message;
 	}
 
-	public Target getTarget() {
+	public final Target getTarget() {
 		return target;
 	}
 
-	public Settings getSettings() {
+	public final Settings getSettings() {
 		return settings;
 	}
 
-	public MessageBuilder getMessageBuilder() {
+	public final MessageBuilder getMessageBuilder() {
 		return messageBuilder;
 	}
 
-	public TargetBuilder getTargetBuilder() {
+	public final TargetBuilder getTargetBuilder() {
 		return targetBuilder;
 	}
 
-	public SettingsBuilder getSettingsBuilder() {
+	public final SettingsBuilder getSettingsBuilder() {
 		return settingsBuilder;
 	}
 
@@ -81,32 +84,32 @@ public final class PushMessageModel {
 		private TargetBuilder targetBuilder;
 		private SettingsBuilder settingsBuilder;
 
-		public PushMessageModelBuilder message(final Message message) {
+		public final PushMessageModelBuilder message(final Message message) {
 			this.message = message;
 			return this;
 		}
 
-		public PushMessageModelBuilder target(final Target target) {
+		public final PushMessageModelBuilder target(final Target target) {
 			this.target = target;
 			return this;
 		}
 
-		public PushMessageModelBuilder settings(final Settings settings) {
+		public final PushMessageModelBuilder settings(final Settings settings) {
 			this.settings = settings;
 			return this;
 		}
 
-		public PushMessageModelBuilder targetBuilder(TargetBuilder targetBuilder) {
+		public final PushMessageModelBuilder targetBuilder(TargetBuilder targetBuilder) {
 			this.targetBuilder = targetBuilder;
 			return this;
 		}
 
-		public PushMessageModelBuilder settingsBuilder(SettingsBuilder settingsBuilder) {
+		public final PushMessageModelBuilder settingsBuilder(SettingsBuilder settingsBuilder) {
 			this.settingsBuilder = settingsBuilder;
 			return this;
 		}
 
-		public PushMessageModelBuilder messageBuilder(MessageBuilder messageBuilder) {
+		public final PushMessageModelBuilder messageBuilder(MessageBuilder messageBuilder) {
 			this.messageBuilder = messageBuilder;
 			return this;
 		}
@@ -122,11 +125,11 @@ public final class PushMessageModel {
 		private String alert;
 		private String url;
 
-		public String getAlert() {
+		public final String getAlert() {
 			return alert;
 		}
 
-		public String getUrl() {
+		public final String getUrl() {
 			return url;
 		}
 
@@ -140,12 +143,12 @@ public final class PushMessageModel {
 			private String alert;
 			private String url;
 
-			public MessageBuilder alert(final String alert) {
+			public final MessageBuilder alert(final String alert) {
 				this.alert = alert;
 				return this;
 			}
 
-			public MessageBuilder url(final String url) {
+			public final MessageBuilder url(final String url) {
 				this.url = url;
 				return this;
 			}
@@ -163,19 +166,19 @@ public final class PushMessageModel {
 		private String[] platforms = null;
 		private String[] tagNames = null;
 
-		public String[] getDeviceIds() {
+		public final String[] getDeviceIds() {
 			return deviceIds;
 		}
 
-		public String[] getUserIds() {
+		public final String[] getUserIds() {
 			return userIds;
 		}
 
-		public String[] getPlatforms() {
+		public final String[] getPlatforms() {
 			return platforms;
 		}
 
-		public String[] getTagNames() {
+		public final String[] getTagNames() {
 			return tagNames;
 		}
 
@@ -192,13 +195,13 @@ public final class PushMessageModel {
 				APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
 						"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
 
-				private String platformCode;
+				private final String platformCode;
 
 				PushNotificationsPlatform(String code) {
 					this.platformCode = code;
 				}
 
-				public String getValue() {
+				public final String getValue() {
 					return platformCode;
 				}
 			}
@@ -208,22 +211,22 @@ public final class PushMessageModel {
 			private String[] platforms = null;
 			private String[] tagNames = null;
 
-			public TargetBuilder deviceIds(final String[] deviceIds) {
+			public final TargetBuilder deviceIds(final String[] deviceIds) {
 				this.deviceIds = deviceIds;
 				return this;
 			}
 
-			public TargetBuilder userIds(final String[] userIds) {
+			public final TargetBuilder userIds(final String[] userIds) {
 				this.userIds = userIds;
 				return this;
 			}
 
-			public TargetBuilder tagNames(final String[] tagNames) {
+			public final TargetBuilder tagNames(final String[] tagNames) {
 				this.tagNames = tagNames;
 				return this;
 			}
 
-			public TargetBuilder platforms(final PushNotificationsPlatform[] platforms) {
+			public final TargetBuilder platforms(final PushNotificationsPlatform[] platforms) {
 
 				String[] platformArray = null;
 
@@ -256,27 +259,27 @@ public final class PushMessageModel {
 		private SafariWeb safariWeb;
 		private ChromeAppExt chromeAppExt;
 
-		public Apns getApns() {
+		public final Apns getApns() {
 			return apns;
 		}
 
-		public Gcm getGcm() {
+		public final Gcm getGcm() {
 			return gcm;
 		}
 
-		public FirefoxWeb getFirefoxWeb() {
+		public final FirefoxWeb getFirefoxWeb() {
 			return firefoxWeb;
 		}
 
-		public ChromeWeb getChromeWeb() {
+		public final ChromeWeb getChromeWeb() {
 			return chromeWeb;
 		}
 
-		public SafariWeb getSafariWeb() {
+		public final SafariWeb getSafariWeb() {
 			return safariWeb;
 		}
 
-		public ChromeAppExt getChromeAppExt() {
+		public final ChromeAppExt getChromeAppExt() {
 			return chromeAppExt;
 		}
 
@@ -300,37 +303,37 @@ public final class PushMessageModel {
 			private SafariWeb safariWeb;
 			private ChromeAppExt chromeAppExt;
 
-			public SettingsBuilder apns(Apns apns) {
+			public final SettingsBuilder apns(Apns apns) {
 				this.apns = apns;
 				return this;
 			}
 
-			public SettingsBuilder gcm(Gcm gcm) {
+			public final SettingsBuilder gcm(Gcm gcm) {
 				this.gcm = gcm;
 				return this;
 			}
 
-			public SettingsBuilder firefoxWeb(FirefoxWeb firefoxWeb) {
+			public final SettingsBuilder firefoxWeb(FirefoxWeb firefoxWeb) {
 				this.firefoxWeb = firefoxWeb;
 				return this;
 			}
 
-			public SettingsBuilder chromeWeb(ChromeWeb chromeWeb) {
+			public final SettingsBuilder chromeWeb(ChromeWeb chromeWeb) {
 				this.chromeWeb = chromeWeb;
 				return this;
 			}
 
-			public SettingsBuilder safariWeb(SafariWeb safariWeb) {
+			public final SettingsBuilder safariWeb(SafariWeb safariWeb) {
 				this.safariWeb = safariWeb;
 				return this;
 			}
 
-			public SettingsBuilder chromeAppExt(ChromeAppExt chromeAppExt) {
+			public final SettingsBuilder chromeAppExt(ChromeAppExt chromeAppExt) {
 				this.chromeAppExt = chromeAppExt;
 				return this;
 			}
 
-			public Settings build() {
+			public final Settings build() {
 				return new Settings(this);
 			}
 
@@ -353,59 +356,59 @@ public final class PushMessageModel {
 			private String title;
 			private String attachmentUrl;
 
-			public Integer getBadge() {
+			public final Integer getBadge() {
 				return badge;
 			}
 
-			public String getSound() {
+			public final String getSound() {
 				return sound;
 			}
 
-			public String getIosActionKey() {
+			public final String getIosActionKey() {
 				return iosActionKey;
 			}
 
-			public JsonNode getPayload() {
+			public final JsonNode getPayload() {
 				return payload;
 			}
 
-			public String getInteractiveCategory() {
+			public final String getInteractiveCategory() {
 				return interactiveCategory;
 			}
 
-			public ApnsBuilder.APNSNotificationType getType() {
+			public final APNSNotificationType getType() {
 				return type;
 			}
 
-			public String getTitleLocKey() {
+			public final String getTitleLocKey() {
 				return titleLocKey;
 			}
 
-			public String getLocKey() {
+			public final String getLocKey() {
 				return locKey;
 			}
 
-			public String getLaunchImage() {
+			public final String getLaunchImage() {
 				return launchImage;
 			}
 
-			public String[] getTitleLocArgs() {
+			public final String[] getTitleLocArgs() {
 				return titleLocArgs;
 			}
 
-			public String[] getLocArgs() {
+			public final String[] getLocArgs() {
 				return locArgs;
 			}
 
-			public String getSubtitle() {
+			public final String getSubtitle() {
 				return subtitle;
 			}
 
-			public String getTitle() {
+			public final String getTitle() {
 				return title;
 			}
 
-			public String getAttachmentUrl() {
+			public final String getAttachmentUrl() {
 				return attachmentUrl;
 			}
 
@@ -553,51 +556,51 @@ public final class PushMessageModel {
 			private String icon;
 			private GcmLights lights;
 
-			public Boolean getDelayWhileIdle() {
+			public final Boolean getDelayWhileIdle() {
 				return delayWhileIdle;
 			}
 
-			public Integer getTimeToLive() {
+			public final Integer getTimeToLive() {
 				return timeToLive;
 			}
 
-			public String getCollapseKey() {
+			public final String getCollapseKey() {
 				return collapseKey;
 			}
 
-			public JsonNode getPayload() {
+			public final JsonNode getPayload() {
 				return payload;
 			}
 
-			public Boolean getSync() {
+			public final Boolean getSync() {
 				return sync;
 			}
 
-			public String getSound() {
+			public final String getSound() {
 				return sound;
 			}
 
-			public String getInteractiveCategory() {
+			public final String getInteractiveCategory() {
 				return interactiveCategory;
 			}
 
-			public GcmBuilder.GCMPriority getPriority() {
+			public final GCMPriority getPriority() {
 				return priority;
 			}
 
-			public GcmStyle getStyle() {
+			public final GcmStyle getStyle() {
 				return style;
 			}
 
-			public GcmBuilder.Visibility getVisibility() {
+			public final Visibility getVisibility() {
 				return visibility;
 			}
 
-			public String getIcon() {
+			public final String getIcon() {
 				return icon;
 			}
 
-			public GcmLights getLights() {
+			public final GcmLights getLights() {
 				return lights;
 			}
 
@@ -750,19 +753,35 @@ public final class PushMessageModel {
 						return ledOffMs;
 					}
 
-					public GcmLights ledArgb(GcmLED ledArgb) {
-						this.ledArgb = ledArgb;
-						return this;
+					private GcmLights(GcmLightsBuilder builder) {
+						this.ledArgb = builder.ledArgb;
+						this.ledOnMs = builder.ledOnMs;
+						this.ledOffMs = builder.ledOffMs;
 					}
 
-					public GcmLights ledOnMs(Integer ledOnMs) {
-						this.ledOnMs = ledOnMs;
-						return this;
-					}
+					public static class GcmLightsBuilder {
+						private GcmLED ledArgb;
+						private Integer ledOnMs;
+						private Integer ledOffMs;
 
-					public GcmLights ledOffMs(Integer ledOffMs) {
-						this.ledOffMs = ledOffMs;
-						return this;
+						public GcmLightsBuilder ledArgb(GcmLED ledArgb) {
+							this.ledArgb = ledArgb;
+							return this;
+						}
+
+						public GcmLightsBuilder ledOnMs(Integer ledOnMs) {
+							this.ledOnMs = ledOnMs;
+							return this;
+						}
+
+						public GcmLightsBuilder ledOffMs(Integer ledOffMs) {
+							this.ledOffMs = ledOffMs;
+							return this;
+						}
+
+						public GcmLights build() {
+							return new GcmLights(this);
+						}
 					}
 
 				}
@@ -775,50 +794,72 @@ public final class PushMessageModel {
 					private String text;
 					private String[] lines;
 
-					public GcmStyleTypes getType() {
+					public final GcmStyleTypes getType() {
 						return type;
 					}
 
-					public String getUrl() {
+					public final String getUrl() {
 						return url;
 					}
 
-					public String getTitle() {
+					public final String getTitle() {
 						return title;
 					}
 
-					public String getText() {
+					public final String getText() {
 						return text;
 					}
 
-					public String[] getLines() {
+					public final String[] getLines() {
 						return lines;
 					}
 
-					public GcmStyle type(GcmStyleTypes type) {
-						this.type = type;
-						return this;
-
+					private GcmStyle(GcmStyleBuilder builder) {
+						this.type = builder.type;
+						this.url = builder.url;
+						this.title = builder.title;
+						this.text = builder.text;
+						this.lines = builder.lines;
 					}
 
-					public GcmStyle url(String url) {
-						this.url = url;
-						return this;
-					}
+					public static class GcmStyleBuilder {
 
-					public GcmStyle title(String title) {
-						this.title = title;
-						return this;
-					}
+						private GcmStyleTypes type;
+						private String url;
+						private String title;
+						private String text;
+						private String[] lines;
 
-					public GcmStyle text(String text) {
-						this.text = text;
-						return this;
-					}
+						public final GcmStyleBuilder type(GcmStyleTypes type) {
+							this.type = type;
+							return this;
+						}
 
-					public GcmStyle lines(String[] lines) {
-						this.lines = lines;
-						return this;
+						public final GcmStyleBuilder url(String url) {
+							this.url = url;
+							return this;
+						}
+
+						public final GcmStyleBuilder title(String title) {
+							this.title = title;
+							return this;
+						}
+
+						public final GcmStyleBuilder text(String text) {
+							this.text = text;
+							return this;
+						}
+
+						public final GcmStyleBuilder lines(String[] lines) {
+							this.lines = lines;
+							return this;
+						}
+
+						public GcmStyle build() {
+							return new GcmStyle(this);
+
+						}
+
 					}
 
 				}

@@ -132,14 +132,15 @@ public class NotificationBuilderTest {
 
 		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
-				.url("url").lines(new String[] { "line1" });
+		GcmStyle gcmstyle = new GcmStyle.GcmStyleBuilder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
+				.title("title").url("url").lines(new String[] { "line1" }).build();
 
-		GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
+		GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
-				.priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
-				.visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true)
+				.payload(new JSONObject().put("key", "value")).priority(GCMPriority.MIN).sound("testsoundFile")
+				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
+				.lights(gcmlights).build();
 
 		Settings settings = new Settings.SettingsBuilder().gcm(gcm).build();
 
@@ -256,14 +257,15 @@ public class NotificationBuilderTest {
 				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
 				.attachmentUrl("testattachmentUrl").build();
 
-		GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
-				.url("url").lines(new String[] { "line1" });
+		GcmStyle gcmstyle = new GcmStyle.GcmStyleBuilder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
+				.title("title").url("url").lines(new String[] { "line1" }).build();
 
-		GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
+		GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
-				.priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
-				.visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true)
+				.payload(new JSONObject().put("key", "value")).priority(GCMPriority.MIN).sound("testsoundFile")
+				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
+				.lights(gcmlights).build();
 
 		ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
 				.payload(new JSONObject()).build();
@@ -510,11 +512,9 @@ public class NotificationBuilderTest {
 
 		Target targetValue = new Target.TargetBuilder().deviceIds(new String[] { "device1", "device2" })
 				.userIds(new String[] { "userId1", "userId2" })
-				.platforms(new TargetBuilder.PushNotificationsPlatform[] {
-						PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
-						PushNotificationsPlatform.APPEXTCHROME,
-						PushNotificationsPlatform.WEBCHROME,
-						PushNotificationsPlatform.WEBFIREFOX,
+				.platforms(new TargetBuilder.PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE,
+						PushNotificationsPlatform.GOOGLE, PushNotificationsPlatform.APPEXTCHROME,
+						PushNotificationsPlatform.WEBCHROME, PushNotificationsPlatform.WEBFIREFOX,
 						PushNotificationsPlatform.WEBSAFARI })
 				.tagNames(new String[] { "tag1", "tag2" }).build();
 

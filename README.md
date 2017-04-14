@@ -44,7 +44,7 @@ NotificationBuilder builder = new NotificationBuilder();
 MessageBuilder is use to construct Message attributes.
 
 ```
-Message message = new Message.MessageBuilder().alert("Testing Push Notification").url("www.example.com").build();
+Message message = new Message.MessageBuilder().alert("alert string").url("my url").build();
 
 ```
 You can also configure the notification with some other optional settings.
@@ -59,43 +59,43 @@ FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set bui
 ```
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
-Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
-				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
-				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
-				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
-				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
-				.attachmentUrl("testattachmentUrl").build();
+Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("myInteractiveCategory")
+				.iosActionKey("myIosActionKey").payload(new JSONObject().put("key", "myJsonPayload")).sound("mySoundFile")
+				.type(APNSNotificationType.DEFAULT).titleLocKey("myTitleLocKey").locKey("myLocKey")
+				.launchImage("myLaunchImage").titleLocArgs(new String[] { "myTitlelocArgs1", "myTitlelocArgs2" })
+				.locArgs(new String[] { "myLocArgs1", "myLocArgs" }).title("myTitle").subtitle("mySubtitle")
+				.attachmentUrl("myAttachmentUrl").build();
 
 // Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
-GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
-				    .url("url").lines(new String[] { "line1" });
+GcmStyle gcmstyle = new GcmStyle.GcmStyleBuilder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("myText").title("myTitle")
+				    .url("myUrl").lines(new String[] { "myLine1" }).build();
 
-GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
+GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
-		  .priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
-	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
+Gcm gcm = new Gcm.GcmBuilder().collapseKey("myCollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "myJsonPayLoad"))
+		  .priority(GCMPriority.MIN).sound("mySoundFile").timeToLive(42).icon("myIcon")
+	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(myLights).build();
 
 // Chrome Settings	
 	
-ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
+ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("myTitle").iconUrl("myIconUrl").timeToLive(42)
 					  .payload(new JSONObject()).build();
 
 // ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
 
-ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("testcollapseKey")
-							.delayWhileIdle(true).title("testtitle").iconUrl("testiconUrl").timeToLive(42).payload(new JSONObject()).build();
+ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("myCollapseKey")
+							.delayWhileIdle(true).title("myTitle").iconUrl("myIconUrl").timeToLive(42).payload(new JSONObject()).build();
 
 // Firefox Settings		
 
-FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("testtitle").iconUrl("testiconUrl")
+FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("myTitle").iconUrl("myIconUrl")
 					   .timeToLive(42).payload(new JSONObject()).build();
 
 // Safari Settings. For safari all the three settings are mandatory to set.	
 	
-SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("testtitle")
-					 .urlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).action("testaction").build();
+SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("myTitle")
+					 .urlArgs(new String[] { "myUrlArgs1", "myUrlArgs2" }).action("myAction").build();
 
 
 
