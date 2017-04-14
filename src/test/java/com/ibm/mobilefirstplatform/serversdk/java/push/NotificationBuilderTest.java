@@ -9,261 +9,35 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
 
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.APNSNotificationType;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.GCMPriority;
-import com.ibm.mobilefirstplatform.serversdk.java.push.NotificationBuilder.PushNotificationsPlatform;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ApnsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeAppExtBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.ChromeWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.FirefoxWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.GcmBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.MessageBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SafariWebBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.builders.TargetBuilder;
-
-
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmLED;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmLights;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmStyle;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmStyleTypes;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.Visibility;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder.PushNotificationsPlatform;
 
 public class NotificationBuilderTest {
-
-	// Old test cases for deprecated API'S
-	@Test
-	public void shouldBuildWithJustAlertOld() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		JSONObject notification = builder.build();
-
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	@Test
-	public void shouldThrowExceptionWhenGivenANullMessageOld() {
-		try {
-			new NotificationBuilder(null);
-		} catch (Throwable t) {
-			// Return to mark as successful
-			return;
-		}
-		fail("Exception not thrown.");
-	}
-
-	@Test
-	public void shouldAllowAllOtherParametersToBeOptionalAndNotIncludeThemInTheNotificationIfNullOld() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		builder.setMessageURL(null).setAPNSSettings(null, null, null, null, null, null)
-				.setGCMSettings(null, null, null, null, null, null).setTarget(null, null, null, null);
-
-		JSONObject notification = builder.build();
-
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	@Test
-	public void shouldUpdateExistingMessageParameterToAddURL() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		String testURL = "http://localhost";
-		builder.setMessageURL(testURL);
-
-		JSONObject notification = builder.build();
-
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-
-		assertTrue(notification.getJSONObject("message").has("url"));
-		assertEquals(testURL, notification.getJSONObject("message").getString("url"));
-	}
-
-	@Test
-	public void shouldAllowToConfigureAPNSSettingsOld() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		builder.setAPNSSettings(1, "testCategory", "testiOSActionKey", new JSONObject(), "testSoundFile",
-				APNSNotificationType.DEFAULT);
-
-		JSONObject notification = builder.build();
-
-		checkApnsSettingsOld(notification);
-
-		// Should also still have the message in the notification:
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	private void checkApnsSettingsOld(JSONObject notification) {
-		assertTrue(notification.has("settings"));
-
-		JSONObject settings = notification.getJSONObject("settings");
-		assertTrue(settings.has("apns"));
-
-		JSONObject apnsSettings = settings.getJSONObject("apns");
-
-		assertTrue(apnsSettings.has("badge"));
-		assertEquals(1, apnsSettings.getInt("badge"));
-
-		assertTrue(apnsSettings.has("interactiveCategory"));
-		assertEquals("testCategory", apnsSettings.getString("interactiveCategory"));
-
-		assertTrue(apnsSettings.has("iosActionKey"));
-		assertEquals("testiOSActionKey", apnsSettings.getString("iosActionKey"));
-
-		assertTrue(apnsSettings.has("payload"));
-		assertNotNull(apnsSettings.getJSONObject("payload"));
-		assertTrue(apnsSettings.getJSONObject("payload").keySet().isEmpty());
-
-		assertTrue(apnsSettings.has("type"));
-		assertEquals(APNSNotificationType.DEFAULT.name(), apnsSettings.getString("type"));
-
-		assertTrue(apnsSettings.has("sound"));
-		assertEquals("testSoundFile", apnsSettings.getString("sound"));
-	}
-
-	@Test
-	public void shouldallowtoconfiguregcmsettingsold() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-  
-		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42);
-
-		JSONObject notification = builder.build();
-
-		checkGcmSettingsOld(notification);
-
-		// Should also still have the message in the notification:
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	private void checkGcmSettingsOld(JSONObject notification) {
-		assertTrue(notification.has("settings"));
-		assertTrue(notification.getJSONObject("settings").has("gcm"));
-
-		JSONObject gcm = notification.getJSONObject("settings").getJSONObject("gcm");
-
-		assertTrue(gcm.has("collapseKey"));
-		assertEquals("testCollapseKey", gcm.getString("collapseKey"));
-
-		assertTrue(gcm.has("delayWhileIdle"));
-		assertEquals(true, gcm.getBoolean("delayWhileIdle"));
-
-		assertTrue(gcm.has("payload"));
-		assertNotNull(gcm.getJSONObject("payload"));
-		assertTrue(gcm.getJSONObject("payload").keySet().isEmpty());
-
-		assertTrue(gcm.has("priority"));
-		assertEquals(GCMPriority.MIN.name(), gcm.getString("priority"));
-
-		assertTrue(gcm.has("sound"));
-		assertEquals("testSoundFile", gcm.getString("sound"));
-
-		assertTrue(gcm.has("timeToLive"));
-		assertEquals(42, gcm.getInt("timeToLive"));
-	}
-
-	@Test
-	public void shouldAllowToConfigureBothGCMAndAPNSSettingsSimultaneouslyWithoutOverridingEachOther() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		builder.setAPNSSettings(1, "testCategory", "testiOSActionKey", new JSONObject(), "testSoundFile",
-				APNSNotificationType.DEFAULT);
-		builder.setGCMSettings("testCollapseKey", true, new JSONObject(), GCMPriority.MIN, "testSoundFile", 42);
-		builder.setAPNSSettings(1, "testCategory", "testiOSActionKey", new JSONObject(), "testSoundFile",
-				APNSNotificationType.DEFAULT);
-
-		JSONObject notification = builder.build();
-
-		checkApnsSettingsOld(notification);
-
-		// Check GCM Settings:
-		checkGcmSettingsOld(notification);
-
-		// Should also still have the message in the notification:
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	@Test
-	public void shouldAllowToSetTargetOld() {
-
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-		PushNotificationsPlatform[] targetPlatforms = {};
-
-		builder.setTarget(new String[] { "device1", "device2" }, new String[] { "userId1", "userId2" },
-				new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE },
-				new String[] { "tag1", "tag2" });
-
-		JSONObject notification = builder.build();
-
-		checkTargetOld(notification);
-	}
-
-	private void checkTargetOld(JSONObject notification) {
-		assertTrue(notification.has("target"));
-
-		JSONObject target = notification.getJSONObject("target");
-
-		assertTrue(target.has("deviceIds"));
-		JSONArray deviceIds = target.getJSONArray("deviceIds");
-		assertEquals("device2", deviceIds.get(1));
-
-		assertTrue(target.has("userIds"));
-		JSONArray userIds = target.getJSONArray("userIds");
-		assertEquals("userId2", userIds.get(1));
-
-		assertTrue(target.has("platforms"));
-		JSONArray platforms = target.getJSONArray("platforms");
-		assertEquals("A", platforms.get(0));
-
-		assertTrue(target.has("tagNames"));
-		JSONArray tags = target.getJSONArray("tagNames");
-		assertEquals("tag2", tags.get(1));
-	}
-
-	@Test
-	public void shouldBuildWithJustAlertWhenAllOptionalParametersAreNullOld() {
-		String testAlert = "testMessage";
-		NotificationBuilder builder = new NotificationBuilder(testAlert);
-
-		builder.setAPNSSettings(null, null, null, null, null, null).setAPNSSettings(null, "", "", null, "", null)
-				.setGCMSettings(null, null, null, null, null, null).setGCMSettings("", null, null, null, null, null)
-				.setMessageURL(null).setMessageURL("").setTarget(null, null, null, null).setTarget(new String[] {},
-						new String[] {}, new NotificationBuilder.PushNotificationsPlatform[] {}, new String[] {});
-
-		JSONObject notification = builder.build();
-
-		assertEquals(1, notification.keySet().size());
-		assertTrue(notification.has("message"));
-		assertTrue(notification.getJSONObject("message").has("alert"));
-		assertEquals(testAlert, notification.getJSONObject("message").getString("alert"));
-	}
-
-	// Old Test Cases End
 
 	@Test
 	public void shouldBuildWithJustAlert() {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
-
-		builder.messageBuilder(messageBuilder);
-
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
+		builder.message(message);
 		JSONObject notification = builder.build();
 
 		assertTrue(notification.has("message"));
@@ -274,10 +48,8 @@ public class NotificationBuilderTest {
 	@Test
 	public void shouldThrowExceptionWhenGivenANullMessage() {
 		try {
-
-			MessageBuilder messageBuilder = new MessageBuilder();
-			messageBuilder.setAlert(null);
-			new NotificationBuilder().messageBuilder(messageBuilder).build();
+			Message message = new Message.MessageBuilder().alert(null).build();
+			new NotificationBuilder().message(message).build();
 		} catch (Throwable t) {
 			// Return to mark as successful
 			return;
@@ -291,38 +63,33 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert("testMessage");
-		messageBuilder.setUrl(null);
+		Message message = new Message.MessageBuilder().alert("testMessage").url(null).build();
 
-		ApnsBuilder apnsBuilder = new ApnsBuilder();
-		apnsBuilder.setBadge(null).setAttachmentUrl(null).setInteractiveCategory(null).setIosActionKey(null)
-				.setLaunchImage(null).setLocArgs(null).setLocKey(null).setPayload(null).setSound(null).setSubtitle(null)
-				.setTitle(null).setTitleLocArgs(null).setTitleLocKey(null).setType(null);
+		Apns apns = new Apns.ApnsBuilder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
+				.launchImage(null).locArgs(null).locKey(null).payload(null).sound(null).subtitle(null).title(null)
+				.titleLocArgs(null).titleLocKey(null).type(null).build();
 
-		GcmBuilder gcmBuilder = new GcmBuilder();
-		
-		gcmBuilder.setCollapseKey(null).setDelayWhileIdle(null).setIcon(null).setInteractiveCategory(null)
-				.setLights(null).setPayload(null).setPriority(null).setSound(null).setStyle(null).setSync(null)
-				.setTimeToLive(null).setVisibility(null);
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
+				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
+				.visibility(null).build();
 
-		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
-		chromeWebBuilder.setIconUrl(null).setPayload(null).setTimeToLive(null).setTitle(null);
+		ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey(null).delayWhileIdle(null)
+				.iconUrl(null).payload(null).title(null).build();
 
-		FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
-		firefoxWebBuilder.setIconUrl(null).setPayload(null).setTimeToLive(null).setTitle(null);
+		ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().iconUrl(null).payload(null).timeToLive(null).title(null)
+				.build();
 
-		SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
-		safariWebBuilder.setAction(null).setTitle(null).setUrlArgs(null);
+		FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().iconUrl(null).payload(null).timeToLive(null)
+				.title(null).build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder).setChromeWebBuilder(chromeWebBuilder)
-				.setFirefoxWebBuilder(firefoxWebBuilder).setSafariWebBuilder(safariWebBuilder);
+		SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().action(null).title(null).urlArgs(null).build();
 
-		TargetBuilder targetBuilder = new TargetBuilder();
-		targetBuilder.setDeviceIds(null).setPlatforms(null).setTagNames(null).setUserIds(null);
+		Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeAppExt(chromeAppExt)
+				.chromeWeb(chromeWeb).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 
-		builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder);
+		Target target = new Target.TargetBuilder().deviceIds(null).platforms(null).tagNames(null).userIds(null).build();
+
+		builder.message(message).target(target).settings(settings);
 
 		JSONObject notification = builder.build();
 
@@ -337,22 +104,18 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		ApnsBuilder apnsBuilder = new ApnsBuilder();
-		apnsBuilder.setBadge(1).setInteractiveCategory("testInteractiveCategory").setIosActionKey("testiOSActionKey")
-				.setPayload(new JSONObject()).setSound("testSoundFile")
-				.setType(ApnsBuilder.APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey")
-				.setLocKey("testLocKey").setLaunchImage("testLaunchImage")
-				.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
-				.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
-				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
+		Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
+				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
+				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
+				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
+				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
+				.attachmentUrl("testattachmentUrl").build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setApnsBuilder(apnsBuilder);
+		Settings settings = new Settings.SettingsBuilder().apns(apns).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkAPNSSettings(notification);
 
@@ -367,27 +130,20 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
+		GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
+				.url("url").lines(new String[] { "line1" });
 
-		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
-		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-		.setUrl("url").setLines(new String[] { "line1" });
+		GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
 
-		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
-		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
+				.priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
+				.visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
-		GcmBuilder gcmBuilder = new GcmBuilder();
-		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
-				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
-				.setLights(gcmLights);
+		Settings settings = new Settings.SettingsBuilder().gcm(gcm).build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setGcmBuilder(gcmBuilder);
-
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkGCMSettings(notification);
 
@@ -402,16 +158,14 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
-		chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+		ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
+				.payload(new JSONObject()).build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setChromeWebBuilder(chromeWebBuilder);
+		Settings settings = new Settings.SettingsBuilder().chromeWeb(chromeWeb).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkChromeSettings(notification);
 
@@ -426,17 +180,15 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		ChromeAppExtBuilder chromeAppExtBuilder = new ChromeAppExtBuilder();
-		chromeAppExtBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setTitle("testTitle")
-				.setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+		ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("testcollapseKey")
+				.delayWhileIdle(true).title("testtitle").iconUrl("testiconUrl").timeToLive(42).payload(new JSONObject())
+				.build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setChromeAppExtBuilder(chromeAppExtBuilder);
+		Settings settings = new Settings.SettingsBuilder().chromeAppExt(chromeAppExt).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkChromeExtensionSettings(notification);
 
@@ -451,17 +203,14 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
-		firefoxWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
-				.setPayload(new JSONObject());
+		FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("testtitle").iconUrl("testiconUrl")
+				.timeToLive(42).payload(new JSONObject()).build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setFirefoxWebBuilder(firefoxWebBuilder);
+		Settings settings = new Settings.SettingsBuilder().firefoxWeb(firefoxWeb).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkFirefoxSettings(notification);
 
@@ -476,17 +225,14 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
-		safariWebBuilder.setTitle("testTitle").setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" })
-				.setAction("testAction");
+		SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("testtitle")
+				.urlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).action("testaction").build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setSafariWebBuilder(safariWebBuilder);
+		Settings settings = new Settings.SettingsBuilder().safariWeb(safariWeb).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		checkSafariSettings(notification);
 
@@ -501,54 +247,39 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		ApnsBuilder apnsBuilder = new ApnsBuilder();
-		apnsBuilder.setBadge(1).setInteractiveCategory("testInteractiveCategory").setIosActionKey("testiOSActionKey")
-				.setPayload(new JSONObject()).setSound("testSoundFile")
-				.setType(ApnsBuilder.APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey")
-				.setLocKey("testLocKey").setLaunchImage("testLaunchImage")
-				.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
-				.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
-				.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
+		Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
+				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
+				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
+				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
+				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
+				.attachmentUrl("testattachmentUrl").build();
 
-		GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
-		gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-		.setUrl("url").setLines(new String[] { "line1" });
+		GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
+				.url("url").lines(new String[] { "line1" });
 
-		GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
-		gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
+		GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
 
-		
-		GcmBuilder gcmBuilder = new GcmBuilder();
-		
-		gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
-				.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-				.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
-				.setLights(gcmLights);
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
+				.priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
+				.visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
-		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
-		chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+		ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
+				.payload(new JSONObject()).build();
 
-		ChromeAppExtBuilder chromeAppExtBuilder = new ChromeAppExtBuilder();
-		chromeAppExtBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setTitle("testTitle")
-				.setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+		ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("testcollapseKey")
+				.delayWhileIdle(true).title("testtitle").iconUrl("testiconUrl").timeToLive(42).payload(new JSONObject())
+				.build();
+		FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("testtitle").iconUrl("testiconUrl")
+				.timeToLive(42).payload(new JSONObject()).build();
 
-		FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
-		firefoxWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
-				.setPayload(new JSONObject());
+		SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("testtitle")
+				.urlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).action("testaction").build();
 
-		SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
-		safariWebBuilder.setTitle("testTitle").setUrlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" })
-				.setAction("testAction");
-
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder)
-				.setChromeAppExtBuilder(chromeAppExtBuilder).setChromeWebBuilder(chromeWebBuilder)
-				.setFirefoxWebBuilder(firefoxWebBuilder).setSafariWebBuilder(safariWebBuilder);
-
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).build();
+		Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+				.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
+		JSONObject notification = builder.message(message).settings(settings).build();
 
 		// Check APNS Settings
 
@@ -562,7 +293,7 @@ public class NotificationBuilderTest {
 
 		checkChromeSettings(notification);
 
-		// Check ChromExtension settings
+		// Check ChromExtension Settings
 
 		checkChromeExtensionSettings(notification);
 
@@ -587,14 +318,14 @@ public class NotificationBuilderTest {
 		JSONObject safariWeb = notification.getJSONObject("settings").getJSONObject("safariWeb");
 
 		assertTrue(safariWeb.has("title"));
-		assertEquals("testTitle", safariWeb.getString("title"));
+		assertEquals("testtitle", safariWeb.getString("title"));
 
 		assertTrue(safariWeb.has("urlArgs"));
-		JSONArray jsonLocArgs = safariWeb.getJSONArray("urlArgs");
-		assertEquals("testUrlArgs1", jsonLocArgs.get(0));
+		JSONArray jsonlocArgs = safariWeb.getJSONArray("urlArgs");
+		assertEquals("testUrlArgs1", jsonlocArgs.get(0));
 
 		assertTrue(safariWeb.has("action"));
-		assertEquals("testAction", safariWeb.getString("action"));
+		assertEquals("testaction", safariWeb.getString("action"));
 	}
 
 	private void checkFirefoxSettings(JSONObject notification) {
@@ -604,10 +335,10 @@ public class NotificationBuilderTest {
 		JSONObject firefoxWeb = notification.getJSONObject("settings").getJSONObject("firefoxWeb");
 
 		assertTrue(firefoxWeb.has("title"));
-		assertEquals("testTitle", firefoxWeb.getString("title"));
+		assertEquals("testtitle", firefoxWeb.getString("title"));
 
 		assertTrue(firefoxWeb.has("iconUrl"));
-		assertEquals("testIconUrl", firefoxWeb.getString("iconUrl"));
+		assertEquals("testiconUrl", firefoxWeb.getString("iconUrl"));
 
 		assertTrue(firefoxWeb.has("timeToLive"));
 		assertEquals(42, firefoxWeb.getInt("timeToLive"));
@@ -624,16 +355,16 @@ public class NotificationBuilderTest {
 		JSONObject chromeAppExt = notification.getJSONObject("settings").getJSONObject("chromeAppExt");
 
 		assertTrue(chromeAppExt.has("collapseKey"));
-		assertEquals("testCollapseKey", chromeAppExt.getString("collapseKey"));
+		assertEquals("testcollapseKey", chromeAppExt.getString("collapseKey"));
 
 		assertTrue(chromeAppExt.has("delayWhileIdle"));
 		assertEquals(true, chromeAppExt.getBoolean("delayWhileIdle"));
 
 		assertTrue(chromeAppExt.has("title"));
-		assertEquals("testTitle", chromeAppExt.getString("title"));
+		assertEquals("testtitle", chromeAppExt.getString("title"));
 
 		assertTrue(chromeAppExt.has("iconUrl"));
-		assertEquals("testIconUrl", chromeAppExt.getString("iconUrl"));
+		assertEquals("testiconUrl", chromeAppExt.getString("iconUrl"));
 
 		assertTrue(chromeAppExt.has("timeToLive"));
 		assertEquals(42, chromeAppExt.getInt("timeToLive"));
@@ -650,10 +381,10 @@ public class NotificationBuilderTest {
 		JSONObject chromeWeb = notification.getJSONObject("settings").getJSONObject("chromeWeb");
 
 		assertTrue(chromeWeb.has("title"));
-		assertEquals("testTitle", chromeWeb.getString("title"));
+		assertEquals("testtitle", chromeWeb.getString("title"));
 
 		assertTrue(chromeWeb.has("iconUrl"));
-		assertEquals("testIconUrl", chromeWeb.getString("iconUrl"));
+		assertEquals("testiconUrl", chromeWeb.getString("iconUrl"));
 
 		assertTrue(chromeWeb.has("timeToLive"));
 		assertEquals(42, chromeWeb.getInt("timeToLive"));
@@ -670,49 +401,49 @@ public class NotificationBuilderTest {
 		JSONObject gcm = notification.getJSONObject("settings").getJSONObject("gcm");
 
 		assertTrue(gcm.has("collapseKey"));
-		assertEquals("testCollapseKey", gcm.getString("collapseKey"));
+		assertEquals("testcollapseKey", gcm.getString("collapseKey"));
 
 		assertTrue(gcm.has("delayWhileIdle"));
 		assertEquals(true, gcm.getBoolean("delayWhileIdle"));
 
 		assertTrue(gcm.has("payload"));
 		assertNotNull(gcm.getJSONObject("payload"));
-		assertTrue(gcm.getJSONObject("payload").keySet().isEmpty());
+		assertTrue(gcm.getJSONObject("payload").has("key"));
 
 		assertTrue(gcm.has("priority"));
 		assertEquals(GcmBuilder.GCMPriority.MIN.name(), gcm.getString("priority"));
 
 		assertTrue(gcm.has("sound"));
-		assertEquals("testSoundFile", gcm.getString("sound"));
+		assertEquals("testsoundFile", gcm.getString("sound"));
 
 		assertTrue(gcm.has("timeToLive"));
 		assertEquals(42, gcm.getInt("timeToLive"));
 
 		assertTrue(gcm.has("icon"));
-		assertEquals("testIcon", gcm.getString("icon"));
+		assertEquals("testicon", gcm.getString("icon"));
 
 		assertTrue(gcm.has("visibility"));
-		assertEquals(GcmBuilder.Visibility.PUBLIC.name(), gcm.getString("visibility"));
+		assertEquals(Visibility.PUBLIC.name(), gcm.getString("visibility"));
 
 		assertTrue(gcm.has("sync"));
 		assertEquals(true, gcm.getBoolean("sync"));
 
 		assertTrue(gcm.has("style"));
 		JSONObject gcmJson = gcm.getJSONObject("style");
-		assertEquals(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION.name(), gcmJson.get("type"));
+		assertEquals(GcmStyleTypes.BIGTEXT_NOTIFICATION.name(), gcmJson.get("type"));
 		assertEquals("text", gcmJson.get("text"));
 		assertEquals("title", gcmJson.get("title"));
 		assertEquals("url", gcmJson.get("url"));
 
 		assertTrue(gcmJson.has("lines"));
-		JSONArray jsonLocArgs = gcmJson.getJSONArray("lines");
-		assertEquals("line1", jsonLocArgs.get(0));
+		JSONArray jsonlocArgs = gcmJson.getJSONArray("lines");
+		assertEquals("line1", jsonlocArgs.get(0));
 
 		assertTrue(gcm.has("lights"));
-		JSONObject gcmLightsJson = gcm.getJSONObject("lights");
-		assertEquals(GcmBuilder.GcmLED.BLACK.name(), gcmLightsJson.get("ledArgb"));
-		assertEquals(1, gcmLightsJson.get("ledOffMs"));
-		assertEquals(1, gcmLightsJson.get("ledOnMs"));
+		JSONObject gcmlightsJson = gcm.getJSONObject("lights");
+		assertEquals(GcmBuilder.GcmLED.BLACK.name(), gcmlightsJson.get("ledArgb"));
+		assertEquals(1, gcmlightsJson.get("ledOffMs"));
+		assertEquals(1, gcmlightsJson.get("ledOnMs"));
 	}
 
 	private void checkAPNSSettings(JSONObject notification) {
@@ -727,46 +458,46 @@ public class NotificationBuilderTest {
 		assertEquals(1, apnsSettings.getInt("badge"));
 
 		assertTrue(apnsSettings.has("interactiveCategory"));
-		assertEquals("testInteractiveCategory", apnsSettings.getString("interactiveCategory"));
+		assertEquals("testinteractiveCategory", apnsSettings.getString("interactiveCategory"));
 
 		assertTrue(apnsSettings.has("iosActionKey"));
-		assertEquals("testiOSActionKey", apnsSettings.getString("iosActionKey"));
+		assertEquals("testiOSactionKey", apnsSettings.getString("iosActionKey"));
 
 		assertTrue(apnsSettings.has("payload"));
 		assertNotNull(apnsSettings.getJSONObject("payload"));
-		assertTrue(apnsSettings.getJSONObject("payload").keySet().isEmpty());
+		assertTrue(apnsSettings.getJSONObject("payload").has("key"));
 
 		assertTrue(apnsSettings.has("type"));
-		assertEquals(ApnsBuilder.APNSNotificationType.DEFAULT.name(), apnsSettings.getString("type"));
+		assertEquals(APNSNotificationType.DEFAULT.name(), apnsSettings.getString("type"));
 
 		assertTrue(apnsSettings.has("sound"));
-		assertEquals("testSoundFile", apnsSettings.getString("sound"));
+		assertEquals("testsoundFile", apnsSettings.getString("sound"));
 
 		assertTrue(apnsSettings.has("titleLocKey"));
-		assertEquals("testTitleLocKey", apnsSettings.getString("titleLocKey"));
+		assertEquals("testtitlelocKey", apnsSettings.getString("titleLocKey"));
 
 		assertTrue(apnsSettings.has("locKey"));
-		assertEquals("testLocKey", apnsSettings.getString("locKey"));
+		assertEquals("testlocKey", apnsSettings.getString("locKey"));
 
 		assertTrue(apnsSettings.has("launchImage"));
-		assertEquals("testLaunchImage", apnsSettings.getString("launchImage"));
+		assertEquals("testlaunchImage", apnsSettings.getString("launchImage"));
 
 		assertTrue(apnsSettings.has("titleLocArgs"));
-		JSONArray jsonTitleLocArgs = apnsSettings.getJSONArray("titleLocArgs");
-		assertEquals("testTitleLocArgs1", jsonTitleLocArgs.get(0));
+		JSONArray jsontitlelocArgs = apnsSettings.getJSONArray("titleLocArgs");
+		assertEquals("testtitlelocArgs1", jsontitlelocArgs.get(0));
 
 		assertTrue(apnsSettings.has("locArgs"));
-		JSONArray jsonLocArgsApns = apnsSettings.getJSONArray("locArgs");
-		assertEquals("testLocArgs1", jsonLocArgsApns.get(0));
+		JSONArray jsonlocArgsApns = apnsSettings.getJSONArray("locArgs");
+		assertEquals("testlocArgs1", jsonlocArgsApns.get(0));
 
 		assertTrue(apnsSettings.has("title"));
-		assertEquals("testTitle", apnsSettings.getString("title"));
+		assertEquals("testtitle", apnsSettings.getString("title"));
 
 		assertTrue(apnsSettings.has("subtitle"));
 		assertEquals("testSubtitle", apnsSettings.getString("subtitle"));
 
 		assertTrue(apnsSettings.has("attachmentUrl"));
-		assertEquals("testAttachmentUrl", apnsSettings.getString("attachmentUrl"));
+		assertEquals("testattachmentUrl", apnsSettings.getString("attachmentUrl"));
 	}
 
 	@Test
@@ -775,21 +506,19 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
+		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
-		TargetBuilder targetBuilder = new TargetBuilder();
-		targetBuilder.setDeviceIds(new String[] { "device1", "device2" })
-				.setUserIds(new String[] { "userId1", "userId2" })
-				.setPlatforms(new TargetBuilder.PushNotificationsPlatform[] {
-						TargetBuilder.PushNotificationsPlatform.APPLE, TargetBuilder.PushNotificationsPlatform.GOOGLE,
-						TargetBuilder.PushNotificationsPlatform.APPEXTCHROME,
-						TargetBuilder.PushNotificationsPlatform.WEBCHROME,
-						TargetBuilder.PushNotificationsPlatform.WEBFIREFOX,
-						TargetBuilder.PushNotificationsPlatform.WEBSAFARI })
-				.setTagNames(new String[] { "tag1", "tag2" });
+		Target targetValue = new Target.TargetBuilder().deviceIds(new String[] { "device1", "device2" })
+				.userIds(new String[] { "userId1", "userId2" })
+				.platforms(new TargetBuilder.PushNotificationsPlatform[] {
+						PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
+						PushNotificationsPlatform.APPEXTCHROME,
+						PushNotificationsPlatform.WEBCHROME,
+						PushNotificationsPlatform.WEBFIREFOX,
+						PushNotificationsPlatform.WEBSAFARI })
+				.tagNames(new String[] { "tag1", "tag2" }).build();
 
-		JSONObject notification = builder.messageBuilder(messageBuilder).targetBuilder(targetBuilder).build();
+		JSONObject notification = builder.message(message).target(targetValue).build();
 
 		assertTrue(notification.has("target"));
 
@@ -822,57 +551,44 @@ public class NotificationBuilderTest {
 		String testAlert = "testMessage";
 		NotificationBuilder builder = new NotificationBuilder();
 
-		MessageBuilder messageBuilder = new MessageBuilder();
-		messageBuilder.setAlert(testAlert);
-		messageBuilder.setUrl(null);
+		Message message = new Message.MessageBuilder().alert(testAlert).url(null).build();
 
-		ApnsBuilder apnsBuilder = new ApnsBuilder();
-		apnsBuilder.setBadge(null).setAttachmentUrl(null).setInteractiveCategory(null).setIosActionKey(null)
-				.setLaunchImage(null).setLocArgs(null).setLocKey(null).setPayload(null).setSound(null).setSubtitle(null)
-				.setTitle(null).setTitleLocArgs(null).setTitleLocKey(null).setType(null);
+		Apns apns = new Apns.ApnsBuilder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
+				.launchImage(null).locArgs(null).locKey(null).payload(null).sound(null).subtitle(null).title(null)
+				.titleLocArgs(null).titleLocKey(null).type(null)
 
-		apnsBuilder.setBadge(null).setAttachmentUrl("").setInteractiveCategory("").setIosActionKey("")
-				.setLaunchImage("").setLocArgs(null).setLocKey("").setPayload(null).setSound("").setSubtitle("")
-				.setTitle("").setTitleLocArgs(null).setTitleLocKey("").setType(null);
+				.badge(null).attachmentUrl("").interactiveCategory("").iosActionKey("").launchImage("").locArgs(null)
+				.locKey("").payload(null).sound("").subtitle("").title("").titleLocArgs(null).titleLocKey("").type(null)
+				.build();
 
-		GcmBuilder gcmBuilder = new GcmBuilder();
-		gcmBuilder.setCollapseKey(null).setDelayWhileIdle(null).setIcon(null).setInteractiveCategory(null)
-				.setLights(null).setPayload(null).setPriority(null).setSound(null).setStyle(null).setSync(null)
-				.setTimeToLive(null).setVisibility(null);
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
+				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
+				.visibility(null)
 
-		gcmBuilder.setCollapseKey("").setDelayWhileIdle(null).setIcon("").setInteractiveCategory("").setLights(null)
-				.setPayload(null).setPriority(null).setSound("").setStyle(null).setSync(null).setTimeToLive(null)
-				.setVisibility(null);
+				.collapseKey("").delayWhileIdle(null).icon("").interactiveCategory("").lights(null).payload(null)
+				.priority(null).sound("").style(null).sync(null).timeToLive(null).visibility(null).build();
 
-		ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
-		chromeWebBuilder.setIconUrl(null).setPayload(null).setTimeToLive(null).setTitle(null);
+		ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().iconUrl(null).payload(null).timeToLive(null).title(null)
+				.iconUrl("").payload(null).timeToLive(null).title("").build();
 
-		chromeWebBuilder.setIconUrl("").setPayload(null).setTimeToLive(null).setTitle("");
+		FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().iconUrl(null).payload(null).timeToLive(null)
+				.title(null)
 
-		FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
-		firefoxWebBuilder.setIconUrl(null).setPayload(null).setTimeToLive(null).setTitle(null);
+				.iconUrl("").payload(null).timeToLive(null).title("").build();
 
-		firefoxWebBuilder.setIconUrl("").setPayload(null).setTimeToLive(null).setTitle("");
+		SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().action(null).title(null).urlArgs(null).action("")
+				.title("").urlArgs(null).build();
 
-		SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
-		safariWebBuilder.setAction(null).setTitle(null).setUrlArgs(null);
-		safariWebBuilder.setAction("").setTitle("").setUrlArgs(null);
+		ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey(null).delayWhileIdle(null)
+				.iconUrl(null).payload(null).timeToLive(null).title(null).collapseKey("").delayWhileIdle(null)
+				.iconUrl("").payload(null).timeToLive(null).title("").build();
 
-		ChromeAppExtBuilder chromeAppExtBuilder = new ChromeAppExtBuilder();
-		chromeAppExtBuilder.setCollapseKey(null).setDelayWhileIdle(null).setIconUrl(null).setPayload(null)
-				.setTimeToLive(null).setTitle(null);
-		chromeAppExtBuilder.setCollapseKey("").setDelayWhileIdle(null).setIconUrl("").setPayload(null)
-				.setTimeToLive(null).setTitle("");
+		Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+				.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 
-		SettingsBuilder settingsBuilder = new SettingsBuilder();
-		settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder)
-				.setChromeAppExtBuilder(chromeAppExtBuilder).setChromeWebBuilder(chromeWebBuilder)
-				.setFirefoxWebBuilder(firefoxWebBuilder).setSafariWebBuilder(safariWebBuilder);
+		Target target = new Target.TargetBuilder().deviceIds(null).platforms(null).tagNames(null).userIds(null).build();
 
-		TargetBuilder targetBuilder = new TargetBuilder();
-		targetBuilder.setDeviceIds(null).setPlatforms(null).setTagNames(null).setUserIds(null);
-
-		JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder).build();
+		JSONObject notification = builder.message(message).settings(settings).target(target).build();
 
 		assertTrue(notification.has("message"));
 		assertTrue(notification.getJSONObject("message").has("alert"));

@@ -36,109 +36,86 @@ PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 Then create a new notification using `NotificationBuilder`:
 
 ```
-// Older approach
-NotificationBuilder builder = new NotificationBuilder("This is the notification's text!"); // Deprecated
+
+NotificationBuilder builder = new NotificationBuilder(); 
+
+``` 
+
+MessageBuilder is use to construct Message attributes.
+
+```
+Message message = new Message.MessageBuilder().alert("Testing Push Notification").url("www.example.com").build();
 
 ```
 You can also configure the notification with some other optional settings.
 
-Use SettingBuilder for creating all optional settings, BuilderFactory to get builder (FirefoxWebBuilder, ApnsBuilder, GcmBuilder etc) and TargetBuilder for constructing Target..
+Use SettingBuilder for creating all optional settings and TargetBuilder for constructing Target..
 
 Functionality added for FirefoxWeb, ChromeWeb, SafariWeb, ChromeAppExtension and extra optional settings introduced for Apns and GCM as shown below :
 
+Builders are introduced which sets the optional settings for a particualr platform : ApnsBuilder (Apns), GcmBuilder (Gcm), ChromeAppExtBuilder (ChromeAppExtension), ChromeWebBuilder (ChromeWeb), 
+FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
+
 ```
-
-// Older approach
-builder.setMessageURL(urlToBeIncludedWithThePushNotification)
-	.setTarget(deviceIdArray, userIdArray, platformArray, tagNameArray)
-	.setAPNSSettings(badge, category, iosActionKey, payload, soundFile, APNSNotificationType)
-	.setGCMSettings(collapseKey, delayWhileIdle, jsonPayload, priority, soundFile, secondsToLive);
-	.setTarget(new String [] {"deviceId1","deviceId1"}, new String [] {"user1","user2"}, new PushNotificationsPlatform[] { PushNotificationsPlatform.APPEXTCHROME,
-				PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE}, new String[] {"tag1","tag2"}); // This approach is deprecated
-
-
-// Below New approach has been introduced
-
-Create a new Notification using 'NotificationBuilder':
-
-NotificationBuilder builder = new NotificationBuilder();
-
-// Use MessageBuilder to set message alert and url
-
-MessageBuilder messageBuilder = new MessageBuilder();
-messageBuilder.setAlert("This is the notification's text!");
-messageBuilder.setUrl("www.example.com");
-
-
-// Builders are introduced which sets the optional settings for a particualr platform : ApnsBuilder (Apns), GcmBuilder (Gcm), ChromeAppExtBuilder (ChromeAppExtension), ChromeWebBuilder (ChromeWeb), 
-// FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
-
-
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
-ApnsBuilder apnsBuilder = new ApnsBuilder();
-apnsBuilder.setBadge(1).setInteractiveCategory("testInteractiveCategory").setIosActionKey("testiOSActionKey")
-.setPayload(new JSONObject()).setSound("testSoundFile")
-.setType(ApnsBuilder.APNSNotificationType.DEFAULT).setTitleLocKey("testTitleLocKey")
-.setLocKey("testLocKey").setLaunchImage("testLaunchImage")
-.setTitleLocArgs(new String[] { "testTitleLocArgs1", "testTitleLocArgs2" })
-.setLocArgs(new String[] { "testLocArgs1", "testLocArgs" }).setTitle("testTitle")
-.setSubtitle("testSubtitle").setAttachmentUrl("testAttachmentUrl");
+Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
+				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
+				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
+				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
+				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
+				.attachmentUrl("testattachmentUrl").build();
 
+// Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
-// style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
+GcmStyle gcmstyle = new GcmStyle().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
+				    .url("url").lines(new String[] { "line1" });
 
-GcmBuilder.GcmStyle gcmStyle = new GcmBuilder.GcmStyle();
-gcmStyle.setType(GcmBuilder.GcmStyleTypes.BIGTEXT_NOTIFICATION).setText("text").setTitle("title")
-.setUrl("url").setLines(new String[] { "line1" });
+GcmLights gcmlights = new GcmLights().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1);
 
-GcmBuilder.GcmLights gcmLights = new GcmBuilder.GcmLights();
-gcmLights.setLedArgb(GcmBuilder.GcmLED.BLACK).setLedOffMs(1).setLedOnMs(1);
-		
-// Gcm Settings	
-GcmBuilder gcmBuilder = new GcmBuilder();
-gcmBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setPayload(new JSONObject())
-.setPriority(GcmBuilder.GCMPriority.MIN).setSound("testSoundFile").setTimeToLive(42).setIcon("testIcon")
-.setVisibility(GcmBuilder.Visibility.PUBLIC).setSync(true).setStyle(gcmStyle)
-.setLights(gcmLights);
+Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true).payload(new JSONObject().put("key", "value"))
+		  .priority(GCMPriority.MIN).sound("testsoundFile").timeToLive(42).icon("testicon")
+	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
-// Chrome Settings		
-ChromeWebBuilder chromeWebBuilder = new ChromeWebBuilder();
-chromeWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+// Chrome Settings	
+	
+ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
+					  .payload(new JSONObject()).build();
 
 // ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
-ChromeAppExtBuilder chromeAppExtBuilder = new ChromeAppExtBuilder();
-chromeAppExtBuilder.setCollapseKey("testCollapseKey").setDelayWhileIdle(true).setTitle("testTitle")
-.setIconUrl("testIconUrl").setTimeToLive(42).setPayload(new JSONObject());
+
+ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("testcollapseKey")
+							.delayWhileIdle(true).title("testtitle").iconUrl("testiconUrl").timeToLive(42).payload(new JSONObject()).build();
 
 // Firefox Settings		
-FirefoxWebBuilder firefoxWebBuilder = new FirefoxWebBuilder();
-firefoxWebBuilder.setTitle("testTitle").setIconUrl("testIconUrl").setTimeToLive(42)
-.setPayload(new JSONObject());
 
-// Safari Settings. For safari all the three settings are mandatory to set.		
-SafariWebBuilder safariWebBuilder = new SafariWebBuilder();
-safariWebBuilder.setTitle("testTitle").setUrlArgs(new String[] {"testUrlArgs1"})
-.setAction("testAction");
+FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("testtitle").iconUrl("testiconUrl")
+					   .timeToLive(42).payload(new JSONObject()).build();
 
-// Now we set builders created above in SettingsBuilder as shown below: 			
-SettingsBuilder settingsBuilder = new SettingsBuilder();
-settingsBuilder.setApnsBuilder(apnsBuilder).setGcmBuilder(gcmBuilder)
-.setChromeAppExtBuilder(chromeAppExtBuilder).setChromeWebBuilder(chromeWebBuilder)
-.setFirefoxWebBuilder(firefoxWebBuilder).setSafariWebBuilder(safariWebBuilder);
+// Safari Settings. For safari all the three settings are mandatory to set.	
+	
+SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("testtitle")
+					 .urlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).action("testaction").build();
+
+
 
 // Target.**Note : We should provide either deviceIds or userIds or platforms or tagnames
-TargetBuilder targetBuilder = new TargetBuilder();
-		targetBuilder.setPlatforms(new TargetBuilder.PushNotificationsPlatform[] {
-		TargetBuilder.PushNotificationsPlatform.APPLE, TargetBuilder.PushNotificationsPlatform.GOOGLE,
-		TargetBuilder.PushNotificationsPlatform.APPEXTCHROME,
-		TargetBuilder.PushNotificationsPlatform.WEBCHROME,
-		TargetBuilder.PushNotificationsPlatform.WEBFIREFOX,
-		TargetBuilder.PushNotificationsPlatform.WEBSAFARI });
+Target target = new Target.TargetBuilder()
+.platforms(new PushNotificationsPlatform[] {
+		PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
+		PushNotificationsPlatform.APPEXTCHROME,
+		PushNotificationsPlatform.WEBCHROME,
+		PushNotificationsPlatform.WEBFIREFOX,
+		PushNotificationsPlatform.WEBSAFARI })
+.build();
+		
+// Setting optional values for all platforms to Settings object.
+Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 		
 // Now we create notification json using messageBuilder , settingsBuilder and targetBuilder created above :
 
-JSONObject notification = builder.messageBuilder(messageBuilder).settingsBuilder(settingsBuilder).targetBuilder(targetBuilder).build();
+JSONObject notification = builder.message(message).settings(settings).target(target).build();
 	
 ```
 (Note that you can chain the different calls to `NotificationBuilder`.)
