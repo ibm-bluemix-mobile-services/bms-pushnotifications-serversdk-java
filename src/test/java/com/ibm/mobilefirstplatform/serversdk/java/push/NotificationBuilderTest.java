@@ -107,7 +107,7 @@ public class NotificationBuilderTest {
 		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
 		Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
-				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
+				.iosActionKey("testiOSactionKey").payload(new JSONObject()).sound("testsoundFile")
 				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
 				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
 				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
@@ -137,8 +137,8 @@ public class NotificationBuilderTest {
 
 		GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true)
-				.payload(new JSONObject().put("key", "value")).priority(GCMPriority.MIN).sound("testsoundFile")
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
+				.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN).sound("testsoundFile")
 				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
 				.lights(gcmlights).build();
 
@@ -251,7 +251,7 @@ public class NotificationBuilderTest {
 		Message message = new Message.MessageBuilder().alert(testAlert).build();
 
 		Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("testinteractiveCategory")
-				.iosActionKey("testiOSactionKey").payload(new JSONObject().put("key", "value")).sound("testsoundFile")
+				.iosActionKey("testiOSactionKey").payload(new JSONObject()).sound("testsoundFile")
 				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
 				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
 				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
@@ -262,8 +262,8 @@ public class NotificationBuilderTest {
 
 		GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").delayWhileIdle(true)
-				.payload(new JSONObject().put("key", "value")).priority(GCMPriority.MIN).sound("testsoundFile")
+		Gcm gcm = new Gcm.GcmBuilder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
+				.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN).sound("testsoundFile")
 				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
 				.lights(gcmlights).build();
 
@@ -405,12 +405,15 @@ public class NotificationBuilderTest {
 		assertTrue(gcm.has("collapseKey"));
 		assertEquals("testcollapseKey", gcm.getString("collapseKey"));
 
+		assertTrue(gcm.has("interactiveCategory"));
+		assertEquals("testinteractiveCategory", gcm.getString("interactiveCategory"));
+
 		assertTrue(gcm.has("delayWhileIdle"));
 		assertEquals(true, gcm.getBoolean("delayWhileIdle"));
 
 		assertTrue(gcm.has("payload"));
 		assertNotNull(gcm.getJSONObject("payload"));
-		assertTrue(gcm.getJSONObject("payload").has("key"));
+		assertTrue(gcm.getJSONObject("payload").keySet().isEmpty());
 
 		assertTrue(gcm.has("priority"));
 		assertEquals(GcmBuilder.GCMPriority.MIN.name(), gcm.getString("priority"));
@@ -467,7 +470,7 @@ public class NotificationBuilderTest {
 
 		assertTrue(apnsSettings.has("payload"));
 		assertNotNull(apnsSettings.getJSONObject("payload"));
-		assertTrue(apnsSettings.getJSONObject("payload").has("key"));
+		assertTrue(apnsSettings.getJSONObject("payload").keySet().isEmpty());
 
 		assertTrue(apnsSettings.has("type"));
 		assertEquals(APNSNotificationType.DEFAULT.name(), apnsSettings.getString("type"));

@@ -368,6 +368,7 @@ public final class PushMessageModel {
 				return iosActionKey;
 			}
 
+			@JsonRawValue
 			public final JsonNode getPayload() {
 				return payload;
 			}
@@ -568,6 +569,7 @@ public final class PushMessageModel {
 				return collapseKey;
 			}
 
+			@JsonRawValue
 			public final JsonNode getPayload() {
 				return payload;
 			}
@@ -651,7 +653,6 @@ public final class PushMessageModel {
 				private Integer timeToLive;
 				private String collapseKey;
 				private JsonNode payload;
-
 				private Boolean sync;
 				private String sound;
 				private String interactiveCategory;
