@@ -118,7 +118,7 @@ Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb
 ```		
 
 Now we create notification json using message , settings and target created above :
-
+```
 JSONObject notification = builder.message(message).settings(settings).target(target).build();
 	
 ```
