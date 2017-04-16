@@ -13,7 +13,7 @@ You can get the SDK from Maven Central. For example, to get it with Maven, inclu
 <dependency>
 	<groupId>com.ibm.mobilefirstplatform.serversdk.java</groupId>
 	<artifactId>push</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 </dependency>
 ```
 
@@ -98,8 +98,8 @@ SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("title")
 					 .urlArgs(new String[] {"urlArgs1"}).action("action").build();
 ```
 
-Create target using TargetBuilder.**Note : We should provide either deviceIds or userIds or platforms or tagnames.
-Below code snippet uses platforms.
+Create target using TargetBuilder.**Note : We should provide either deviceIds or userIds or platforms or tagNames.
+Below code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...)
 ```
 Target target = new Target.TargetBuilder()
 .platforms(new PushNotificationsPlatform[] {
@@ -111,7 +111,7 @@ Target target = new Target.TargetBuilder()
 .build();
 
 ```		
-Setting optional values for all platforms to Settings object.
+Now set optional values for all platforms to Settings object.
 ```
 Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
 .chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
