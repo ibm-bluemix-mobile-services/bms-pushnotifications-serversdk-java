@@ -33,75 +33,62 @@ You can achieve this by binding your Push Notification service to your server ap
 PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 ```
 
-Then create a new notification using `NotificationBuilder`:
-
-```
-
-NotificationBuilder builder = new NotificationBuilder(); 
-
-``` 
-
 MessageBuilder is use to construct Message attributes.
 
 ```
-Message message = new Message.MessageBuilder().alert("alert string").url("url").build();
+Message message = new Message.Builder().alert("Testing Push Notification").url("www.example.com").build();
 
 ```
 You can also configure the notification with some other optional settings.
 
-Use SettingBuilder for creating all optional settings and TargetBuilder for constructing Target..
-
 Functionality added for FirefoxWeb, ChromeWeb, SafariWeb, ChromeAppExtension and extra optional settings introduced for Apns and GCM as shown below :
 
-Builders are introduced which sets the optional settings for a particualr platform : ApnsBuilder (Apns), GcmBuilder (Gcm), ChromeAppExtBuilder (ChromeAppExtension), ChromeWebBuilder (ChromeWeb), 
-FirefoxWebBuilder (FirefoxWeb) and SafariWebBuilder (SafariWeb), you can set builders for those platforms which you require, not necessary to set all the builders. 
-
+Builders are introduced which sets the optional settings for the platforms : 
 ```
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
-Apns apns = new Apns.ApnsBuilder().badge(1).interactiveCategory("interactiveCategory")
+Apns apns = new Apns.Builder().badge(1).interactiveCategory("interactiveCategory")
 				.iosActionKey("iosActionKey").payload(new JSONObject()).sound("sound.wav")
 				.type(APNSNotificationType.DEFAULT).titleLocKey("titleLocKey").locKey("locKey")
 				.launchImage("launchImage").titleLocArgs(new String[] { "titlelocArgs1", "titlelocArgs2" })
-				.locArgs(new String[] { "locArgs1", "locArgs" }).title("title").subtitle("subtitle")
+				.locArgs(new String[] { "locArgs1", "locArg2" }).title("title").subtitle("subtitle")
 				.attachmentUrl("attachmentUrl").build();
 
 // Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
-GcmStyle gcmstyle = new GcmStyle.GcmStyleBuilder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
+GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
 				    .url("url").lines(new String[] { "line1" }).build();
 
-GcmLights gcmlights = new GcmLights.GcmLightsBuilder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
+GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-Gcm gcm = new Gcm.GcmBuilder().collapseKey("collapseKey").interactiveCategory("interactiveCategory").delayWhileIdle(true).payload(new JSONObject())
-		  .priority(GCMPriority.MIN).sound("sound.wav").timeToLive(42).icon("icon")
+Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("interactiveCategory").delayWhileIdle(true).payload(new JSONObject())
+		  .priority(GCMPriority.MIN).sound("mysound.wav").timeToLive(42).icon("icon")
 	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
-ChromeWeb chromeWeb = new ChromeWeb.ChromeWebBuilder().title("title").iconUrl("iconUrl").timeToLive(42)
+ChromeWeb chromeWeb = new ChromeWeb.Builder().title("title").iconUrl("iconUrl").timeToLive(42)
 					  .payload(new JSONObject()).build();
 
 // ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
 
-ChromeAppExt chromeAppExt = new ChromeAppExt.ChromeAppExtBuilder().collapseKey("collapseKey")
+ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey")
 							.delayWhileIdle(true).title("title").iconUrl("iconUrl").timeToLive(42).payload(new JSONObject()).build();
 
 // Firefox Settings		
 
-FirefoxWeb firefoxWeb = new FirefoxWeb.FirefoxWebBuilder().title("title").iconUrl("iconUrl")
+FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("title").iconUrl("iconUrl")
 					   .timeToLive(42).payload(new JSONObject()).build();
 
 // Safari Settings. For safari all the three settings are mandatory to set.	
 	
-SafariWeb safariWeb = new SafariWeb.SafariWebBuilder().title("title")
+SafariWeb safariWeb = new SafariWeb.Builder().title("title")
 					 .urlArgs(new String[] {"urlArgs1"}).action("action").build();
 ```
-
-Create target using TargetBuilder.**Note : We should provide either deviceIds or userIds or platforms or tagNames.
+**Note : We should provide either deviceIds or userIds or platforms or tagNames.
 Below code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...)
 ```
-Target target = new Target.TargetBuilder()
+Target target = new Target.Builder()
 .platforms(new PushNotificationsPlatform[] {
 		PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
 		PushNotificationsPlatform.APPEXTCHROME,
@@ -113,18 +100,19 @@ Target target = new Target.TargetBuilder()
 ```		
 Now set optional values for all platforms to Settings object.
 ```
-Settings settings = new Settings.SettingsBuilder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+Settings settings = new Settings.Builder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
 .chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 ```		
 
-Now we create notification json using message , settings and target created above :
-```
-JSONObject notification = builder.message(message).settings(settings).target(target).build();
-	
-```
-(Note that you can chain the different calls to `NotificationBuilder`.)
+Now create a new notification as shown below:
 
-Finally, pass this notification using `NotificationBuilder.build()` and an optional `ResponseListener` to get notified of the result:
+```
+
+Notification notification = new Notification.Builder().message(message).settings(settings).target(target).build(); 
+
+```
+
+Finally, pass this notification and an optional `ResponseListener` to get notified of the result:
 
 ```
 	PushNotifications.send(notification, new PushNotificationsResponseListener(){

@@ -28,6 +28,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * This class is used to send push notifications from a Java server to mobile
  * devices using the Push Notification service in IBM® Bluemix.
@@ -145,7 +149,7 @@ public class PushNotifications {
 	 *            an optional {@link PushNotificationsResponseListener} to
 	 *            listen to the result of this operation
 	 */
-	public static void send(JSONObject notification, PushNotificationsResponseListener listener) {
+	public static void send(Notification notification, PushNotificationsResponseListener listener) {
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
 			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
@@ -166,10 +170,42 @@ public class PushNotifications {
 		}
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
+		
+		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage()).target(notification.getTarget())
+				.settings(notification.getSettings()).build();
 
-		HttpPost pushPost = createPushPostRequest(notification);
+		JSONObject notificationJson = generateJSON(model);
+
+		HttpPost pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
+	}
+	
+	/**
+	 * API converts object to json format.
+	 * 
+	 * @param obj
+	 *            The object which needs to be serialized as json string.
+	 * 
+	 * @return Return a JSONOject for the passed object.
+	 */
+	private static JSONObject generateJSON(Object obj) {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		String jsonString = null;
+		try {
+			mapper.setSerializationInclusion(Include.NON_EMPTY);
+			jsonString = mapper.writeValueAsString(obj);
+
+		} catch (JsonProcessingException exception) {
+
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
+
+		JSONObject json = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
+
+		return json;
 	}
 
 	protected static HttpPost createPushPostRequest(JSONObject notification) {

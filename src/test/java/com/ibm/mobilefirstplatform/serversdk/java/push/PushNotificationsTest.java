@@ -44,7 +44,7 @@ public class PushNotificationsTest {
 		PushNotifications.pushMessageEndpointURL = "http://www.testendpoint.com";
 		PushNotifications.secret = "testAppSecret";
 
-		JSONObject notification = (new NotificationBuilder()).build();
+		JSONObject notification = new JSONObject();
 
 		HttpPost post = PushNotifications.createPushPostRequest(notification);
 

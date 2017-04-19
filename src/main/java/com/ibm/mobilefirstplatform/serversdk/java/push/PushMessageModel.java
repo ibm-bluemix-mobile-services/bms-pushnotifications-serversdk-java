@@ -21,27 +21,21 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message.MessageBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.ApnsBuilder.APNSNotificationType;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GCMPriority;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmLights;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.GcmStyle;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.GcmBuilder.Visibility;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SettingsBuilder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.TargetBuilder;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.Builder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.Builder.GCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.Builder.Visibility;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights.Builder.GcmLED;
+import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle.Builder.GcmStyleTypes;
 
 public final class PushMessageModel {
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
-	public static final Logger logger = Logger.getLogger(NotificationBuilder.class.getName());
+	public static final Logger logger = Logger.getLogger(Notification.class.getName());
 
 	private Message message;
 	private Target target;
 	private Settings settings;
-	private MessageBuilder messageBuilder;
-	private TargetBuilder targetBuilder;
-	private SettingsBuilder settingsBuilder;
 
 	public final Message getMessage() {
 		return message;
@@ -55,62 +49,29 @@ public final class PushMessageModel {
 		return settings;
 	}
 
-	public final MessageBuilder getMessageBuilder() {
-		return messageBuilder;
-	}
-
-	public final TargetBuilder getTargetBuilder() {
-		return targetBuilder;
-	}
-
-	public final SettingsBuilder getSettingsBuilder() {
-		return settingsBuilder;
-	}
-
-	private PushMessageModel(PushMessageModelBuilder builder) {
+	private PushMessageModel(Builder builder) {
 		this.message = builder.message;
 		this.settings = builder.settings;
 		this.target = builder.target;
-		this.settingsBuilder = builder.settingsBuilder;
-		this.targetBuilder = builder.targetBuilder;
-		this.messageBuilder = builder.messageBuilder;
 	}
 
-	public static class PushMessageModelBuilder {
+	public static class Builder {
 		private Message message;
 		private Target target;
 		private Settings settings;
-		private MessageBuilder messageBuilder;
-		private TargetBuilder targetBuilder;
-		private SettingsBuilder settingsBuilder;
 
-		public final PushMessageModelBuilder message(final Message message) {
+		public final Builder message(final Message message) {
 			this.message = message;
 			return this;
 		}
 
-		public final PushMessageModelBuilder target(final Target target) {
+		public final Builder target(final Target target) {
 			this.target = target;
 			return this;
 		}
 
-		public final PushMessageModelBuilder settings(final Settings settings) {
+		public final Builder settings(final Settings settings) {
 			this.settings = settings;
-			return this;
-		}
-
-		public final PushMessageModelBuilder targetBuilder(TargetBuilder targetBuilder) {
-			this.targetBuilder = targetBuilder;
-			return this;
-		}
-
-		public final PushMessageModelBuilder settingsBuilder(SettingsBuilder settingsBuilder) {
-			this.settingsBuilder = settingsBuilder;
-			return this;
-		}
-
-		public final PushMessageModelBuilder messageBuilder(MessageBuilder messageBuilder) {
-			this.messageBuilder = messageBuilder;
 			return this;
 		}
 
@@ -133,22 +94,22 @@ public final class PushMessageModel {
 			return url;
 		}
 
-		private Message(MessageBuilder builder) {
+		private Message(Builder builder) {
 			this.alert = builder.alert;
 			this.url = builder.url;
 
 		}
 
-		public static class MessageBuilder {
+		public static class Builder {
 			private String alert;
 			private String url;
 
-			public final MessageBuilder alert(final String alert) {
+			public final Builder alert(final String alert) {
 				this.alert = alert;
 				return this;
 			}
 
-			public final MessageBuilder url(final String url) {
+			public final Builder url(final String url) {
 				this.url = url;
 				return this;
 			}
@@ -182,14 +143,14 @@ public final class PushMessageModel {
 			return tagNames;
 		}
 
-		private Target(TargetBuilder builder) {
+		private Target(Builder builder) {
 			this.deviceIds = builder.deviceIds;
 			this.platforms = builder.platforms;
 			this.tagNames = builder.tagNames;
 			this.userIds = builder.userIds;
 		}
 
-		public static class TargetBuilder {
+		public static class Builder {
 
 			public enum PushNotificationsPlatform {
 				APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
@@ -211,22 +172,22 @@ public final class PushMessageModel {
 			private String[] platforms = null;
 			private String[] tagNames = null;
 
-			public final TargetBuilder deviceIds(final String[] deviceIds) {
+			public final Builder deviceIds(final String[] deviceIds) {
 				this.deviceIds = deviceIds;
 				return this;
 			}
 
-			public final TargetBuilder userIds(final String[] userIds) {
+			public final Builder userIds(final String[] userIds) {
 				this.userIds = userIds;
 				return this;
 			}
 
-			public final TargetBuilder tagNames(final String[] tagNames) {
+			public final Builder tagNames(final String[] tagNames) {
 				this.tagNames = tagNames;
 				return this;
 			}
 
-			public final TargetBuilder platforms(final PushNotificationsPlatform[] platforms) {
+			public final Builder platforms(final PushNotificationsPlatform[] platforms) {
 
 				String[] platformArray = null;
 
@@ -283,7 +244,7 @@ public final class PushMessageModel {
 			return chromeAppExt;
 		}
 
-		private Settings(SettingsBuilder builder) {
+		private Settings(Builder builder) {
 
 			this.apns = builder.apns;
 			this.gcm = builder.gcm;
@@ -294,7 +255,7 @@ public final class PushMessageModel {
 		}
 
 		// Builder for Settings
-		public static class SettingsBuilder {
+		public static class Builder {
 
 			private Apns apns;
 			private Gcm gcm;
@@ -303,32 +264,32 @@ public final class PushMessageModel {
 			private SafariWeb safariWeb;
 			private ChromeAppExt chromeAppExt;
 
-			public final SettingsBuilder apns(Apns apns) {
+			public final Builder apns(Apns apns) {
 				this.apns = apns;
 				return this;
 			}
 
-			public final SettingsBuilder gcm(Gcm gcm) {
+			public final Builder gcm(Gcm gcm) {
 				this.gcm = gcm;
 				return this;
 			}
 
-			public final SettingsBuilder firefoxWeb(FirefoxWeb firefoxWeb) {
+			public final Builder firefoxWeb(FirefoxWeb firefoxWeb) {
 				this.firefoxWeb = firefoxWeb;
 				return this;
 			}
 
-			public final SettingsBuilder chromeWeb(ChromeWeb chromeWeb) {
+			public final Builder chromeWeb(ChromeWeb chromeWeb) {
 				this.chromeWeb = chromeWeb;
 				return this;
 			}
 
-			public final SettingsBuilder safariWeb(SafariWeb safariWeb) {
+			public final Builder safariWeb(SafariWeb safariWeb) {
 				this.safariWeb = safariWeb;
 				return this;
 			}
 
-			public final SettingsBuilder chromeAppExt(ChromeAppExt chromeAppExt) {
+			public final Builder chromeAppExt(ChromeAppExt chromeAppExt) {
 				this.chromeAppExt = chromeAppExt;
 				return this;
 			}
@@ -346,7 +307,7 @@ public final class PushMessageModel {
 			private String iosActionKey;
 			private JsonNode payload;
 			private String interactiveCategory;
-			private ApnsBuilder.APNSNotificationType type;
+			private APNSNotificationType type;
 			private String titleLocKey;
 			private String locKey;
 			private String launchImage;
@@ -413,7 +374,7 @@ public final class PushMessageModel {
 				return attachmentUrl;
 			}
 
-			private Apns(ApnsBuilder builder) {
+			private Apns(Builder builder) {
 
 				this.badge = builder.badge;
 				this.interactiveCategory = builder.interactiveCategory;
@@ -432,7 +393,7 @@ public final class PushMessageModel {
 			}
 
 			// Builder for Apns
-			public static class ApnsBuilder {
+			public static class Builder {
 
 				public enum APNSNotificationType {
 					DEFAULT, MIXED, SILENT
@@ -453,22 +414,22 @@ public final class PushMessageModel {
 				private String title;
 				private String attachmentUrl;
 
-				public final ApnsBuilder badge(Integer badge) {
+				public final Builder badge(Integer badge) {
 					this.badge = badge;
 					return this;
 				}
 
-				public final ApnsBuilder sound(String sound) {
+				public final Builder sound(String sound) {
 					this.sound = sound;
 					return this;
 				}
 
-				public final ApnsBuilder iosActionKey(String iosActionKey) {
+				public final Builder iosActionKey(String iosActionKey) {
 					this.iosActionKey = iosActionKey;
 					return this;
 				}
 
-				public final ApnsBuilder payload(JSONObject payload) {
+				public final Builder payload(JSONObject payload) {
 					JsonNode jsonNodePayload = null;
 
 					try {
@@ -483,52 +444,52 @@ public final class PushMessageModel {
 					return this;
 				}
 
-				public final ApnsBuilder interactiveCategory(String interactiveCategory) {
+				public final Builder interactiveCategory(String interactiveCategory) {
 					this.interactiveCategory = interactiveCategory;
 					return this;
 				}
 
-				public final ApnsBuilder type(APNSNotificationType type) {
+				public final Builder type(APNSNotificationType type) {
 					this.type = type;
 					return this;
 				}
 
-				public final ApnsBuilder titleLocKey(String titleLocKey) {
+				public final Builder titleLocKey(String titleLocKey) {
 					this.titleLocKey = titleLocKey;
 					return this;
 				}
 
-				public final ApnsBuilder locKey(String locKey) {
+				public final Builder locKey(String locKey) {
 					this.locKey = locKey;
 					return this;
 				}
 
-				public final ApnsBuilder launchImage(String launchImage) {
+				public final Builder launchImage(String launchImage) {
 					this.launchImage = launchImage;
 					return this;
 				}
 
-				public final ApnsBuilder titleLocArgs(String[] titleLocArgs) {
+				public final Builder titleLocArgs(String[] titleLocArgs) {
 					this.titleLocArgs = titleLocArgs;
 					return this;
 				}
 
-				public final ApnsBuilder locArgs(String[] locArgs) {
+				public final Builder locArgs(String[] locArgs) {
 					this.locArgs = locArgs;
 					return this;
 				}
 
-				public final ApnsBuilder subtitle(String subtitle) {
+				public final Builder subtitle(String subtitle) {
 					this.subtitle = subtitle;
 					return this;
 				}
 
-				public final ApnsBuilder title(String title) {
+				public final Builder title(String title) {
 					this.title = title;
 					return this;
 				}
 
-				public final ApnsBuilder attachmentUrl(String attachmentUrl) {
+				public final Builder attachmentUrl(String attachmentUrl) {
 					this.attachmentUrl = attachmentUrl;
 					return this;
 				}
@@ -551,9 +512,9 @@ public final class PushMessageModel {
 			private Boolean sync;
 			private String sound;
 			private String interactiveCategory;
-			private GcmBuilder.GCMPriority priority;
+			private GCMPriority priority;
 			private GcmStyle style;
-			private GcmBuilder.Visibility visibility;
+			private Visibility visibility;
 			private String icon;
 			private GcmLights lights;
 
@@ -606,7 +567,7 @@ public final class PushMessageModel {
 				return lights;
 			}
 
-			private Gcm(GcmBuilder builder) {
+			private Gcm(Builder builder) {
 
 				this.delayWhileIdle = builder.delayWhileIdle;
 				this.timeToLive = builder.timeToLive;
@@ -623,7 +584,7 @@ public final class PushMessageModel {
 
 			}
 
-			public static class GcmBuilder {
+			public static class Builder {
 
 				public enum GCMPriority {
 					DEFAULT, MIN, LOW, HIGH, MAX
@@ -631,22 +592,6 @@ public final class PushMessageModel {
 
 				public enum Visibility {
 					PUBLIC, PRIVATE, SECRET;
-				}
-
-				/**
-				 * The available style type of the gcm notification message.
-				 */
-				public enum GcmStyleTypes {
-
-					BIGTEXT_NOTIFICATION, INBOX_NOTIFICATION, PICTURE_NOTIFICATION
-				}
-
-				/**
-				 * Determines the LED value in the notifications
-				 */
-				public enum GcmLED {
-
-					BLACK, DARKGRAY, GRAY, LIGHTGRAY, WHITE, RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, TRANSPARENT
 				}
 
 				private Boolean delayWhileIdle;
@@ -662,22 +607,22 @@ public final class PushMessageModel {
 				private String icon;
 				private GcmLights lights;
 
-				public final GcmBuilder delayWhileIdle(Boolean delayWhileIdle) {
+				public final Builder delayWhileIdle(Boolean delayWhileIdle) {
 					this.delayWhileIdle = delayWhileIdle;
 					return this;
 				}
 
-				public final GcmBuilder timeToLive(Integer timeToLive) {
+				public final Builder timeToLive(Integer timeToLive) {
 					this.timeToLive = timeToLive;
 					return this;
 				}
 
-				public final GcmBuilder collapseKey(String collapseKey) {
+				public final Builder collapseKey(String collapseKey) {
 					this.collapseKey = collapseKey;
 					return this;
 				}
 
-				public final GcmBuilder payload(JSONObject payload) {
+				public final Builder payload(JSONObject payload) {
 					JsonNode jsonNodePayload = null;
 
 					try {
@@ -693,42 +638,42 @@ public final class PushMessageModel {
 					return this;
 				}
 
-				public final GcmBuilder sync(Boolean sync) {
+				public final Builder sync(Boolean sync) {
 					this.sync = sync;
 					return this;
 				}
 
-				public final GcmBuilder sound(String sound) {
+				public final Builder sound(String sound) {
 					this.sound = sound;
 					return this;
 				}
 
-				public final GcmBuilder interactiveCategory(String interactiveCategory) {
+				public final Builder interactiveCategory(String interactiveCategory) {
 					this.interactiveCategory = interactiveCategory;
 					return this;
 				}
 
-				public final GcmBuilder priority(GCMPriority priority) {
+				public final Builder priority(GCMPriority priority) {
 					this.priority = priority;
 					return this;
 				}
 
-				public final GcmBuilder style(GcmStyle style) {
+				public final Builder style(GcmStyle style) {
 					this.style = style;
 					return this;
 				}
 
-				public final GcmBuilder visibility(Visibility visibility) {
+				public final Builder visibility(Visibility visibility) {
 					this.visibility = visibility;
 					return this;
 				}
 
-				public final GcmBuilder icon(String icon) {
+				public final Builder icon(String icon) {
 					this.icon = icon;
 					return this;
 				}
 
-				public final GcmBuilder lights(GcmLights lights) {
+				public final Builder lights(GcmLights lights) {
 					this.lights = lights;
 					return this;
 				}
@@ -737,135 +682,150 @@ public final class PushMessageModel {
 					return new Gcm(this);
 				}
 
-				public static final class GcmLights {
-					private GcmLED ledArgb;
-					private Integer ledOnMs;
-					private Integer ledOffMs;
+			}
+		}
 
-					public GcmLED getLedArgb() {
-						return ledArgb;
-					}
+		public static final class GcmLights {
+			private GcmLED ledArgb;
+			private Integer ledOnMs;
+			private Integer ledOffMs;
 
-					public Integer getLedOnMs() {
-						return ledOnMs;
-					}
+			public GcmLED getLedArgb() {
+				return ledArgb;
+			}
 
-					public Integer getLedOffMs() {
-						return ledOffMs;
-					}
+			public Integer getLedOnMs() {
+				return ledOnMs;
+			}
 
-					private GcmLights(GcmLightsBuilder builder) {
-						this.ledArgb = builder.ledArgb;
-						this.ledOnMs = builder.ledOnMs;
-						this.ledOffMs = builder.ledOffMs;
-					}
+			public Integer getLedOffMs() {
+				return ledOffMs;
+			}
 
-					public static class GcmLightsBuilder {
-						private GcmLED ledArgb;
-						private Integer ledOnMs;
-						private Integer ledOffMs;
+			private GcmLights(Builder builder) {
+				this.ledArgb = builder.ledArgb;
+				this.ledOnMs = builder.ledOnMs;
+				this.ledOffMs = builder.ledOffMs;
+			}
 
-						public GcmLightsBuilder ledArgb(GcmLED ledArgb) {
-							this.ledArgb = ledArgb;
-							return this;
-						}
+			public static class Builder {
+				/**
+				 * Determines the LED value in the notifications
+				 */
+				public enum GcmLED {
 
-						public GcmLightsBuilder ledOnMs(Integer ledOnMs) {
-							this.ledOnMs = ledOnMs;
-							return this;
-						}
-
-						public GcmLightsBuilder ledOffMs(Integer ledOffMs) {
-							this.ledOffMs = ledOffMs;
-							return this;
-						}
-
-						public GcmLights build() {
-							return new GcmLights(this);
-						}
-					}
-
+					BLACK, DARKGRAY, GRAY, LIGHTGRAY, WHITE, RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, TRANSPARENT
 				}
 
-				public static final class GcmStyle {
+				private GcmLED ledArgb;
+				private Integer ledOnMs;
+				private Integer ledOffMs;
 
-					private GcmStyleTypes type;
-					private String url;
-					private String title;
-					private String text;
-					private String[] lines;
+				public Builder ledArgb(GcmLED ledArgb) {
+					this.ledArgb = ledArgb;
+					return this;
+				}
 
-					public final GcmStyleTypes getType() {
-						return type;
-					}
+				public Builder ledOnMs(Integer ledOnMs) {
+					this.ledOnMs = ledOnMs;
+					return this;
+				}
 
-					public final String getUrl() {
-						return url;
-					}
+				public Builder ledOffMs(Integer ledOffMs) {
+					this.ledOffMs = ledOffMs;
+					return this;
+				}
 
-					public final String getTitle() {
-						return title;
-					}
+				public GcmLights build() {
+					return new GcmLights(this);
+				}
+			}
 
-					public final String getText() {
-						return text;
-					}
+		}
 
-					public final String[] getLines() {
-						return lines;
-					}
+		public static final class GcmStyle {
 
-					private GcmStyle(GcmStyleBuilder builder) {
-						this.type = builder.type;
-						this.url = builder.url;
-						this.title = builder.title;
-						this.text = builder.text;
-						this.lines = builder.lines;
-					}
+			private GcmStyleTypes type;
+			private String url;
+			private String title;
+			private String text;
+			private String[] lines;
 
-					public static class GcmStyleBuilder {
+			public final GcmStyleTypes getType() {
+				return type;
+			}
 
-						private GcmStyleTypes type;
-						private String url;
-						private String title;
-						private String text;
-						private String[] lines;
+			public final String getUrl() {
+				return url;
+			}
 
-						public final GcmStyleBuilder type(GcmStyleTypes type) {
-							this.type = type;
-							return this;
-						}
+			public final String getTitle() {
+				return title;
+			}
 
-						public final GcmStyleBuilder url(String url) {
-							this.url = url;
-							return this;
-						}
+			public final String getText() {
+				return text;
+			}
 
-						public final GcmStyleBuilder title(String title) {
-							this.title = title;
-							return this;
-						}
+			public final String[] getLines() {
+				return lines;
+			}
 
-						public final GcmStyleBuilder text(String text) {
-							this.text = text;
-							return this;
-						}
+			private GcmStyle(Builder builder) {
+				this.type = builder.type;
+				this.url = builder.url;
+				this.title = builder.title;
+				this.text = builder.text;
+				this.lines = builder.lines;
+			}
 
-						public final GcmStyleBuilder lines(String[] lines) {
-							this.lines = lines;
-							return this;
-						}
+			public static class Builder {
+				/**
+				 * The available style type of the gcm notification message.
+				 */
+				public enum GcmStyleTypes {
 
-						public GcmStyle build() {
-							return new GcmStyle(this);
+					BIGTEXT_NOTIFICATION, INBOX_NOTIFICATION, PICTURE_NOTIFICATION
+				}
 
-						}
+				private GcmStyleTypes type;
+				private String url;
+				private String title;
+				private String text;
+				private String[] lines;
 
-					}
+				public final Builder type(GcmStyleTypes type) {
+					this.type = type;
+					return this;
+				}
+
+				public final Builder url(String url) {
+					this.url = url;
+					return this;
+				}
+
+				public final Builder title(String title) {
+					this.title = title;
+					return this;
+				}
+
+				public final Builder text(String text) {
+					this.text = text;
+					return this;
+				}
+
+				public final Builder lines(String[] lines) {
+					this.lines = lines;
+					return this;
+				}
+
+				public GcmStyle build() {
+					return new GcmStyle(this);
 
 				}
 
 			}
+
 		}
 
 		public static final class ChromeWeb {
@@ -892,7 +852,7 @@ public final class PushMessageModel {
 				return this.payload;
 			}
 
-			private ChromeWeb(ChromeWebBuilder builder) {
+			private ChromeWeb(Builder builder) {
 
 				this.title = builder.title;
 				this.iconUrl = builder.iconUrl;
@@ -900,29 +860,29 @@ public final class PushMessageModel {
 				this.payload = builder.payload;
 			}
 
-			public static class ChromeWebBuilder {
+			public static class Builder {
 
 				private String title;
 				private String iconUrl;
 				private Integer timeToLive;
 				private JsonNode payload;
 
-				public final ChromeWebBuilder title(String title) {
+				public final Builder title(String title) {
 					this.title = title;
 					return this;
 				}
 
-				public final ChromeWebBuilder iconUrl(String iconUrl) {
+				public final Builder iconUrl(String iconUrl) {
 					this.iconUrl = iconUrl;
 					return this;
 				}
 
-				public final ChromeWebBuilder timeToLive(Integer timeToLive) {
+				public final Builder timeToLive(Integer timeToLive) {
 					this.timeToLive = timeToLive;
 					return this;
 				}
 
-				public final ChromeWebBuilder payload(JSONObject payload) {
+				public final Builder payload(JSONObject payload) {
 
 					JsonNode jsonNodePayload = null;
 
@@ -963,30 +923,30 @@ public final class PushMessageModel {
 				return urlArgs;
 			}
 
-			private SafariWeb(SafariWebBuilder builder) {
+			private SafariWeb(Builder builder) {
 
 				this.title = builder.title;
 				this.action = builder.action;
 				this.urlArgs = builder.urlArgs;
 			}
 
-			public static class SafariWebBuilder {
+			public static class Builder {
 
 				private String title;
 				private String action;
 				private String[] urlArgs;
 
-				public final SafariWebBuilder title(String title) {
+				public final Builder title(String title) {
 					this.title = title;
 					return this;
 				}
 
-				public final SafariWebBuilder action(String action) {
+				public final Builder action(String action) {
 					this.action = action;
 					return this;
 				}
 
-				public final SafariWebBuilder urlArgs(String[] urlArgs) {
+				public final Builder urlArgs(String[] urlArgs) {
 					this.urlArgs = urlArgs;
 					return this;
 				}
@@ -1021,7 +981,7 @@ public final class PushMessageModel {
 				return this.payload;
 			}
 
-			private FirefoxWeb(FirefoxWebBuilder builder) {
+			private FirefoxWeb(Builder builder) {
 
 				this.title = builder.title;
 				this.iconUrl = builder.iconUrl;
@@ -1029,29 +989,29 @@ public final class PushMessageModel {
 				this.payload = builder.payload;
 			}
 
-			public static class FirefoxWebBuilder {
+			public static class Builder {
 
 				private String title;
 				private String iconUrl;
 				private Integer timeToLive;
 				private JsonNode payload;
 
-				public final FirefoxWebBuilder title(String title) {
+				public final Builder title(String title) {
 					this.title = title;
 					return this;
 				}
 
-				public final FirefoxWebBuilder iconUrl(String iconUrl) {
+				public final Builder iconUrl(String iconUrl) {
 					this.iconUrl = iconUrl;
 					return this;
 				}
 
-				public final FirefoxWebBuilder timeToLive(Integer timeToLive) {
+				public final Builder timeToLive(Integer timeToLive) {
 					this.timeToLive = timeToLive;
 					return this;
 				}
 
-				public final FirefoxWebBuilder payload(JSONObject payload) {
+				public final Builder payload(JSONObject payload) {
 					JsonNode jsonNodePayload = null;
 
 					try {
@@ -1107,7 +1067,7 @@ public final class PushMessageModel {
 				return payload;
 			}
 
-			private ChromeAppExt(ChromeAppExtBuilder builder) {
+			private ChromeAppExt(Builder builder) {
 
 				this.collapseKey = builder.collapseKey;
 				this.delayWhileIdle = builder.delayWhileIdle;
@@ -1118,7 +1078,7 @@ public final class PushMessageModel {
 
 			}
 
-			public static class ChromeAppExtBuilder {
+			public static class Builder {
 
 				private String collapseKey;
 				private Boolean delayWhileIdle;
@@ -1127,32 +1087,32 @@ public final class PushMessageModel {
 				private Integer timeToLive;
 				private JsonNode payload;
 
-				public final ChromeAppExtBuilder collapseKey(String collapseKey) {
+				public final Builder collapseKey(String collapseKey) {
 					this.collapseKey = collapseKey;
 					return this;
 				}
 
-				public final ChromeAppExtBuilder delayWhileIdle(Boolean delayWhileIdle) {
+				public final Builder delayWhileIdle(Boolean delayWhileIdle) {
 					this.delayWhileIdle = delayWhileIdle;
 					return this;
 				}
 
-				public final ChromeAppExtBuilder title(String title) {
+				public final Builder title(String title) {
 					this.title = title;
 					return this;
 				}
 
-				public final ChromeAppExtBuilder iconUrl(String iconUrl) {
+				public final Builder iconUrl(String iconUrl) {
 					this.iconUrl = iconUrl;
 					return this;
 				}
 
-				public final ChromeAppExtBuilder timeToLive(Integer timeToLive) {
+				public final Builder timeToLive(Integer timeToLive) {
 					this.timeToLive = timeToLive;
 					return this;
 				}
 
-				public final ChromeAppExtBuilder payload(JSONObject payload) {
+				public final Builder payload(JSONObject payload) {
 					JsonNode jsonNodePayload = null;
 
 					try {
