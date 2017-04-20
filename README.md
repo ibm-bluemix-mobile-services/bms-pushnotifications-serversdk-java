@@ -48,55 +48,54 @@ Builders are introduced which sets the optional settings for the platforms :
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
 Apns apns = new Apns.Builder().badge(1).interactiveCategory("interactiveCategory")
-				.iosActionKey("iosActionKey").payload(new JSONObject()).sound("sound.wav")
-				.type(APNSNotificationType.DEFAULT).titleLocKey("titleLocKey").locKey("locKey")
-				.launchImage("launchImage").titleLocArgs(new String[] { "titlelocArgs1", "titlelocArgs2" })
-				.locArgs(new String[] { "locArgs1", "locArg2" }).title("title").subtitle("subtitle")
-				.attachmentUrl("attachmentUrl").build();
+.iosActionKey("iosActionKey").payload(new JSONObject()).sound("sound.wav")
+.type(APNSNotificationType.DEFAULT).titleLocKey("titleLocKey").locKey("locKey")
+.launchImage("launchImage").titleLocArgs(new String[] { "titlelocArgs1", "titlelocArgs2" })
+.locArgs(new String[] { "locArgs1", "locArg2" }).title("title").subtitle("subtitle")
+.attachmentUrl("attachmentUrl").build();
 
 // Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
 GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
-						.title("title").url("url").lines(new String[] { "line1" }).build();
+.title("title").url("url").lines(new String[] { "line1" }).build();
 
 GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
 Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("interactiveCategory")
-			  .delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN)
-			  .sound("mysound.wav").timeToLive(42).icon("icon").visibility(Visibility.PUBLIC).sync(true)
-			  .style(gcmstyle).lights(gcmlights).build();
+.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN)
+.sound("mysound.wav").timeToLive(42).icon("icon").visibility(Visibility.PUBLIC).sync(true)
+.style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
 ChromeWeb chromeWeb = new ChromeWeb.Builder().title("title").iconUrl("iconUrl").timeToLive(42)
-					  .payload(new JSONObject()).build();
+.payload(new JSONObject()).build();
 
 // ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
 
-ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey")
-							.delayWhileIdle(true).title("title").iconUrl("iconUrl").timeToLive(42)
-							.payload(new JSONObject()).build();
+ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey").delayWhileIdle(true).
+title("title").iconUrl("iconUrl").timeToLive(42).payload(new JSONObject()).build();
 
 // Firefox Settings		
 
 FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("title").iconUrl("iconUrl")
-					   .timeToLive(42).payload(new JSONObject()).build();
+.timeToLive(42).payload(new JSONObject()).build();
 
 // Safari Settings. For safari all the three settings are mandatory to set.	
 	
 SafariWeb safariWeb = new SafariWeb.Builder().title("title")
-					 .urlArgs(new String[] {"urlArgs1"}).action("action").build();
+.urlArgs(new String[] {"urlArgs1"}).action("action").build();
 ```
 **Note : We should provide either deviceIds or userIds or platforms or tagNames.
 Below code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...)
 ```
 Target target = new Target.Builder()
 .platforms(new PushNotificationsPlatform[] {
-		PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
-		PushNotificationsPlatform.APPEXTCHROME,
-		PushNotificationsPlatform.WEBCHROME,
-		PushNotificationsPlatform.WEBFIREFOX,
-		PushNotificationsPlatform.WEBSAFARI })
+PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
+PushNotificationsPlatform.APPEXTCHROME,
+PushNotificationsPlatform.WEBCHROME,
+PushNotificationsPlatform.WEBSAFARI })
+PushNotificationsPlatform.WEBFIREFOX,
 .build();
 
 ```		
