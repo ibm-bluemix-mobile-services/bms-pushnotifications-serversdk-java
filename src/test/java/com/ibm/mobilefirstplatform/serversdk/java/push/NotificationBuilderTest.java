@@ -12,23 +12,14 @@ import org.junit.Test;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Apns.Builder.APNSNotificationType;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeAppExt;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.ChromeWeb;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.FirefoxWeb;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.Builder.GCMPriority;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.Gcm.Builder.Visibility;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmLights.Builder.GcmLED;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.GcmStyle.Builder.GcmStyleTypes;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings.SafariWeb;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target.Builder.PushNotificationsPlatform;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.Builder.GCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.Builder.Visibility;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights.Builder.GcmLED;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle.Builder.GcmStyleTypes;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Target.Builder.PushNotificationsPlatform;
 
 public class NotificationBuilderTest {
 

@@ -12,13 +12,7 @@
  */
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
-import java.util.logging.Logger;
-
 import org.json.JSONObject;
-
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Message;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Settings;
-import com.ibm.mobilefirstplatform.serversdk.java.push.PushMessageModel.Target;
 
 /**
  * The NotificationBuilder is used to create a new push notification that is
@@ -53,8 +47,6 @@ public class Notification {
 
 	public static class Builder {
 		
-		public static final Logger logger = Logger.getLogger(Notification.class.getName());
-
 		private Message message;
 		private Target target;
 		private Settings settings;
