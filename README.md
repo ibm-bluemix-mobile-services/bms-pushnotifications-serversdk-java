@@ -54,7 +54,10 @@ Apns apns = new Apns.Builder().badge(1).interactiveCategory("interactiveCategory
 .locArgs(new String[] { "locArgs1", "locArg2" }).title("title").subtitle("subtitle")
 .attachmentUrl("attachmentUrl").build();
 
-// Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
+/*
+ * Gcm Settings, style and lights attibute addded to Gcm optional settings
+ * which can be constructed as shown below:
+ */
 
 GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
 .title("title").url("url").lines(new String[] { "line1" }).build();
@@ -71,8 +74,10 @@ Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("inte
 ChromeWeb chromeWeb = new ChromeWeb.Builder().title("title").iconUrl("iconUrl").timeToLive(42)
 .payload(new JSONObject()).build();
 
-// ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
-
+/*
+ * ChromeAppExtension settings. **Note: You need to provide a proper icon url 
+ * for chromAppExtension notification to work properly.		
+*/
 ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey").delayWhileIdle(true).
 title("title").iconUrl("iconUrl").timeToLive(42).payload(new JSONObject()).build();
 
