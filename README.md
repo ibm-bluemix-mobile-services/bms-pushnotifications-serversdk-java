@@ -56,14 +56,15 @@ Apns apns = new Apns.Builder().badge(1).interactiveCategory("interactiveCategory
 
 // Gcm Settings, style and lights attibute addded to Gcm optional settings which can be constructed as shown below:
 
-GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text").title("title")
-				    .url("url").lines(new String[] { "line1" }).build();
+GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
+						.title("title").url("url").lines(new String[] { "line1" }).build();
 
 GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("interactiveCategory").delayWhileIdle(true).payload(new JSONObject())
-		  .priority(GCMPriority.MIN).sound("mysound.wav").timeToLive(42).icon("icon")
-	   	  .visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
+Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("interactiveCategory")
+			  .delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN)
+			  .sound("mysound.wav").timeToLive(42).icon("icon").visibility(Visibility.PUBLIC).sync(true)
+			  .style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
@@ -73,7 +74,8 @@ ChromeWeb chromeWeb = new ChromeWeb.Builder().title("title").iconUrl("iconUrl").
 // ChromeAppExtension settings. **Note: You need to provide a proper icon url for chromAppExtension notification to work properly.		
 
 ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey")
-							.delayWhileIdle(true).title("title").iconUrl("iconUrl").timeToLive(42).payload(new JSONObject()).build();
+							.delayWhileIdle(true).title("title").iconUrl("iconUrl").timeToLive(42)
+							.payload(new JSONObject()).build();
 
 // Firefox Settings		
 
