@@ -33,7 +33,7 @@ You can achieve this by binding your Push Notification service to your server ap
 PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 ```
 
-MessageBuilder is use to construct Message attributes.
+Create Message attributes using builder.
 
 ```
 Message message = new Message.Builder().alert("Testing Push Notification").url("www.example.com").build();
