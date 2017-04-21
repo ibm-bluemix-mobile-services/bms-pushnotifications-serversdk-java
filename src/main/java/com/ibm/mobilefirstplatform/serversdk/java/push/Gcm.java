@@ -1,3 +1,16 @@
+/*
+ *     Copyright 2017 IBM Corp.
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
+
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.util.logging.Level;
@@ -13,7 +26,11 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.Builder.Visibility;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights.Builder.GcmLED;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle.Builder.GcmStyleTypes;
 
-
+/**
+ * 
+ * Modal class for Gcm optional settings.
+ *
+ */
 public final class Gcm {
 
 	public static final Logger logger = Logger.getLogger(Gcm.class.getName());
@@ -199,6 +216,11 @@ public final class Gcm {
 
 	}
 	
+	/**
+	 * 
+	 * Modal class for GcmLights.
+	 *
+	 */
 	public static final class GcmLights {
 		private GcmLED ledArgb;
 		private Integer ledOnMs;
@@ -216,7 +238,7 @@ public final class Gcm {
 			return ledOffMs;
 		}
 
-		private GcmLights(GcmLights.Builder builder) {
+		private GcmLights(Builder builder) {
 			this.ledArgb = builder.ledArgb;
 			this.ledOnMs = builder.ledOnMs;
 			this.ledOffMs = builder.ledOffMs;
@@ -257,6 +279,11 @@ public final class Gcm {
 
 	}
 
+	/**
+	 * 
+	 * Modal class for GcmStyle.
+	 *
+	 */
 	public static final class GcmStyle {
 
 		private GcmStyleTypes type;
@@ -285,7 +312,7 @@ public final class Gcm {
 			return lines;
 		}
 
-		private GcmStyle(GcmStyle.Builder builder) {
+		private GcmStyle(Builder builder) {
 			this.type = builder.type;
 			this.url = builder.url;
 			this.title = builder.title;
@@ -308,27 +335,27 @@ public final class Gcm {
 			private String text;
 			private String[] lines;
 
-			public final GcmStyle.Builder type(GcmStyleTypes type) {
+			public final Builder type(GcmStyleTypes type) {
 				this.type = type;
 				return this;
 			}
 
-			public final GcmStyle.Builder url(String url) {
+			public final Builder url(String url) {
 				this.url = url;
 				return this;
 			}
 
-			public final GcmStyle.Builder title(String title) {
+			public final Builder title(String title) {
 				this.title = title;
 				return this;
 			}
 
-			public final GcmStyle.Builder text(String text) {
+			public final Builder text(String text) {
 				this.text = text;
 				return this;
 			}
 
-			public final GcmStyle.Builder lines(String[] lines) {
+			public final Builder lines(String[] lines) {
 				this.lines = lines;
 				return this;
 			}

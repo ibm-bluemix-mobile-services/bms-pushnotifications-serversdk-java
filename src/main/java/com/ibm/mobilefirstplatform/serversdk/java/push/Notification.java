@@ -12,10 +12,8 @@
  */
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
-import org.json.JSONObject;
-
 /**
- * The NotificationBuilder is used to create a new push notification that is
+ * The Notification is used to create a new push notification that is
  * going to be sent using the Push Notification service in IBMÂ® Bluemix.
  * 
  * The push notification's message that is passed in the constructor is
@@ -96,7 +94,7 @@ public class Notification {
 		/**
 		 * Build the push notification as configured. The result of this method
 		 * is to be passed to
-		 * {@link PushNotifications#send(JSONObject, PushNotificationsResponseListener)}
+		 * {@link PushNotifications#send(Notification, PushNotificationsResponseListener)}
 		 * as a parameter.
 		 * 
 		 * @return the push notification built as specified, ready to be sent

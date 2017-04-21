@@ -13,6 +13,11 @@
 
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
+/**
+ * 
+ * Parent modal class for notification message.
+ *
+ */
 public final class PushMessageModel {
 
 	private Message message;
