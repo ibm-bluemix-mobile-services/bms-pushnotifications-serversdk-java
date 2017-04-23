@@ -28,7 +28,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle.Builder.GcmS
 
 /**
  * 
- * Modal class for Gcm optional settings.
+ * Modal class for Gcm which specifies the settings specific to the Android platform.
  *
  */
 public final class Gcm {
@@ -114,12 +114,26 @@ public final class Gcm {
 
 	}
 
+	/**
+	 * 
+	 * Builder for {@link Gcm}.
+	 *
+	 */
 	public static class Builder {
-
+		/**
+		 * 
+		 * Determines the priority of the notification.
+		 *
+		 */
 		public enum GCMPriority {
 			DEFAULT, MIN, LOW, HIGH, MAX
 		}
 
+		/**
+		 * 
+		 * Determines the visibility of the notification.
+		 *
+		 */
 		public enum Visibility {
 			PUBLIC, PRIVATE, SECRET;
 		}
@@ -137,23 +151,51 @@ public final class Gcm {
 		private String icon;
 		private GcmLights lights;
 
+		/**
+		 * 
+		 * @param delayWhileIdle
+		 *            When this parameter is set to true, it indicates that the
+		 *            message should not be sent until the device becomes
+		 *            active.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder delayWhileIdle(Boolean delayWhileIdle) {
 			this.delayWhileIdle = delayWhileIdle;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param timeToLive
+		 *            This parameter specifies how long (in seconds) the message
+		 *            should be kept in GCM storage if the device is offline.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder timeToLive(Integer timeToLive) {
 			this.timeToLive = timeToLive;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param collapseKey
+		 *            The parameter identifies a group of messages.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder collapseKey(String collapseKey) {
 			this.collapseKey = collapseKey;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param payload
+		 *            Custom JSON payload that will be sent as part of the
+		 *            notification message.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder payload(JSONObject payload) {
-			
+
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode jsonNodePayload = null;
 
@@ -170,52 +212,122 @@ public final class Gcm {
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param sync
+		 *            Device group messaging makes it possible for every app
+		 *            instance in a group to reflect the latest messaging state.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder sync(Boolean sync) {
 			this.sync = sync;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param sound
+		 *            The sound file (on device) that will be attempted to play
+		 *            when the notification arrives on the device.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder sound(String sound) {
 			this.sound = sound;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param interactiveCategory
+		 *            The category identifier to be used for the interactive
+		 *            push notifications.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder interactiveCategory(String interactiveCategory) {
 			this.interactiveCategory = interactiveCategory;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param priority
+		 *            A string value that indicates the priority of this
+		 *            notification. Allowed values are 'max', 'high', 'default',
+		 *            'low' and 'min'. High/Max priority notifications along
+		 *            with 'sound' field may be used for Heads up notification
+		 *            in Android 5.0 or higher.sampleval='low' , sound (string,
+		 *            optional): The sound file (on device) that will be
+		 *            attempted to play when the notification arrives on the
+		 *            device.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder priority(GCMPriority priority) {
 			this.priority = priority;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param style
+		 *            Options to specify for Android expandable notifications.
+		 *            The types of expandable notifications are
+		 *            picture_notification, bigtext_notification,
+		 *            inbox_notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder style(GcmStyle style) {
 			this.style = style;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param visibility
+		 *            private/public - Visibility of this notification, which
+		 *            affects how and when the notifications are revealed on a
+		 *            secure locked screen.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder visibility(Visibility visibility) {
 			this.visibility = visibility;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param icon
+		 *            Specify the name of the icon to be displayed for the
+		 *            notification. Make sure the icon is already packaged with
+		 *            the client application.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder icon(String icon) {
 			this.icon = icon;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param lights
+		 *            Allows setting the notification LED color on receiving
+		 *            push notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder lights(GcmLights lights) {
 			this.lights = lights;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link Gcm} object.
+		 */
 		public Gcm build() {
 			return new Gcm(this);
 		}
 
 	}
-	
+
 	/**
 	 * 
 	 * Modal class for GcmLights.
@@ -244,6 +356,11 @@ public final class Gcm {
 			this.ledOffMs = builder.ledOffMs;
 		}
 
+		/**
+		 * 
+		 * Builder for {@link GcmLights}
+		 *
+		 */
 		public static class Builder {
 			/**
 			 * Determines the LED value in the notifications
@@ -257,21 +374,48 @@ public final class Gcm {
 			private Integer ledOnMs;
 			private Integer ledOffMs;
 
+			/**
+			 * 
+			 * @param ledArgb
+			 *            The color of the led. The hardware will do its best
+			 *            approximation.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public Builder ledArgb(GcmLED ledArgb) {
 				this.ledArgb = ledArgb;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param ledOnMs
+			 *            The number of milliseconds for the LED to be on while
+			 *            it's flashing. The hardware will do its best
+			 *            approximation.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public Builder ledOnMs(Integer ledOnMs) {
 				this.ledOnMs = ledOnMs;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param ledOffMs
+			 *            The number of milliseconds for the LED to be off while
+			 *            it's flashing. The hardware will do its best
+			 *            approximation.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public Builder ledOffMs(Integer ledOffMs) {
 				this.ledOffMs = ledOffMs;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @return the {@link GcmLights} object.
+			 */
 			public GcmLights build() {
 				return new GcmLights(this);
 			}
@@ -320,9 +464,14 @@ public final class Gcm {
 			this.lines = builder.lines;
 		}
 
+		/**
+		 * 
+		 * Builder for {@link GcmStyle}.
+		 *
+		 */
 		public static class Builder {
 			/**
-			 * The available style type of the gcm notification message.
+			 * The available style type of the {@link Gcm} notification message.
 			 */
 			public enum GcmStyleTypes {
 
@@ -335,31 +484,76 @@ public final class Gcm {
 			private String text;
 			private String[] lines;
 
+			/**
+			 * 
+			 * @param type
+			 *            Specifies the type of expandable notifications. The
+			 *            possible values are bigtext_notification,
+			 *            picture_notification, inbox_notification.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public final Builder type(GcmStyleTypes type) {
 				this.type = type;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param url
+			 *            An URL from which the picture has to be obtained for
+			 *            the notification. Must be specified for
+			 *            picture_notification.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public final Builder url(String url) {
 				this.url = url;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param title
+			 *            Specifies the title of the notification. The title is
+			 *            displayed when the notification is expanded. Title
+			 *            must be specified for all three expandable
+			 *            notification.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public final Builder title(String title) {
 				this.title = title;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param text
+			 *            The big text that needs to be displayed on expanding a
+			 *            bigtext_notification. Must be specified for
+			 *            bigtext_notification.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public final Builder text(String text) {
 				this.text = text;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @param lines
+			 *            An array of strings that is to be displayed in inbox
+			 *            style for inbox_notification. Must be specified for
+			 *            inbox_notification.
+			 * @return the Builder object so that calls can be chained.
+			 */
 			public final Builder lines(String[] lines) {
 				this.lines = lines;
 				return this;
 			}
 
+			/**
+			 * 
+			 * @return the {@link GcmStyle} object.
+			 */
 			public GcmStyle build() {
 				return new GcmStyle(this);
 
@@ -369,5 +563,3 @@ public final class Gcm {
 
 	}
 }
-
-

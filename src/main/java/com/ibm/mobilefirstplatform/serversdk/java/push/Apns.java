@@ -25,7 +25,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotifica
 
 /**
  * 
- * Modal class for Apns optional settings.
+ * Modal class for Apns which specifies the settings specific to the IOS platform.
  *
  */
 public final class Apns {
@@ -122,8 +122,16 @@ public final class Apns {
 		this.type = builder.type;
 	}
 
+	/**
+	 * 
+	 * Builder for Apns.
+	 *
+	 */
 	public static class Builder {
-
+		/**
+		 * The available notification type of the {@link Apns} notification
+		 * message.
+		 */
 		public enum APNSNotificationType {
 			DEFAULT, MIXED, SILENT
 		}
@@ -143,21 +151,48 @@ public final class Apns {
 		private String title;
 		private String attachmentUrl;
 
+		/**
+		 * 
+		 * @param badge
+		 *            The number to display as the badge of the application
+		 *            icon.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder badge(Integer badge) {
 			this.badge = badge;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param sound
+		 *            The name of the sound file in the application bundle. The
+		 *            sound of this file is played as an alert
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder sound(String sound) {
 			this.sound = sound;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param iosActionKey
+		 *            The title for the Action key.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder iosActionKey(String iosActionKey) {
 			this.iosActionKey = iosActionKey;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param payload
+		 *            Custom JSON payload that will be sent as part of the
+		 *            notification message.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder payload(JSONObject payload) {
 
 			ObjectMapper mapper = new ObjectMapper();
@@ -175,56 +210,136 @@ public final class Apns {
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param interactiveCategory
+		 *            The category identifier to be used for the interactive
+		 *            push notifications.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder interactiveCategory(String interactiveCategory) {
 			this.interactiveCategory = interactiveCategory;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param type
+		 *            ['DEFAULT', 'MIXED', 'SILENT']
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder type(APNSNotificationType type) {
 			this.type = type;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param titleLocKey
+		 *            The key to a title string in the Localizable.strings file
+		 *            for the current localization. The key string can be
+		 *            formatted with %@ and %n$@ specifiers to take the
+		 *            variables specified in the titleLocArgs array.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder titleLocKey(String titleLocKey) {
 			this.titleLocKey = titleLocKey;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param locKey
+		 *            A key to an alert-message string in a Localizable.strings
+		 *            file for the current localization (which is set by the
+		 *            user’s language preference). The key string can be
+		 *            formatted with %@ and %n$@ specifiers to take the
+		 *            variables specified in the locArgs array.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder locKey(String locKey) {
 			this.locKey = locKey;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param launchImage
+		 *            The filename of an image file in the app bundle, with or
+		 *            without the filename extension. The image is used as the
+		 *            launch image when users tap the action button or move the
+		 *            action slider.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder launchImage(String launchImage) {
 			this.launchImage = launchImage;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param titleLocArgs
+		 *            Variable string values to appear in place of the format
+		 *            specifiers in title-loc-key.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder titleLocArgs(String[] titleLocArgs) {
 			this.titleLocArgs = titleLocArgs;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param locArgs
+		 *            Variable string values to appear in place of the format
+		 *            specifiers in locKey.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder locArgs(String[] locArgs) {
 			this.locArgs = locArgs;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param subtitle
+		 *            The subtitle of the Rich Notifications. (Supported only on
+		 *            iOS 10 and above).
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder subtitle(String subtitle) {
 			this.subtitle = subtitle;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param title
+		 *            The title of Rich Push notifications (Supported only on
+		 *            iOS 10 and above).
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder title(String title) {
 			this.title = title;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param attachmentUrl
+		 *            The link to the iOS notifications media (video, audio,
+		 *            GIF, images - Supported only on iOS 10 and above).
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder attachmentUrl(String attachmentUrl) {
 			this.attachmentUrl = attachmentUrl;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link Apns} object.
+		 */
 		public Apns build() {
 			return new Apns(this);
 

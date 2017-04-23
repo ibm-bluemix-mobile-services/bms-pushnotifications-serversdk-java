@@ -15,7 +15,8 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
  * 
- * Modal class for Message attributes.
+ * Modal class for Message attributes which specifies the content of the
+ * notification message.
  *
  */
 public final class Message {
@@ -37,20 +38,41 @@ public final class Message {
 
 	}
 
+	/**
+	 * 
+	 * Builder for {@link Message}.
+	 *
+	 */
 	public static class Builder {
 		private String alert;
 		private String url;
 
+		/**
+		 * 
+		 * @param alert
+		 *            The notification message to be shown to the user.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder alert(final String alert) {
 			this.alert = alert;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param url
+		 *            An optional URL that can be sent along with the alert.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder url(final String url) {
 			this.url = url;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link Message} object.
+		 */
 		public Message build() {
 			return new Message(this);
 		}

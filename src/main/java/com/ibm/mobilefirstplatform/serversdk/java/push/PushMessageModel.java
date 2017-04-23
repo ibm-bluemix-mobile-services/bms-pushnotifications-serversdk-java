@@ -42,26 +42,56 @@ public final class PushMessageModel {
 		this.target = builder.target;
 	}
 
+	/**
+	 * 
+	 * Builder for {@link PushMessageModel}.
+	 *
+	 */
 	public static class Builder {
 		private Message message;
 		private Target target;
 		private Settings settings;
 
+		/**
+		 * 
+		 * @param message
+		 *            Message object with attributes alert and url.
+		 * @return the Builder object so that calls can be chained.
+		 * 
+		 */
 		public final Builder message(final Message message) {
 			this.message = message;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param target
+		 *            Target object with attributes deviceIds, userIds,
+		 *            platforms and tagNames.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder target(final Target target) {
 			this.target = target;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param settings
+		 *            Settings object with platforms settings like apns, gcm,
+		 *            safari etc.
+		 * @return the Builder object so that calls can be chained.
+		 */
+
 		public final Builder settings(final Settings settings) {
 			this.settings = settings;
 			return this;
 		}
-
+		/**
+		 * 
+		 * @return the {@link PushMessageModel} object.
+		 */
 		public PushMessageModel build() {
 			return new PushMessageModel(this);
 		}

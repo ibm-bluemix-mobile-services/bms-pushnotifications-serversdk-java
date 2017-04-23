@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
- * Modal class for ChromeWeb optional settings.
+ * Modal class for ChromeWeb the settings specific to the ChromeWeb browser.
  *
  */
 public final class ChromeWeb {
@@ -61,6 +61,11 @@ public final class ChromeWeb {
 		this.payload = builder.payload;
 	}
 
+	/**
+	 * 
+	 * Builder for {@link ChromeWeb}.
+	 *
+	 */
 	public static class Builder {
 
 		private String title;
@@ -68,21 +73,49 @@ public final class ChromeWeb {
 		private Integer timeToLive;
 		private JsonNode payload;
 
+		/**
+		 * 
+		 * @param title
+		 *            Specifies the title to be set for the WebPush
+		 *            Notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder title(String title) {
 			this.title = title;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param iconUrl
+		 *            The URL of the icon to be set for the WebPush
+		 *            Notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder iconUrl(String iconUrl) {
 			this.iconUrl = iconUrl;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param timeToLive
+		 *            This parameter specifies how long (in seconds) the message
+		 *            should be kept in GCM storage if the device is offline.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder timeToLive(Integer timeToLive) {
 			this.timeToLive = timeToLive;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param payload
+		 *            Custom JSON payload that will be sent as part of the
+		 *            notification message.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder payload(JSONObject payload) {
 
 			ObjectMapper mapper = new ObjectMapper();
@@ -100,6 +133,10 @@ public final class ChromeWeb {
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link ChromeWeb} object.
+		 */
 		public ChromeWeb build() {
 			return new ChromeWeb(this);
 		}

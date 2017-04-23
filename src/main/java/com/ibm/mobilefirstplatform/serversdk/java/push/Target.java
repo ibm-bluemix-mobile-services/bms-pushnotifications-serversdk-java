@@ -15,7 +15,8 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
  * 
- * Modal class for notification target.
+ * Modal class for notification target which specifies the recipients of the
+ * notification.
  *
  */
 public final class Target {
@@ -48,8 +49,17 @@ public final class Target {
 		this.userIds = builder.userIds;
 	}
 
+	/**
+	 * 
+	 * Builder for {@link Target}.
+	 *
+	 */
 	public static class Builder {
-
+		/**
+		 * 
+		 * Determines platforms for notification.
+		 *
+		 */
 		public enum PushNotificationsPlatform {
 			APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
 					"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
@@ -70,21 +80,51 @@ public final class Target {
 		private String[] platforms = null;
 		private String[] tagNames = null;
 
+		/**
+		 * 
+		 * @param deviceIds
+		 *            Send notification to the list of specified devices.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder deviceIds(final String[] deviceIds) {
 			this.deviceIds = deviceIds;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param userIds
+		 *            Send notification to the specified userIds.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder userIds(final String[] userIds) {
 			this.userIds = userIds;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param tagNames
+		 *            Send notification to the devices that have subscribed to
+		 *            any of these tags.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder tagNames(final String[] tagNames) {
 			this.tagNames = tagNames;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param platforms
+		 *            Send notification to the devices of the specified
+		 *            platforms. 'A' for apple (iOS) devices, 'G' for google
+		 *            (Android) devices, 'WEB_CHROME' for Chrome Web Browsers,
+		 *            'WEB_FIREFOX' for Firefox Web Browsers, 'WEB_SAFARI' for
+		 *            Safari Push Notifications and 'APPEXT_CHROME' for Chrome
+		 *            App Extension.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder platforms(final PushNotificationsPlatform[] platforms) {
 
 			String[] platformArray = null;
@@ -102,6 +142,10 @@ public final class Target {
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link Target} object.
+		 */
 		public Target build() {
 			return new Target(this);
 		}

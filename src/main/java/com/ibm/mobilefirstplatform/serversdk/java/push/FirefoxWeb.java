@@ -24,7 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
- * Modal class for FirefoxWeb optional settings.
+ * Modal class for FirefoxWeb which specifies the settings specific to the
+ * FirefoxWeb browser.
  *
  */
 public final class FirefoxWeb {
@@ -61,6 +62,11 @@ public final class FirefoxWeb {
 		this.payload = builder.payload;
 	}
 
+	/**
+	 * 
+	 * Builder for {@link FirefoxWeb}.
+	 *
+	 */
 	public static class Builder {
 
 		private String title;
@@ -68,23 +74,51 @@ public final class FirefoxWeb {
 		private Integer timeToLive;
 		private JsonNode payload;
 
+		/**
+		 * 
+		 * @param title
+		 *            Specifies the title to be set for the WebPush
+		 *            Notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder title(String title) {
 			this.title = title;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param iconUrl
+		 *            The URL of the icon to be set for the WebPush
+		 *            Notification.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder iconUrl(String iconUrl) {
 			this.iconUrl = iconUrl;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param timeToLive
+		 *            This parameter specifies how long (in seconds) the message
+		 *            should be kept in GCM storage if the device is offline.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder timeToLive(Integer timeToLive) {
 			this.timeToLive = timeToLive;
 			return this;
 		}
 
+		/**
+		 * 
+		 * @param payload
+		 *            Custom JSON payload that will be sent as part of the
+		 *            notification message.
+		 * @return the Builder object so that calls can be chained.
+		 */
 		public final Builder payload(JSONObject payload) {
-			
+
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode jsonNodePayload = null;
 
@@ -100,6 +134,10 @@ public final class FirefoxWeb {
 			return this;
 		}
 
+		/**
+		 * 
+		 * @return the {@link FirefoxWeb} object.
+		 */
 		public FirefoxWeb build() {
 			return new FirefoxWeb(this);
 

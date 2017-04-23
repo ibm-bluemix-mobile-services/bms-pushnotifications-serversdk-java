@@ -14,7 +14,7 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
  * Listener interface to be used to specify callbacks for the
- * {@link PushNotifications#send(org.json.JSONObject, PushNotificationsResponseListener)}
+ * {@link PushNotifications#send(Notification, PushNotificationsResponseListener)}
  * method.
  */
 public interface PushNotificationsResponseListener {

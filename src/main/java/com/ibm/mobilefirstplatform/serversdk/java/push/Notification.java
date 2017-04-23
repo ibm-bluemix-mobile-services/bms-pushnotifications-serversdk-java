@@ -13,8 +13,8 @@
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
- * The Notification is used to create a new push notification that is
- * going to be sent using the Push Notification service in IBMÂ® Bluemix.
+ * The Notification is used to create a new push notification that is going to
+ * be sent using the Push Notification service in IBMÂ® Bluemix.
  * 
  * The push notification's message that is passed in the constructor is
  * required. All other parameters are optional. Set them as needed.
@@ -36,15 +36,15 @@ public class Notification {
 	public final Settings getSettings() {
 		return settings;
 	}
-	
-	private Notification(Builder builder){
+
+	private Notification(Builder builder) {
 		this.message = builder.message;
 		this.target = builder.target;
 		this.settings = builder.settings;
 	}
 
 	public static class Builder {
-		
+
 		private Message message;
 		private Target target;
 		private Settings settings;
@@ -90,7 +90,6 @@ public class Notification {
 			return this;
 		}
 
-
 		/**
 		 * Build the push notification as configured. The result of this method
 		 * is to be passed to
@@ -110,7 +109,6 @@ public class Notification {
 				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
 			}
 
-			
 			return new Notification(this);
 		}
 
