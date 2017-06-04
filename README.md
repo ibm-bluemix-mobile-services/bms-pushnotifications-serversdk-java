@@ -36,7 +36,7 @@ PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 Next, create Message attributes using builder.
 
 ```
-Message message = new Message.Builder().alert("Testing Push Notification").url("www.example.com").build();
+Message message = new Message.Builder().alert("20% Off for first 100 Bluemix customers").url("www.ibm.com").build();
 
 ```
 You can also configure the notification with some other optional settings.
@@ -47,49 +47,49 @@ Builders are introduced which sets the optional settings for the platforms :
 ```
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
-Apns apns = new Apns.Builder().badge(1).interactiveCategory("interactiveCategory")
-.iosActionKey("iosActionKey").payload(new JSONObject()).sound("sound.wav")
-.type(APNSNotificationType.DEFAULT).titleLocKey("titleLocKey").locKey("locKey")
-.launchImage("launchImage").titleLocArgs(new String[] { "titlelocArgs1", "titlelocArgs2" })
-.locArgs(new String[] { "locArgs1", "locArg2" }).title("title").subtitle("subtitle")
-.attachmentUrl("attachmentUrl").build();
+Apns apns = new Apns.Builder().badge(1).interactiveCategory("First_Button_Group1")
+.iosActionKey("My Localized String").payload(new JSONObject().put("alert" , "Message received from Bluemix")).sound("sound.wav")
+.type(APNSNotificationType.DEFAULT).titleLocKey("My Localized String").locKey("My Localized String")
+.launchImage("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").titleLocArgs(new String[] {"IBM","Bluemix"})
+.locArgs(new String[] { "IBM","Bluemix" }).title("IBM").subtitle("Bluemix")
+.attachmentUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").build();
 
 /*
  * Gcm Settings, style and lights attibute addded to Gcm optional settings
  * which can be constructed as shown below:
  */
 
-GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
-.title("title").url("url").lines(new String[] { "line1" }).build();
+GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("IBM Push")
+.title("Push Notification").url("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").lines(new String[] { "IBM", "Bluemix", "Push" }).build();
 
-GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
+GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.GREEN).ledOffMs(1).ledOnMs(1).build();
 
-Gcm gcm = new Gcm.Builder().collapseKey("collapseKey").interactiveCategory("interactiveCategory")
-.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN)
-.sound("mysound.wav").timeToLive(42).icon("icon").visibility(Visibility.PUBLIC).sync(true)
+Gcm gcm = new Gcm.Builder().collapseKey("ping").interactiveCategory("First_Button_Group1")
+.delayWhileIdle(true).payload(new JSONObject().put("alert" , "Message received from Bluemix")).priority(GCMPriority.MIN)
+.sound("mysound.wav").timeToLive(42).icon("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").visibility(Visibility.PUBLIC).sync(true)
 .style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
-ChromeWeb chromeWeb = new ChromeWeb.Builder().title("title").iconUrl("iconUrl").timeToLive(42)
-.payload(new JSONObject()).build();
+ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM").iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").timeToLive(42)
+.payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
 
 /*
  * ChromeAppExtension settings. **Note: You need to provide a proper icon url 
  * for chromAppExtension notification to work properly.		
 */
-ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("collapseKey").delayWhileIdle(true).
-title("title").iconUrl("iconUrl").timeToLive(42).payload(new JSONObject()).build();
+ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true).
+title("IBM").iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").timeToLive(42).payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
 
 // Firefox Settings		
 
-FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("title").iconUrl("iconUrl")
-.timeToLive(42).payload(new JSONObject()).build();
+FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM").iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.timeToLive(42).payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
 
 // Safari Settings. For safari all the three settings are mandatory to set.	
 	
-SafariWeb safariWeb = new SafariWeb.Builder().title("title")
-.urlArgs(new String[] {"urlArgs1"}).action("action").build();
+SafariWeb safariWeb = new SafariWeb.Builder().title("IBM")
+.urlArgs(new String[] {"www.IBM.com"}).action("View").build();
 ```
 **Note : We should provide either deviceIds or userIds or platforms or tagNames.
 Below code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...)
@@ -99,8 +99,8 @@ Target target = new Target.Builder()
 PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
 PushNotificationsPlatform.APPEXTCHROME,
 PushNotificationsPlatform.WEBCHROME,
-PushNotificationsPlatform.WEBSAFARI })
-PushNotificationsPlatform.WEBFIREFOX,
+PushNotificationsPlatform.WEBSAFARI, 
+PushNotificationsPlatform.WEBFIREFOX})
 .build();
 
 ```		

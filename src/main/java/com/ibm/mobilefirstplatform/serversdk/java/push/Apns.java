@@ -225,7 +225,7 @@ public final class Apns {
 		/**
 		 * 
 		 * @param type
-		 *            ['DEFAULT', 'MIXED', 'SILENT']
+		 *            {'DEFAULT', 'MIXED', 'SILENT'}
 		 * @return the Builder object so that calls can be chained.
 		 */
 		public final Builder type(APNSNotificationType type) {
@@ -252,7 +252,7 @@ public final class Apns {
 		 * @param locKey
 		 *            A key to an alert-message string in a Localizable.strings
 		 *            file for the current localization (which is set by the
-		 *            user’s language preference). The key string can be
+		 *            userï¿½s language preference). The key string can be
 		 *            formatted with %@ and %n$@ specifiers to take the
 		 *            variables specified in the locArgs array.
 		 * @return the Builder object so that calls can be chained.
