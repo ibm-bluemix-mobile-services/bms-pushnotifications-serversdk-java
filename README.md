@@ -48,11 +48,14 @@ Builders are introduced which sets the optional settings for the platforms :
 // For APns Settings. **Note : category is deprecated, use interactiveCategory instead.
 	
 Apns apns = new Apns.Builder().badge(1).interactiveCategory("First_Button_Group1")
-.iosActionKey("My Localized String").payload(new JSONObject().put("alert" , "Message received from Bluemix")).sound("sound.wav")
+.iosActionKey("My Localized String").payload(new JSONObject().put("alert" , "Message received from Bluemix"))
+.sound("sound.wav")
 .type(APNSNotificationType.DEFAULT).titleLocKey("My Localized String").locKey("My Localized String")
-.launchImage("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").titleLocArgs(new String[] {"IBM","Bluemix"})
+.launchImage("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.titleLocArgs(new String[] {"IBM","Bluemix"})
 .locArgs(new String[] { "IBM","Bluemix" }).title("IBM").subtitle("Bluemix")
-.attachmentUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").build();
+.attachmentUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.build();
 
 /*
  * Gcm Settings, style and lights attibute addded to Gcm optional settings
@@ -60,26 +63,33 @@ Apns apns = new Apns.Builder().badge(1).interactiveCategory("First_Button_Group1
  */
 
 GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("IBM Push")
-.title("Push Notification").url("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").lines(new String[] { "IBM", "Bluemix", "Push" }).build();
+.title("Push Notification")
+.url("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.lines(new String[] { "IBM", "Bluemix", "Push" }).build();
 
 GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.GREEN).ledOffMs(1).ledOnMs(1).build();
 
 Gcm gcm = new Gcm.Builder().collapseKey("ping").interactiveCategory("First_Button_Group1")
-.delayWhileIdle(true).payload(new JSONObject().put("alert" , "Message received from Bluemix")).priority(GCMPriority.MIN)
-.sound("mysound.wav").timeToLive(42).icon("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").visibility(Visibility.PUBLIC).sync(true)
-.style(gcmstyle).lights(gcmlights).build();
+.delayWhileIdle(true).payload(new JSONObject().put("alert" , "Message received from Bluemix"))
+.priority(GCMPriority.MIN)
+.sound("mysound.wav").timeToLive(42)
+.icon("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.visibility(Visibility.PUBLIC).sync(true).style(gcmstyle).lights(gcmlights).build();
 
 // Chrome Settings	
 	
-ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM").iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").timeToLive(42)
-.payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
+ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM")
+.iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.timeToLive(42).payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
 
 /*
  * ChromeAppExtension settings. **Note: You need to provide a proper icon url 
  * for chromAppExtension notification to work properly.		
 */
 ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true).
-title("IBM").iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg").timeToLive(42).payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
+title("IBM")
+.iconUrl("https://s-media-cache-ak0.pinimg.com/236x/da/4f/46/da4f46512233232861d3cada1978c230.jpg")
+.timeToLive(42).payload(new JSONObject().put("alert" , "Message received from Bluemix")).build();
 
 // Firefox Settings		
 
