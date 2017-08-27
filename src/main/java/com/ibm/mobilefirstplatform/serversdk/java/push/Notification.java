@@ -103,10 +103,10 @@ public class Notification {
 			if (message != null) {
 				Message msg = message;
 				if (msg.getAlert() == null) {
-					throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+					throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTION);
 				}
 			} else {
-				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTION);
 			}
 
 			return new Notification(this);

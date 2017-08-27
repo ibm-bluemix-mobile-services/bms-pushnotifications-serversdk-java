@@ -13,6 +13,7 @@
 
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -125,7 +126,7 @@ public final class ChromeWeb {
 				if (payload != null) {
 					jsonNodePayload = mapper.readTree(payload.toString());
 				}
-			} catch (Exception exception) {
+			} catch (IOException exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
 

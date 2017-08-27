@@ -65,7 +65,7 @@ public class PushNotifications {
 	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
 		secret = pushSecret;
 
-		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.PORTURL + tenantId
+		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.URL + tenantId
 				+ PushConstants.PROJECT;
 	}
 
@@ -212,7 +212,7 @@ public class PushNotifications {
 	protected static HttpPost createPushPostRequest(JSONObject notification) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
-		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENTTYPE);
+		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
 		pushPost.addHeader(PushConstants.APPSECRET, secret);
 
 		StringEntity body = new StringEntity(notification.toString(), PushConstants.UTFEIGHT);

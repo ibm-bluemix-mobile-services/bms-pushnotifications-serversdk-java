@@ -34,7 +34,7 @@ public class PushNotificationsTest {
 		PushNotifications.init("testTenantId", "testPushSecret", PushNotifications.US_SOUTH_REGION);
 
 		assertEquals(
-				"https://imfpush" + PushNotifications.US_SOUTH_REGION + ":443/imfpush/v1/apps/testTenantId/messages",
+				"https://imfpush" + PushNotifications.US_SOUTH_REGION + ":/imfpush/v1/apps/testTenantId/messages",
 				PushNotifications.pushMessageEndpointURL);
 		assertEquals("testPushSecret", PushNotifications.secret);
 	}

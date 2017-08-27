@@ -13,12 +13,15 @@
 
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
@@ -202,7 +205,7 @@ public final class Apns {
 				if (payload != null) {
 					jsonNodePayload = mapper.readTree(payload.toString());
 				}
-			} catch (Exception exception) {
+			} catch (IOException exception) {
 				logger.log(Level.SEVERE, exception.toString(), exception);
 			}
 
