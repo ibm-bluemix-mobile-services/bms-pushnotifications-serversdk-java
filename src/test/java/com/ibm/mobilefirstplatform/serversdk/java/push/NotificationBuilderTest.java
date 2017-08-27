@@ -19,7 +19,7 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights.Builder.GcmLED;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle.Builder.GcmStyleTypes;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Target.Builder.PushNotificationsPlatform;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Target.Builder.Platform;
 
 public class NotificationBuilderTest {
 
@@ -554,10 +554,10 @@ private static JSONObject generateJSON(Object obj) {
 
 		Target targetValue = new Target.Builder().deviceIds(new String[] { "device1", "device2" })
 				.userIds(new String[] { "userId1", "userId2" })
-				.platforms(new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE,
-						PushNotificationsPlatform.GOOGLE, PushNotificationsPlatform.APPEXTCHROME,
-						PushNotificationsPlatform.WEBCHROME, PushNotificationsPlatform.WEBFIREFOX,
-						PushNotificationsPlatform.WEBSAFARI })
+				.platforms(new Platform[] { Platform.APPLE,
+						Platform.GOOGLE, Platform.APPEXTCHROME,
+						Platform.WEBCHROME, Platform.WEBFIREFOX,
+						Platform.WEBSAFARI })
 				.tagNames(new String[] { "tag1", "tag2" }).build();
 
 		Notification notificationObj = new Notification.Builder().message(message).target(targetValue).build();

@@ -105,19 +105,14 @@ SafariWeb safariWeb = new SafariWeb.Builder().title("IBM")
 ```
 **Note : We should provide either deviceIds or userIds or platforms or tagNames.
 Below code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...).
-
-For example below we are sending notification to the devices of the specified platforms.
-'A' for apple (iOS) devices, 'G' for google (Android) devices,
-'WEB_CHROME' for Chrome Web Browsers, 'WEB_FIREFOX' for Firefox Web Browsers,
-'WEB_SAFARI' for Safari Push Notifications,'APPEXT_CHROME' for Chrome App Extension.
 ```
 Target target = new Target.Builder()
-.platforms(new PushNotificationsPlatform[] {
-PushNotificationsPlatform.APPLE, PushNotificationsPlatform.GOOGLE,
-PushNotificationsPlatform.APPEXTCHROME,
-PushNotificationsPlatform.WEBCHROME,
-PushNotificationsPlatform.WEBSAFARI, 
-PushNotificationsPlatform.WEBFIREFOX})
+.platforms(new Platform[] {
+Platform.APPLE, Platform.GOOGLE,
+Platform.APPEXTCHROME,
+Platform.WEBCHROME,
+Platform.WEBSAFARI, 
+Platform.WEBFIREFOX})
 .build();
 
 ```		

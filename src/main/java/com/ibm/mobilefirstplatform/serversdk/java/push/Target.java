@@ -60,13 +60,13 @@ public final class Target {
 		 * Determines platforms for notification.
 		 *
 		 */
-		public enum PushNotificationsPlatform {
+		public enum Platform {
 			APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
 					"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
 
 			private final String platformCode;
 
-			PushNotificationsPlatform(String code) {
+			Platform(String code) {
 				this.platformCode = code;
 			}
 
@@ -125,7 +125,7 @@ public final class Target {
 		 *            App Extension.
 		 * @return the Builder object so that calls can be chained.
 		 */
-		public final Builder platforms(final PushNotificationsPlatform[] platforms) {
+		public final Builder platforms(final Platform[] platforms) {
 
 			String[] platformArray = null;
 
