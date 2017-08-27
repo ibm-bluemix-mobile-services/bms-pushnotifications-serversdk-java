@@ -61,7 +61,7 @@ Apns apns = new Apns.Builder().badge(1).interactiveCategory("First_Button_Group1
  * Gcm Settings, style and lights attibute addded to Gcm optional settings
  * which can be constructed as shown below.
  * Also timetolive setting is provided which specifies how long (in seconds)
- * the message should be kept in GCM storage if the device is offline..
+ * the message should be kept in GCM storage if the device is offline.
  */
 
 GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("IBM Push")
