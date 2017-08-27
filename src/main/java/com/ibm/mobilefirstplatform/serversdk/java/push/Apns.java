@@ -20,8 +20,6 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
