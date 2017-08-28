@@ -20,9 +20,9 @@ public final class PushConstants {
 
 	public static final String MESSAGE_OBJECT_KEY = "message";
 	public static final String SETTINGS_OBJECT_KEY = "settings";
-	public static final String BASEURL = "https://imfpush";
+	public static final String HOST = "https://imfpush";
 	public static final String URL = ":/imfpush/v1/apps/";
-	public static final String PROJECT = "/messages";
+	public static final String API = "/messages";
 	public static final String PUSH_INIT_EXCEPTION = "PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.";
 	public static final String VCAP_SERVICES = "VCAP_SERVICES";
 	public static final String IMFPUSH = "imfpush";

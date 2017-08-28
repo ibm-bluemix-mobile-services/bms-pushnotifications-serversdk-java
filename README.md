@@ -33,6 +33,13 @@ You can achieve this by binding your Push Notification service to your server ap
 PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 ```
 
+**Note:** If you are using dedicated service, use overrideServerHost and add bluemixRegion (bluemix region) value.
+
+```
+PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST" + PushNotifications.US_SOUTH_REGION; (for example: "https://imfpush" + PushNotifications.US_SOUTH_REGION)
+PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
+```
+
 Next, create Message attributes using builder.
 
 ```

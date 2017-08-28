@@ -40,17 +40,20 @@ public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
-	public static final String FRANKFURT = "eu-de.bluemix.net";
+	public static final String FRANKFURT = ".eu-de.bluemix.net";
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
 
 	protected static String secret;
 
 	protected static String pushMessageEndpointURL;
+	
+	public static String overrideServerHost = null;
 
 	/**
 	 * Specify the credentials and Bluemix region for your push notification
 	 * service.
+	 *  Also if you are using dedicated service, use overrideServerHost. 
 	 * 
 	 * @param tenantId
 	 *            the tenant ID for the Bluemix application that the Push
@@ -64,9 +67,15 @@ public class PushNotifications {
 	 */
 	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
 		secret = pushSecret;
-
-		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.URL + tenantId
-				+ PushConstants.PROJECT;
+		
+		if(overrideServerHost != null) {
+			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId
+					+ PushConstants.API;	
+		} else {
+			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId
+					+ PushConstants.API;	
+		}
+		
 	}
 
 	/**
