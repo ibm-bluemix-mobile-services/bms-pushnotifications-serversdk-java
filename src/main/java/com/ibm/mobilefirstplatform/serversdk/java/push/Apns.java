@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
@@ -31,6 +32,9 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotifica
  */
 public final class Apns {
 
+	/**
+	 * 
+	 */
 	public static final Logger logger = Logger.getLogger(Apns.class.getName());
 
 	private Integer badge;
@@ -203,8 +207,11 @@ public final class Apns {
 				if (payload != null) {
 					jsonNodePayload = mapper.readTree(payload.toString());
 				}
-			} catch (IOException exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
+			} catch (JsonProcessingException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
+			}
+			catch (IOException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
 			}
 
 			this.payload = jsonNodePayload;

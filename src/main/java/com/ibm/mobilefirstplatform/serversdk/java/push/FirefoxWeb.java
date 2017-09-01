@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonRawValue;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -127,8 +128,11 @@ public final class FirefoxWeb {
 				if (payload != null) {
 					jsonNodePayload = mapper.readTree(payload.toString());
 				}
-			} catch (IOException exception) {
-				logger.log(Level.SEVERE, exception.toString(), exception);
+			} catch (JsonProcessingException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
+			}
+			catch (IOException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
 			}
 
 			this.payload = jsonNodePayload;
