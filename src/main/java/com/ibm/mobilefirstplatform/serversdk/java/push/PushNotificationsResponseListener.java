@@ -31,18 +31,17 @@ public interface PushNotificationsResponseListener {
 
 	/**
 	 * This method will be called when anything goes wrong while sending the
-	 * push notification.
-	 * 
-	 * All three of the parameters could potentially be null.
+	 * push notification. All three of the parameters might be null.
 	 * 
 	 * @param statusCode
-	 *            the status code of the response; can be null if there was no
-	 *            response
+	 *            The status code of the response. It can be null, if there was
+	 *            no response.
 	 * @param responseBody
-	 *            the body of the response; can be null if no body was received
+	 *            The body of the response. It can be null, if no body was
+	 *            received.
 	 * @param t
-	 *            the exception or throwable that caused the failure, or null if
-	 *            there was no Throwable
+	 *            The exception or throwable that caused the failure, or null,
+	 *            if there was no Throwable.
 	 */
 	void onFailure(Integer statusCode, String responseBody, Throwable t);
 }

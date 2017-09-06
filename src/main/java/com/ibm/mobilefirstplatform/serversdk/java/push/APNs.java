@@ -23,19 +23,19 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.APNs.Builder.APNSNotificationType;
 
 /**
  * 
- * Modal class for Apns which specifies the settings specific to the IOS platform.
+ * Modal class for APNs that specifies the iOS platform settings.
  *
  */
-public final class Apns {
+public final class APNs {
 
 	/**
 	 * 
 	 */
-	public static final Logger logger = Logger.getLogger(Apns.class.getName());
+	public static final Logger logger = Logger.getLogger(APNs.class.getName());
 
 	private Integer badge;
 	private String sound;
@@ -109,7 +109,7 @@ public final class Apns {
 		return attachmentUrl;
 	}
 
-	private Apns(Builder builder) {
+	private APNs(Builder builder) {
 
 		this.badge = builder.badge;
 		this.interactiveCategory = builder.interactiveCategory;
@@ -129,13 +129,12 @@ public final class Apns {
 
 	/**
 	 * 
-	 * Builder for Apns.
+	 * Builder for APNs.
 	 *
 	 */
 	public static class Builder {
 		/**
-		 * The available notification type of the {@link Apns} notification
-		 * message.
+		 * The available notification types of the APNs notification message.
 		 */
 		public enum APNSNotificationType {
 			DEFAULT, MIXED, SILENT
@@ -161,7 +160,7 @@ public final class Apns {
 		 * @param badge
 		 *            The number to display as the badge of the application
 		 *            icon.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder badge(Integer badge) {
 			this.badge = badge;
@@ -172,8 +171,8 @@ public final class Apns {
 		 * 
 		 * @param sound
 		 *            The name of the sound file in the application bundle. The
-		 *            sound of this file is played as an alert
-		 * @return the Builder object so that calls can be chained.
+		 *            sound of this file is played as an alert.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder sound(String sound) {
 			this.sound = sound;
@@ -184,7 +183,7 @@ public final class Apns {
 		 * 
 		 * @param iosActionKey
 		 *            The title for the Action key.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder iosActionKey(String iosActionKey) {
 			this.iosActionKey = iosActionKey;
@@ -196,7 +195,7 @@ public final class Apns {
 		 * @param payload
 		 *            Custom JSON payload that will be sent as part of the
 		 *            notification message.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder payload(JSONObject payload) {
 
@@ -209,8 +208,7 @@ public final class Apns {
 				}
 			} catch (JsonProcessingException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 
@@ -223,7 +221,7 @@ public final class Apns {
 		 * @param interactiveCategory
 		 *            The category identifier to be used for the interactive
 		 *            push notifications.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder interactiveCategory(String interactiveCategory) {
 			this.interactiveCategory = interactiveCategory;
@@ -234,7 +232,7 @@ public final class Apns {
 		 * 
 		 * @param type
 		 *            {'DEFAULT', 'MIXED', 'SILENT'}
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder type(APNSNotificationType type) {
 			this.type = type;
@@ -248,7 +246,7 @@ public final class Apns {
 		 *            for the current localization. The key string can be
 		 *            formatted with %@ and %n$@ specifiers to take the
 		 *            variables specified in the titleLocArgs array.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder titleLocKey(String titleLocKey) {
 			this.titleLocKey = titleLocKey;
@@ -263,7 +261,7 @@ public final class Apns {
 		 *            user�s language preference). The key string can be
 		 *            formatted with %@ and %n$@ specifiers to take the
 		 *            variables specified in the locArgs array.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder locKey(String locKey) {
 			this.locKey = locKey;
@@ -277,7 +275,7 @@ public final class Apns {
 		 *            without the filename extension. The image is used as the
 		 *            launch image when users tap the action button or move the
 		 *            action slider.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder launchImage(String launchImage) {
 			this.launchImage = launchImage;
@@ -289,7 +287,7 @@ public final class Apns {
 		 * @param titleLocArgs
 		 *            Variable string values to appear in place of the format
 		 *            specifiers in title-loc-key.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder titleLocArgs(String[] titleLocArgs) {
 			this.titleLocArgs = titleLocArgs;
@@ -301,7 +299,7 @@ public final class Apns {
 		 * @param locArgs
 		 *            Variable string values to appear in place of the format
 		 *            specifiers in locKey.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder locArgs(String[] locArgs) {
 			this.locArgs = locArgs;
@@ -311,9 +309,9 @@ public final class Apns {
 		/**
 		 * 
 		 * @param subtitle
-		 *            The subtitle of the Rich Notifications. (Supported only on
-		 *            iOS 10 and above).
-		 * @return the Builder object so that calls can be chained.
+		 *            The subtitle of the Rich Notifications. (Supported on iOS
+		 *            10 or later).
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder subtitle(String subtitle) {
 			this.subtitle = subtitle;
@@ -323,9 +321,9 @@ public final class Apns {
 		/**
 		 * 
 		 * @param title
-		 *            The title of Rich Push notifications (Supported only on
-		 *            iOS 10 and above).
-		 * @return the Builder object so that calls can be chained.
+		 *            title - The title of Rich Push notifications (Supported on
+		 *            iOS 10 or later).
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder title(String title) {
 			this.title = title;
@@ -337,7 +335,7 @@ public final class Apns {
 		 * @param attachmentUrl
 		 *            The link to the iOS notifications media (video, audio,
 		 *            GIF, images - Supported only on iOS 10 and above).
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder attachmentUrl(String attachmentUrl) {
 			this.attachmentUrl = attachmentUrl;
@@ -346,10 +344,10 @@ public final class Apns {
 
 		/**
 		 * 
-		 * @return the {@link Apns} object.
+		 * @return the {@link APNs} object.
 		 */
-		public Apns build() {
-			return new Apns(this);
+		public APNs build() {
+			return new APNs(this);
 
 		}
 

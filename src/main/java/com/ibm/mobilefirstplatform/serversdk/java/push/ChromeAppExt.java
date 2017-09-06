@@ -26,7 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 
- * Modal class for chromeAppExtension the settings specific to the ChromeAppExtension browser.
+ * Modal class for chromeAppExtension, with settings specific to the
+ * ChromeAppExtension browser.
  *
  */
 public final class ChromeAppExt {
@@ -94,7 +95,7 @@ public final class ChromeAppExt {
 		 * 
 		 * @param collapseKey
 		 *            This parameter identifies a group of messages.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder collapseKey(String collapseKey) {
 			this.collapseKey = collapseKey;
@@ -107,7 +108,7 @@ public final class ChromeAppExt {
 		 *            When this parameter is set to true, it indicates that the
 		 *            message should not be sent until the device becomes
 		 *            active.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder delayWhileIdle(Boolean delayWhileIdle) {
 			this.delayWhileIdle = delayWhileIdle;
@@ -119,7 +120,7 @@ public final class ChromeAppExt {
 		 * @param title
 		 *            Specifies the title to be set for the WebPush
 		 *            Notification.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder title(String title) {
 			this.title = title;
@@ -131,7 +132,7 @@ public final class ChromeAppExt {
 		 * @param iconUrl
 		 *            The URL of the icon to be set for the WebPush
 		 *            Notification.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder iconUrl(String iconUrl) {
 			this.iconUrl = iconUrl;
@@ -141,9 +142,10 @@ public final class ChromeAppExt {
 		/**
 		 * 
 		 * @param timeToLive
-		 *            This parameter specifies how long (in seconds) the message
-		 *            should be kept in GCM storage if the device is offline.
-		 * @return the Builder object so that calls can be chained.
+		 *            This parameter specifies the duration (in seconds) for
+		 *            which the message should be held in FCM, if the device is
+		 *            offline.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder timeToLive(Integer timeToLive) {
 			this.timeToLive = timeToLive;
@@ -155,7 +157,7 @@ public final class ChromeAppExt {
 		 * @param payload
 		 *            Custom JSON payload that will be sent as part of the
 		 *            notification message.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder payload(JSONObject payload) {
 
@@ -169,8 +171,7 @@ public final class ChromeAppExt {
 
 			} catch (JsonProcessingException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 			}
 
