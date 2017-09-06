@@ -145,6 +145,8 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 
 You will now receive the notification that was sent, on the device that you had registered.
 
+For Javadocs please follow the link:--> https://www.javadoc.io/doc/com.ibm.mobilefirstplatform.serversdk.java/push
+
 ## License
 
 Copyright 2017 IBM Corp.
