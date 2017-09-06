@@ -12,14 +12,14 @@ import org.junit.Test;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Apns.Builder.APNSNotificationType;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.Builder.GCMPriority;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.Builder.Visibility;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmLights.Builder.GcmLED;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Gcm.GcmStyle.Builder.GcmStyleTypes;
-import com.ibm.mobilefirstplatform.serversdk.java.push.Target.Builder.PushNotificationsPlatform;
+import com.ibm.mobilefirstplatform.serversdk.java.push.APNs.Builder.APNSNotificationType;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.FCMPriority;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.Visibility;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.FCMLights;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.FCMLights.Builder.FCMLED;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.FCMStyle;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.FCMStyle.Builder.FCMStyleTypes;
+import com.ibm.mobilefirstplatform.serversdk.java.push.Target.Builder.Platform;
 
 public class NotificationBuilderTest {
 
@@ -79,11 +79,11 @@ private static JSONObject generateJSON(Object obj) {
 
 		Message message = new Message.Builder().alert("testMessage").url(null).build();
 
-		Apns apns = new Apns.Builder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
+		APNs apns = new APNs.Builder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
 				.launchImage(null).locArgs(null).locKey(null).payload(null).sound(null).subtitle(null).title(null)
 				.titleLocArgs(null).titleLocKey(null).type(null).build();
 
-		Gcm gcm = new Gcm.Builder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
+		FCM fcm = new FCM.Builder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
 				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
 				.visibility(null).build();
 
@@ -98,7 +98,7 @@ private static JSONObject generateJSON(Object obj) {
 
 		SafariWeb safariWeb = new SafariWeb.Builder().action(null).title(null).urlArgs(null).build();
 
-		Settings settings = new Settings.Builder().apns(apns).gcm(gcm).chromeAppExt(chromeAppExt)
+		Settings settings = new Settings.Builder().apns(apns).fcm(fcm).chromeAppExt(chromeAppExt)
 				.chromeWeb(chromeWeb).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 
 		Target target = new Target.Builder().deviceIds(null).platforms(null).tagNames(null).userIds(null).build();
@@ -121,7 +121,7 @@ private static JSONObject generateJSON(Object obj) {
 
 		Message message = new Message.Builder().alert(testAlert).build();
 
-		Apns apns = new Apns.Builder().badge(1).interactiveCategory("testinteractiveCategory")
+		APNs apns = new APNs.Builder().badge(1).interactiveCategory("testinteractiveCategory")
 				.iosActionKey("testiOSactionKey").payload(new JSONObject()).sound("testsoundFile")
 				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
 				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
@@ -145,22 +145,22 @@ private static JSONObject generateJSON(Object obj) {
 	}
 
 	@Test
-	public void shouldAllowToConfigureGCMSettings() {
+	public void shouldAllowToConfigureFCMSettings() {
 		String testAlert = "testMessage";
 		
 		Message message = new Message.Builder().alert(testAlert).build();
 
-		GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
+		FCMStyle fcmstyle = new FCMStyle.Builder().type(FCMStyleTypes.BIGTEXT_NOTIFICATION).text("text")
 				.title("title").url("url").lines(new String[] { "line1" }).build();
 
-		GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
+		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.Builder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
-				.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN).sound("testsoundFile")
-				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
-				.lights(gcmlights).build();
+		FCM fcm = new FCM.Builder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
+				.delayWhileIdle(true).payload(new JSONObject()).priority(FCMPriority.MIN).sound("testsoundFile")
+				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(fcmstyle)
+				.lights(fcmlights).build();
 
-		Settings settings = new Settings.Builder().gcm(gcm).build();
+		Settings settings = new Settings.Builder().fcm(fcm).build();
 
 		Notification notificationObj = new Notification.Builder().message(message).settings(settings).build();
 		
@@ -168,7 +168,7 @@ private static JSONObject generateJSON(Object obj) {
 		
 		JSONObject notification = generateJSON(model);
 
-		checkGCMSettings(notification);
+		checkFCMSettings(notification);
 
 		// Should also still have the message in the notification:
 		assertTrue(notification.has("message"));
@@ -284,22 +284,22 @@ private static JSONObject generateJSON(Object obj) {
 
 		Message message = new Message.Builder().alert(testAlert).build();
 
-		Apns apns = new Apns.Builder().badge(1).interactiveCategory("testinteractiveCategory")
+		APNs apns = new APNs.Builder().badge(1).interactiveCategory("testinteractiveCategory")
 				.iosActionKey("testiOSactionKey").payload(new JSONObject()).sound("testsoundFile")
 				.type(APNSNotificationType.DEFAULT).titleLocKey("testtitlelocKey").locKey("testlocKey")
 				.launchImage("testlaunchImage").titleLocArgs(new String[] { "testtitlelocArgs1", "testtitlelocArgs2" })
 				.locArgs(new String[] { "testlocArgs1", "testlocArgs" }).title("testtitle").subtitle("testSubtitle")
 				.attachmentUrl("testattachmentUrl").build();
 
-		GcmStyle gcmstyle = new GcmStyle.Builder().type(GcmStyleTypes.BIGTEXT_NOTIFICATION).text("text")
+		FCMStyle fcmstyle = new FCMStyle.Builder().type(FCMStyleTypes.BIGTEXT_NOTIFICATION).text("text")
 				.title("title").url("url").lines(new String[] { "line1" }).build();
 
-		GcmLights gcmlights = new GcmLights.Builder().ledArgb(GcmLED.BLACK).ledOffMs(1).ledOnMs(1).build();
+		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		Gcm gcm = new Gcm.Builder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
-				.delayWhileIdle(true).payload(new JSONObject()).priority(GCMPriority.MIN).sound("testsoundFile")
-				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(gcmstyle)
-				.lights(gcmlights).build();
+		FCM fcm = new FCM.Builder().collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
+				.delayWhileIdle(true).payload(new JSONObject()).priority(FCMPriority.MIN).sound("testsoundFile")
+				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(fcmstyle)
+				.lights(fcmlights).build();
 
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("testtitle").iconUrl("testiconUrl").timeToLive(42)
 				.payload(new JSONObject()).build();
@@ -313,7 +313,7 @@ private static JSONObject generateJSON(Object obj) {
 		SafariWeb safariWeb = new SafariWeb.Builder().title("testtitle")
 				.urlArgs(new String[] { "testUrlArgs1", "testUrlArgs2" }).action("testaction").build();
 
-		Settings settings = new Settings.Builder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+		Settings settings = new Settings.Builder().apns(apns).fcm(fcm).chromeWeb(chromeWeb)
 				.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 		
 		Notification notificationObj = new Notification.Builder().message(message).settings(settings).build();
@@ -327,9 +327,9 @@ private static JSONObject generateJSON(Object obj) {
 
 		checkAPNSSettings(notification);
 
-		// Check GCM Settings
+		// Check FCM Settings
 
-		checkGCMSettings(notification);
+		checkFCMSettings(notification);
 
 		// Check Chrome Settings
 
@@ -436,59 +436,59 @@ private static JSONObject generateJSON(Object obj) {
 		assertTrue(chromeWeb.getJSONObject("payload").keySet().isEmpty());
 	}
 
-	private void checkGCMSettings(JSONObject notification) {
+	private void checkFCMSettings(JSONObject notification) {
 		assertTrue(notification.has("settings"));
-		assertTrue(notification.getJSONObject("settings").has("gcm"));
+		assertTrue(notification.getJSONObject("settings").has("fcm"));
 
-		JSONObject gcm = notification.getJSONObject("settings").getJSONObject("gcm");
+		JSONObject fcm = notification.getJSONObject("settings").getJSONObject("fcm");
 
-		assertTrue(gcm.has("collapseKey"));
-		assertEquals("testcollapseKey", gcm.getString("collapseKey"));
+		assertTrue(fcm.has("collapseKey"));
+		assertEquals("testcollapseKey", fcm.getString("collapseKey"));
 
-		assertTrue(gcm.has("interactiveCategory"));
-		assertEquals("testinteractiveCategory", gcm.getString("interactiveCategory"));
+		assertTrue(fcm.has("interactiveCategory"));
+		assertEquals("testinteractiveCategory", fcm.getString("interactiveCategory"));
 
-		assertTrue(gcm.has("delayWhileIdle"));
-		assertEquals(true, gcm.getBoolean("delayWhileIdle"));
+		assertTrue(fcm.has("delayWhileIdle"));
+		assertEquals(true, fcm.getBoolean("delayWhileIdle"));
 
-		assertTrue(gcm.has("payload"));
-		assertNotNull(gcm.getJSONObject("payload"));
-		assertTrue(gcm.getJSONObject("payload").keySet().isEmpty());
+		assertTrue(fcm.has("payload"));
+		assertNotNull(fcm.getJSONObject("payload"));
+		assertTrue(fcm.getJSONObject("payload").keySet().isEmpty());
 
-		assertTrue(gcm.has("priority"));
-		assertEquals(GCMPriority.MIN.name(), gcm.getString("priority"));
+		assertTrue(fcm.has("priority"));
+		assertEquals(FCMPriority.MIN.name(), fcm.getString("priority"));
 
-		assertTrue(gcm.has("sound"));
-		assertEquals("testsoundFile", gcm.getString("sound"));
+		assertTrue(fcm.has("sound"));
+		assertEquals("testsoundFile", fcm.getString("sound"));
 
-		assertTrue(gcm.has("timeToLive"));
-		assertEquals(42, gcm.getInt("timeToLive"));
+		assertTrue(fcm.has("timeToLive"));
+		assertEquals(42, fcm.getInt("timeToLive"));
 
-		assertTrue(gcm.has("icon"));
-		assertEquals("testicon", gcm.getString("icon"));
+		assertTrue(fcm.has("icon"));
+		assertEquals("testicon", fcm.getString("icon"));
 
-		assertTrue(gcm.has("visibility"));
-		assertEquals(Visibility.PUBLIC.name(), gcm.getString("visibility"));
+		assertTrue(fcm.has("visibility"));
+		assertEquals(Visibility.PUBLIC.name(), fcm.getString("visibility"));
 
-		assertTrue(gcm.has("sync"));
-		assertEquals(true, gcm.getBoolean("sync"));
+		assertTrue(fcm.has("sync"));
+		assertEquals(true, fcm.getBoolean("sync"));
 
-		assertTrue(gcm.has("style"));
-		JSONObject gcmJson = gcm.getJSONObject("style");
-		assertEquals(GcmStyleTypes.BIGTEXT_NOTIFICATION.name(), gcmJson.get("type"));
-		assertEquals("text", gcmJson.get("text"));
-		assertEquals("title", gcmJson.get("title"));
-		assertEquals("url", gcmJson.get("url"));
+		assertTrue(fcm.has("style"));
+		JSONObject fcmJson = fcm.getJSONObject("style");
+		assertEquals(FCMStyleTypes.BIGTEXT_NOTIFICATION.name(), fcmJson.get("type"));
+		assertEquals("text", fcmJson.get("text"));
+		assertEquals("title", fcmJson.get("title"));
+		assertEquals("url", fcmJson.get("url"));
 
-		assertTrue(gcmJson.has("lines"));
-		JSONArray jsonlocArgs = gcmJson.getJSONArray("lines");
+		assertTrue(fcmJson.has("lines"));
+		JSONArray jsonlocArgs = fcmJson.getJSONArray("lines");
 		assertEquals("line1", jsonlocArgs.get(0));
 
-		assertTrue(gcm.has("lights"));
-		JSONObject gcmlightsJson = gcm.getJSONObject("lights");
-		assertEquals(GcmLED.BLACK.name(), gcmlightsJson.get("ledArgb"));
-		assertEquals(1, gcmlightsJson.get("ledOffMs"));
-		assertEquals(1, gcmlightsJson.get("ledOnMs"));
+		assertTrue(fcm.has("lights"));
+		JSONObject fcmlightsJson = fcm.getJSONObject("lights");
+		assertEquals(FCMLED.BLACK.name(), fcmlightsJson.get("ledArgb"));
+		assertEquals(1, fcmlightsJson.get("ledOffMs"));
+		assertEquals(1, fcmlightsJson.get("ledOnMs"));
 	}
 
 	private void checkAPNSSettings(JSONObject notification) {
@@ -554,10 +554,10 @@ private static JSONObject generateJSON(Object obj) {
 
 		Target targetValue = new Target.Builder().deviceIds(new String[] { "device1", "device2" })
 				.userIds(new String[] { "userId1", "userId2" })
-				.platforms(new PushNotificationsPlatform[] { PushNotificationsPlatform.APPLE,
-						PushNotificationsPlatform.GOOGLE, PushNotificationsPlatform.APPEXTCHROME,
-						PushNotificationsPlatform.WEBCHROME, PushNotificationsPlatform.WEBFIREFOX,
-						PushNotificationsPlatform.WEBSAFARI })
+				.platforms(new Platform[] { Platform.APPLE,
+						Platform.GOOGLE, Platform.APPEXTCHROME,
+						Platform.WEBCHROME, Platform.WEBFIREFOX,
+						Platform.WEBSAFARI })
 				.tagNames(new String[] { "tag1", "tag2" }).build();
 
 		Notification notificationObj = new Notification.Builder().message(message).target(targetValue).build();
@@ -599,7 +599,7 @@ private static JSONObject generateJSON(Object obj) {
 		
 		Message message = new Message.Builder().alert(testAlert).url(null).build();
 
-		Apns apns = new Apns.Builder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
+		APNs apns = new APNs.Builder().badge(null).attachmentUrl(null).interactiveCategory(null).iosActionKey(null)
 				.launchImage(null).locArgs(null).locKey(null).payload(null).sound(null).subtitle(null).title(null)
 				.titleLocArgs(null).titleLocKey(null).type(null)
 
@@ -607,7 +607,7 @@ private static JSONObject generateJSON(Object obj) {
 				.locKey("").payload(null).sound("").subtitle("").title("").titleLocArgs(null).titleLocKey("").type(null)
 				.build();
 
-		Gcm gcm = new Gcm.Builder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
+		FCM fcm = new FCM.Builder().collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
 				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
 				.visibility(null)
 
@@ -629,7 +629,7 @@ private static JSONObject generateJSON(Object obj) {
 				.iconUrl(null).payload(null).timeToLive(null).title(null).collapseKey("").delayWhileIdle(null)
 				.iconUrl("").payload(null).timeToLive(null).title("").build();
 
-		Settings settings = new Settings.Builder().apns(apns).gcm(gcm).chromeWeb(chromeWeb)
+		Settings settings = new Settings.Builder().apns(apns).fcm(fcm).chromeWeb(chromeWeb)
 				.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 
 		Target target = new Target.Builder().deviceIds(null).platforms(null).tagNames(null).userIds(null).build();

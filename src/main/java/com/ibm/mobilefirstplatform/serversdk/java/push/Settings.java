@@ -21,19 +21,19 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
  */
 public final class Settings {
 
-	private Apns apns;
-	private Gcm gcm;
+	private APNs apns;
+	private FCM fcm;
 	private FirefoxWeb firefoxWeb;
 	private ChromeWeb chromeWeb;
 	private SafariWeb safariWeb;
 	private ChromeAppExt chromeAppExt;
 
-	public final Apns getApns() {
+	public final APNs getApns() {
 		return apns;
 	}
 
-	public final Gcm getGcm() {
-		return gcm;
+	public final FCM getFcm() {
+		return fcm;
 	}
 
 	public final FirefoxWeb getFirefoxWeb() {
@@ -55,7 +55,7 @@ public final class Settings {
 	private Settings(Builder builder) {
 
 		this.apns = builder.apns;
-		this.gcm = builder.gcm;
+		this.fcm = builder.fcm;
 		this.firefoxWeb = builder.firefoxWeb;
 		this.chromeWeb = builder.chromeWeb;
 		this.safariWeb = builder.safariWeb;
@@ -69,8 +69,8 @@ public final class Settings {
 	 */
 	public static class Builder {
 
-		private Apns apns;
-		private Gcm gcm;
+		private APNs apns;
+		private FCM fcm;
 		private FirefoxWeb firefoxWeb;
 		private ChromeWeb chromeWeb;
 		private SafariWeb safariWeb;
@@ -79,22 +79,22 @@ public final class Settings {
 		/**
 		 * 
 		 * @param apns
-		 *            Apns object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 *            APNs object with optional settings.
+		 * @return The Builder object for calls to be linked.
 		 */
-		public final Builder apns(Apns apns) {
+		public final Builder apns(APNs apns) {
 			this.apns = apns;
 			return this;
 		}
 
 		/**
 		 * 
-		 * @param gcm
-		 *            Gcm object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 * @param fcm
+		 *            FCM object with optional settings.
+		 * @return The Builder object for calls to be linked.
 		 */
-		public final Builder gcm(Gcm gcm) {
-			this.gcm = gcm;
+		public final Builder fcm(FCM fcm) {
+			this.fcm = fcm;
 			return this;
 		}
 
@@ -102,7 +102,7 @@ public final class Settings {
 		 * 
 		 * @param firefoxWeb
 		 *            FirefoxWeb object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder firefoxWeb(FirefoxWeb firefoxWeb) {
 			this.firefoxWeb = firefoxWeb;
@@ -113,7 +113,7 @@ public final class Settings {
 		 * 
 		 * @param chromeWeb
 		 *            ChromeWeb object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder chromeWeb(ChromeWeb chromeWeb) {
 			this.chromeWeb = chromeWeb;
@@ -124,7 +124,7 @@ public final class Settings {
 		 * 
 		 * @param safariWeb
 		 *            SafariWeb object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder safariWeb(SafariWeb safariWeb) {
 			this.safariWeb = safariWeb;
@@ -135,7 +135,7 @@ public final class Settings {
 		 * 
 		 * @param chromeAppExt
 		 *            ChromeAppExtension object with optional settings.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder chromeAppExt(ChromeAppExt chromeAppExt) {
 			this.chromeAppExt = chromeAppExt;

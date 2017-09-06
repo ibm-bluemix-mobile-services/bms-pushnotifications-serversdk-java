@@ -33,13 +33,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * This class is used to send push notifications from a Java server to mobile
- * devices using the Push Notification service in IBM® Bluemix.
+ * This class is used to send notifications from a Java server to mobile devices
+ * using the Push Notification service.
  */
 public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
+	public static final String FRANKFURT_REGION = ".eu-de.bluemix.net";
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
 
@@ -48,24 +49,37 @@ public class PushNotifications {
 	protected static String pushMessageEndpointURL;
 
 	/**
+	 * Overrides default server host with the provided host. It
+	 * {@code overrideServerHost} can be used for dedicated service and
+	 * overrides default host with dedicated service host.
+	 * 
+	 */
+	public static String overrideServerHost = null;
+
+	/**
 	 * Specify the credentials and Bluemix region for your push notification
-	 * service.
+	 * service. Also if you are using dedicated service, use overrideServerHost.
 	 * 
 	 * @param tenantId
-	 *            the tenant ID for the Bluemix application that the Push
-	 *            Notifications service is bound to
+	 *            The tenant ID for the Bluemix application that the Push
+	 *            Notifications service is bound to.
 	 * @param pushSecret
-	 *            the credential required for Push Notifications service
-	 *            authorization
+	 *            The credential required for Push Notifications service
+	 *            authorization.
 	 * @param bluemixRegion
-	 *            the Bluemix region where the Push Notifications service is
-	 *            hosted, such as {@link PushNotifications#US_SOUTH_REGION}
+	 *            The Bluemix region where the Push Notifications service is
+	 *            hosted. For example, US_SOUTH_REGION.
 	 */
 	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
 		secret = pushSecret;
 
-		pushMessageEndpointURL = PushConstants.BASEURL + bluemixRegion + PushConstants.PORTURL + tenantId
-				+ PushConstants.PROJECT;
+		if (overrideServerHost != null) {
+			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
+		} else {
+			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId
+					+ PushConstants.API;
+		}
+
 	}
 
 	/**
@@ -75,12 +89,12 @@ public class PushNotifications {
 	 * environment variables.
 	 * 
 	 * @param bluemixRegion
-	 *            the Bluemix region where the Push Notifications service is
-	 *            hosted, such as {@link PushNotifications#US_SOUTH_REGION}
+	 *            The Bluemix region where the Push Notifications service is
+	 *            hosted. For example, US_SOUTH_REGION.
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if either the push application ID or the secret are not found
-	 *             in the environment variables
+	 *             If either the push application ID or the secret is not found
+	 *             in the environment variables.
 	 */
 	public static void init(String bluemixRegion) {
 		String tenantId = null;
@@ -144,10 +158,10 @@ public class PushNotifications {
 	 * Push Notification service.
 	 * 
 	 * @param notification
-	 *            the push notification to be sent
+	 *            The push notification to be sent.
 	 * @param listener
-	 *            an optional {@link PushNotificationsResponseListener} to
-	 *            listen to the result of this operation
+	 *            Optional PushNotificationsResponseListener to listen to the
+	 *            result of this operation.
 	 */
 	public static void send(Notification notification, PushNotificationsResponseListener listener) {
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
@@ -170,17 +184,17 @@ public class PushNotifications {
 		}
 
 		CloseableHttpClient httpClient = HttpClients.createDefault();
-		
-		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage()).target(notification.getTarget())
-				.settings(notification.getSettings()).build();
+
+		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage())
+				.target(notification.getTarget()).settings(notification.getSettings()).build();
 
 		JSONObject notificationJson = generateJSON(model);
-
+		
 		HttpPost pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
 	}
-	
+
 	/**
 	 * API converts object to json format.
 	 * 
@@ -190,9 +204,9 @@ public class PushNotifications {
 	 * @return Return a JSONOject for the passed object.
 	 */
 	private static JSONObject generateJSON(Object obj) {
-		
+
 		ObjectMapper mapper = new ObjectMapper();
-		
+
 		String jsonString = null;
 		try {
 			mapper.setSerializationInclusion(Include.NON_EMPTY);
@@ -204,6 +218,15 @@ public class PushNotifications {
 		}
 
 		JSONObject json = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
+		
+		if (json.has("settings")) {
+			
+			JSONObject settingsJson = json.getJSONObject("settings");
+			if(settingsJson.has("fcm")) {
+				settingsJson.put("gcm", settingsJson.getJSONObject("fcm"));
+				settingsJson.remove("fcm");
+			}
+		}
 
 		return json;
 	}
@@ -211,7 +234,7 @@ public class PushNotifications {
 	protected static HttpPost createPushPostRequest(JSONObject notification) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
-		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENTTYPE);
+		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
 		pushPost.addHeader(PushConstants.APPSECRET, secret);
 
 		StringEntity body = new StringEntity(notification.toString(), PushConstants.UTFEIGHT);
@@ -248,6 +271,7 @@ public class PushNotifications {
 					// Closing response is merely a best effort.
 				}
 			}
+
 		}
 	}
 

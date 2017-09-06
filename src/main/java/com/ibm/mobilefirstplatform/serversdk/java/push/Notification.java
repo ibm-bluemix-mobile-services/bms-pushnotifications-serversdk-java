@@ -13,11 +13,10 @@
 package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
- * The Notification is used to create a new push notification that is going to
- * be sent using the Push Notification service in IBMÂ® Bluemix.
- * 
- * The push notification's message that is passed in the constructor is
- * required. All other parameters are optional. Set them as needed.
+ * The Notification is used to create a new push notification sent using the IBM
+ * Bluemix Push Notification service. The push notification's message that is
+ * passed in the constructor is required. All other parameters are optional. Set
+ * them as required.
  */
 public class Notification {
 
@@ -53,9 +52,9 @@ public class Notification {
 		 * Sets the Message object to the NotificationBuilder.
 		 * 
 		 * @param message
-		 *            object with all message attributes set.
+		 *            The object that is set with all message attributes.
 		 * 
-		 * @return the NotificationBuilder object so that calls can be chained.
+		 * @return The NotificationBuilder object for calls to be linked.
 		 */
 
 		public Builder message(Message message) {
@@ -67,9 +66,9 @@ public class Notification {
 		 * Sets Target object to the NotificationBuilder.
 		 * 
 		 * @param target
-		 *            object with all target attributes set.
+		 *            The object that is set with all target attributes.
 		 * 
-		 * @return the NotificationBuilder object so that calls can be chained.
+		 * @return The NotificationBuilder object for calls to be linked.
 		 */
 
 		public Builder target(Target target) {
@@ -81,9 +80,9 @@ public class Notification {
 		 * Sets Settings object to the NotificationBuilder.
 		 * 
 		 * @param settings
-		 *            object with all settings attributes set.
+		 *            The object that is set with all settings attributes.
 		 * 
-		 * @return the NotificationBuilder object so that calls can be chained.
+		 * @return The NotificationBuilder object for calls to be linked.
 		 */
 		public Builder settings(Settings settings) {
 			this.settings = settings;
@@ -96,17 +95,18 @@ public class Notification {
 		 * {@link PushNotifications#send(Notification, PushNotificationsResponseListener)}
 		 * as a parameter.
 		 * 
-		 * @return the push notification built as specified, ready to be sent
+		 * @return The push notification built as specified, ready to be
+		 *         dispatched.
 		 */
 		public Notification build() {
 
 			if (message != null) {
 				Message msg = message;
 				if (msg.getAlert() == null) {
-					throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+					throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTION);
 				}
 			} else {
-				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTIOPN);
+				throw new IllegalArgumentException(PushConstants.ALERT_NOT_NULL_EXCEPTION);
 			}
 
 			return new Notification(this);

@@ -60,13 +60,13 @@ public final class Target {
 		 * Determines platforms for notification.
 		 *
 		 */
-		public enum PushNotificationsPlatform {
+		public enum Platform {
 			APPLE("A"), GOOGLE("G"), WEBCHROME("WEB_CHROME"), WEBFIREFOX("WEB_FIREFOX"), WEBSAFARI(
 					"WEB_SAFARI"), APPEXTCHROME("APPEXT_CHROME");
 
 			private final String platformCode;
 
-			PushNotificationsPlatform(String code) {
+			Platform(String code) {
 				this.platformCode = code;
 			}
 
@@ -84,7 +84,7 @@ public final class Target {
 		 * 
 		 * @param deviceIds
 		 *            Send notification to the list of specified devices.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder deviceIds(final String[] deviceIds) {
 			this.deviceIds = deviceIds;
@@ -95,7 +95,7 @@ public final class Target {
 		 * 
 		 * @param userIds
 		 *            Send notification to the specified userIds.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder userIds(final String[] userIds) {
 			this.userIds = userIds;
@@ -107,7 +107,7 @@ public final class Target {
 		 * @param tagNames
 		 *            Send notification to the devices that have subscribed to
 		 *            any of these tags.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder tagNames(final String[] tagNames) {
 			this.tagNames = tagNames;
@@ -123,9 +123,9 @@ public final class Target {
 		 *            'WEB_FIREFOX' for Firefox Web Browsers, 'WEB_SAFARI' for
 		 *            Safari Push Notifications and 'APPEXT_CHROME' for Chrome
 		 *            App Extension.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
-		public final Builder platforms(final PushNotificationsPlatform[] platforms) {
+		public final Builder platforms(final Platform[] platforms) {
 
 			String[] platformArray = null;
 

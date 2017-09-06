@@ -55,8 +55,8 @@ public final class PushMessageModel {
 		/**
 		 * 
 		 * @param message
-		 *            Message object with attributes alert and url.
-		 * @return the Builder object so that calls can be chained.
+		 *            Message object with attributes alert and URL.
+		 * @return The Builder object for calls to be linked.
 		 * 
 		 */
 		public final Builder message(final Message message) {
@@ -69,7 +69,7 @@ public final class PushMessageModel {
 		 * @param target
 		 *            Target object with attributes deviceIds, userIds,
 		 *            platforms and tagNames.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder target(final Target target) {
 			this.target = target;
@@ -79,15 +79,16 @@ public final class PushMessageModel {
 		/**
 		 * 
 		 * @param settings
-		 *            Settings object with platforms settings like apns, gcm,
-		 *            safari etc.
-		 * @return the Builder object so that calls can be chained.
+		 *            Settings object with platforms settings like APNS, FCM,
+		 *            Safari, and so on.
+		 * @return The Builder object for calls to be linked.
 		 */
 
 		public final Builder settings(final Settings settings) {
 			this.settings = settings;
 			return this;
 		}
+
 		/**
 		 * 
 		 * @return the {@link PushMessageModel} object.

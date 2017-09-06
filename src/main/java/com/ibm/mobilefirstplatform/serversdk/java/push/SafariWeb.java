@@ -15,8 +15,7 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
  * 
- * Modal class for SafariWeb which specifies the settings specific to the SafariWeb
- * platform.
+ * Modal class for SafariWeb, with settings specific to the SafariWeb platform.
  *
  */
 public final class SafariWeb {
@@ -60,7 +59,7 @@ public final class SafariWeb {
 		 * @param title
 		 *            Specifies the title to be set for the Safari Push
 		 *            Notifications.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder title(String title) {
 			this.title = title;
@@ -71,7 +70,7 @@ public final class SafariWeb {
 		 * 
 		 * @param action
 		 *            The label of the action button.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder action(String action) {
 			this.action = action;
@@ -84,7 +83,7 @@ public final class SafariWeb {
 		 *            The URL arguments that need to be used with this
 		 *            notification. This has to provided in the form of a JSON
 		 *            Array.
-		 * @return the Builder object so that calls can be chained.
+		 * @return The Builder object for calls to be linked.
 		 */
 		public final Builder urlArgs(String[] urlArgs) {
 			this.urlArgs = urlArgs;
