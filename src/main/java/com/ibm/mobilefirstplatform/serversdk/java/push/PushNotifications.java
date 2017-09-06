@@ -36,7 +36,6 @@ public class PushNotifications {
 	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
 	public static final String UK_REGION = ".eu-gb.bluemix.net";
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
-	public static final String Frankfurt_REGION = ".fr.bluemix.net";
 	
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName()); 
 	
