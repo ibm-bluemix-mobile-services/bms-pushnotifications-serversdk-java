@@ -48,7 +48,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 
 	Builders are introduced which sets the optional settings for the platforms: 
 	
-		```
+	```
 		// For APNs settings.
 		APNs apns = new APNs.Builder().badge(1).interactiveCategory("Accept")
 			.iosActionKey("PUSH_OFFER").payload(new JSONObject().put("alert" , "20% Off for you"))
@@ -97,7 +97,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 		// Safari Settings. For safari all the three settings are mandatory to set.	
 		SafariWeb safariWeb = new SafariWeb.Builder().title("IBM Offer")
 			.urlArgs(new String[] {"www.IBM.com"}).action("View").build();
-		```
+	```
 
 	**Note** : Ensure that you provide either deviceIds or userIds or platforms or tagNames.The following code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...).
 	
