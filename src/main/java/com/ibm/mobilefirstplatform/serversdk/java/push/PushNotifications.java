@@ -219,14 +219,14 @@ public class PushNotifications {
 
 		JSONObject json = jsonString != null ? new JSONObject(jsonString) : new JSONObject();
 		
-		if (json.has("settings")) {
-			
-			JSONObject settingsJson = json.getJSONObject("settings");
-			if(settingsJson.has("fcm")) {
-				settingsJson.put("gcm", settingsJson.getJSONObject("fcm"));
-				settingsJson.remove("fcm");
-			}
-		}
+//		if (json.has("settings")) {
+//			
+//			JSONObject settingsJson = json.getJSONObject("settings");
+//			if(settingsJson.has("fcm")) {
+//				settingsJson.put("gcm", settingsJson.getJSONObject("fcm"));
+//				settingsJson.remove("fcm");
+//			}
+//		}
 
 		return json;
 	}
