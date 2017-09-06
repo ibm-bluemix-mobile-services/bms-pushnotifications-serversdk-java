@@ -29,7 +29,8 @@ public class NotificationBuilder {
 	
 	public enum PushNotificationsPlatform {
 		APPLE("A"),
-		GOOGLE("G");
+		GOOGLE("G"),
+		WEB_CHROME("WEB_CHROME");
 		
 		private String platformCode;
 		
