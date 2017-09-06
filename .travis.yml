@@ -1,7 +1,8 @@
 language: java
 #Comment the whole JDK section out if trying to run the Travis build in OSX; testing multiple JDKs in OSX is not supported.
 jdk:
-
+- oraclejdk8
+- oraclejdk7
 - openjdk6
 
 install: true
