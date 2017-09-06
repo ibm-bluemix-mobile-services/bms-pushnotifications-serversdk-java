@@ -1,9 +1,8 @@
 language: java
 #Comment the whole JDK section out if trying to run the Travis build in OSX; testing multiple JDKs in OSX is not supported.
 jdk:
-
--- oraclejdk8
--- oraclejdk7
+- oraclejdk8
+- oraclejdk7
 - openjdk6
 
 install: true
@@ -15,4 +14,4 @@ script:
 
 before_script:
 - openssl aes-256-cbc -K $encrypted_36f14abec38f_key -iv $encrypted_36f14abec38f_iv
-  -in settings.xml.enc -out settings.xml -d
+-in settings.xml.enc -out settings.xml -d
