@@ -54,10 +54,10 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.iosActionKey("PUSH_OFFER").payload(new JSONObject().put("alert" , "20% Off for you"))
 			.sound("sound.wav")
 			.type(APNSNotificationType.DEFAULT).titleLocKey("OFFER").locKey("REPLYTO")
-			.launchImage("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.launchImage("launchImage1.png")
 			.titleLocArgs(new String[] {"Jenna", "Frank"})
 			.locArgs(new String[] { "Jenna","Frank" }).title("IBM").subtitle("Bluemix")
-			.attachmentUrl("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.attachmentUrl("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
 			.build();
 		
 		//For FCM settings
@@ -68,30 +68,30 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	
 		FCMStyle fcmstyle = new FCMStyle.Builder().type(FCMStyleTypes.BIGTEXT_NOTIFICATION).text("BIG TEXT NOTIFICATION")
 			.title("Big Text Notification")
-			.url("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.url("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
 			.lines(new String[] { "IBM", "Bluemix", "Big Text Notification" }).build();
 		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.GREEN).ledOffMs(1).ledOnMs(1).build();
 		FCM fcm = new FCM.Builder().collapseKey("ping").interactiveCategory("Accept")
 			.delayWhileIdle(true).payload(new JSONObject().put("alert" , "20% Off for you"))
 			.priority(FCMPriority.MIN)
 			.sound("mysound.wav").timeToLive(3)
-			.icon("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.icon("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
 			.visibility(Visibility.PUBLIC).sync(true).style(fcmstyle).lights(fcmlights).build();
 		
 		// Chrome settings	
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM Push Offer")
-			.iconUrl("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		//ChromeAppExtension settings.  
 		//You need to provide a proper icon urlfor chromAppExtension notification to work properly.		
 		ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true)
 			.title("IBM Push Offer")
-			.iconUrl("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+			.iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		// Firefox Settings		
-		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("http://www.iconninja.com/files/689/621/150/ibm-icon.svg")
+		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 			
 		// Safari Settings. For safari all the three settings are mandatory to set.	
