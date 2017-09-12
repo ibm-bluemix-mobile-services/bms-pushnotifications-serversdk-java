@@ -75,23 +75,23 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.delayWhileIdle(true).payload(new JSONObject().put("alert" , "20% Off for you"))
 			.priority(FCMPriority.MIN)
 			.sound("mysound.wav").timeToLive(3)
-			.icon("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
+			.icon("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
 			.visibility(Visibility.PUBLIC).sync(true).style(fcmstyle).lights(fcmlights).build();
 		
 		// Chrome settings	
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM Push Offer")
-			.iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
+			.iconUrl("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		//ChromeAppExtension settings.  
 		//You need to provide a proper icon urlfor chromAppExtension notification to work properly.		
 		ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true)
 			.title("IBM Push Offer")
-			.iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
+			.iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		// Firefox Settings		
-		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
+		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 			
 		// Safari Settings. For safari all the three settings are mandatory to set.	
