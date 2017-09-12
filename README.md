@@ -89,7 +89,6 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.title("IBM Push Offer")
 			.iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
-
 		
 		// Firefox Settings		
 		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("http://www.iconsdb.com/icons/preview/purple/message-2-xxl.png")
