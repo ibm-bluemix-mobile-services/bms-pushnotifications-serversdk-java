@@ -75,12 +75,12 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.delayWhileIdle(true).payload(new JSONObject().put("alert" , "20% Off for you"))
 			.priority(FCMPriority.MIN)
 			.sound("mysound.wav").timeToLive(3)
-			.icon("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
+			.icon("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.visibility(Visibility.PUBLIC).sync(true).style(fcmstyle).lights(fcmlights).build();
 		
 		// Chrome settings	
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM Push Offer")
-			.iconUrl("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
+			.iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		//ChromeAppExtension settings.  
@@ -91,7 +91,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
 		// Firefox Settings		
-		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("https://t4.ftcdn.net/jpg/01/70/11/61/240_F_170116190_XJGLs1PrMm7FYP1R4wm0JgWLgv6ftaGH.jpg")
+		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 			
 		// Safari Settings. For safari all the three settings are mandatory to set.	
