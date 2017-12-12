@@ -20,7 +20,7 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 public interface PushNotificationsResponseListener {
 	/**
 	 * This method will be called when the push notification was successfully
-	 * sent to the IBM® Bluemix Push Notification service.
+	 * sent to the IBM® Cloud Push Notification service.
 	 * 
 	 * @param statusCode
 	 *            the status code of the response

@@ -1,9 +1,9 @@
-# Bluemix Mobile Services - Push Notifications server-side SDK for Java
+# IBM Cloud Mobile Services - Push Notifications server-side SDK for Java
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=master)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=development)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe43788a157c4c4b971a8918d29c4469)](https://www.codacy.com/app/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java&amp;utm_campaign=Badge_Grade)
 
-The Push Notifications Server-side SDK for Java is used to send push notifications to registered devices using the [Push Notifications service in IBM® Bluemix](https://console.ng.bluemix.net/docs/services/mobilepush/index.html).
+The Push Notifications Server-side SDK for Java is used to send push notifications to registered devices using the [Push Notifications service in IBM® Cloud](https://console.ng.bluemix.net/docs/services/mobilepush/index.html).
 
 ## Getting the SDK
 
@@ -19,19 +19,19 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 
 ## Sending a push notification
 
-1. Initialize the SDK with the Bluemix region of your application, and optionally, your credentials:
+1. Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
 	```
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
 
-	However, if your server is running on Bluemix as well, you can initialize it with just the region. You can achieve this by binding your Push Notification service to your server application in Bluemix, which will then give it access to the service's credentials. To initialize using the region:
+	However, if your server is running on IBM Cloud as well, you can initialize it with just the region. You can achieve this by binding your Push Notification service to your server application in IBM Cloud, which will then give it access to the service's credentials. To initialize using the region:
 
 	```
 	PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 	```
 	
-	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (bluemix region) value.
-	The Bluemix regions where the Push Notifications service is hosted are `PushNotifications.Region.US_SOUTH`, `PushNotifications.Region.UK`,  `PushNotifications.Region.SYDNEY` and `PushNotifications.Region.FRANKFURT`
+	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
+	The IBM Cloud regions where the Push Notifications service is hosted are `PushNotifications.Region.US_SOUTH`, `PushNotifications.Region.UK`,  `PushNotifications.Region.SYDNEY` and `PushNotifications.Region.FRANKFURT`
 	
 	```
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
@@ -56,7 +56,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.type(APNSNotificationType.DEFAULT).titleLocKey("OFFER").locKey("REPLYTO")
 			.launchImage("launchImage1.png")
 			.titleLocArgs(new String[] {"Jenna", "Frank"})
-			.locArgs(new String[] { "Jenna","Frank" }).title("IBM").subtitle("Bluemix")
+			.locArgs(new String[] { "Jenna","Frank" }).title("IBM").subtitle("IBM Cloud")
 			.attachmentUrl("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
 			.build();
 		
@@ -69,7 +69,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 		FCMStyle fcmstyle = new FCMStyle.Builder().type(FCMStyleTypes.BIGTEXT_NOTIFICATION).text("BIG TEXT NOTIFICATION")
 			.title("Big Text Notification")
 			.url("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
-			.lines(new String[] { "IBM", "Bluemix", "Big Text Notification" }).build();
+			.lines(new String[] { "IBM", "IBM Cloud", "Big Text Notification" }).build();
 		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.GREEN).ledOffMs(1).ledOnMs(1).build();
 		FCM fcm = new FCM.Builder().collapseKey("ping").interactiveCategory("Accept")
 			.delayWhileIdle(true).payload(new JSONObject().put("alert" , "20% Off for you"))
