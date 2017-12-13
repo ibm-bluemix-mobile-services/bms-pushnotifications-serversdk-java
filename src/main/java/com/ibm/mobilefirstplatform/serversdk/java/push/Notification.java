@@ -14,7 +14,7 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 /**
  * The Notification is used to create a new push notification sent using the IBM
- * Bluemix Push Notification service. The push notification's message that is
+ * IBM Cloud Push Notification service. The push notification's message that is
  * passed in the constructor is required. All other parameters are optional. Set
  * them as required.
  */
