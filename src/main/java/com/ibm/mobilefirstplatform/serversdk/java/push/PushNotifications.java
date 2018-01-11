@@ -15,6 +15,8 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -194,6 +196,46 @@ public class PushNotifications {
 
 		executePushPostRequest(pushPost, httpClient, listener);
 	}
+	
+	public static void sendBulk(Notification[] notifications, PushNotificationsResponseListener listener) {
+		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
+			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
+			logger.log(Level.SEVERE, exception.toString(), exception);
+
+			if (listener != null) {
+				listener.onFailure(null, null, exception);
+			}
+			return;
+		}
+
+		if (notifications.length == 0) {
+			Throwable exception = new IllegalArgumentException(PushConstants.NULL_NOTIFICATION_EXCEPTION);
+			logger.log(Level.SEVERE, exception.toString(), exception);
+			if (listener != null) {
+				listener.onFailure(null, null, exception);
+			}
+			return;
+		}
+
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+
+		
+		List<JSONObject> MessageJson = new ArrayList<JSONObject>();
+		for (Notification notification: notifications){
+			
+			PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage())
+					.target(notification.getTarget()).settings(notification.getSettings()).build();
+
+			JSONObject notificationJson = generateJSON(model);
+			MessageJson.add(notificationJson);
+		}
+		
+		
+		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
+		System.out.println(MessageJson.toString());
+
+		executePushPostRequest(pushPost, httpClient, listener);
+	}
 
 	/**
 	 * API converts object to json format.
@@ -242,6 +284,19 @@ public class PushNotifications {
 
 		return pushPost;
 	}
+	
+	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) {
+		HttpPost pushPost = new HttpPost(pushMessageEndpointURL + "/bulk");
+
+		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
+		pushPost.addHeader(PushConstants.APPSECRET, secret);
+
+		StringEntity body = new StringEntity(messageJson.toString(), PushConstants.UTFEIGHT);
+		pushPost.setEntity(body);
+
+		return pushPost;
+	}
+
 
 	protected static void executePushPostRequest(HttpPost pushPost, CloseableHttpClient httpClient,
 			PushNotificationsResponseListener listener) {
