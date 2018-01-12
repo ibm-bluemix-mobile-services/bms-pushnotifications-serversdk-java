@@ -23,8 +23,6 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ibm.mobilefirstplatform.serversdk.java.push.APNs.Builder;
-import com.ibm.mobilefirstplatform.serversdk.java.push.APNs.Builder.APNSNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.FCMNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.FCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.Visibility;
