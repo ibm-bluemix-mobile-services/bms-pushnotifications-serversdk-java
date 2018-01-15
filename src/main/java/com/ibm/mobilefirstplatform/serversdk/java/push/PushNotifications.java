@@ -232,7 +232,6 @@ public class PushNotifications {
 		
 		
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
-		System.out.println(MessageJson.toString());
 
 		executePushPostRequest(pushPost, httpClient, listener);
 	}
