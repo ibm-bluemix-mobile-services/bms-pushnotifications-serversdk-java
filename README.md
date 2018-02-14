@@ -145,6 +145,26 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 
 You will now receive the notification that was sent, on the device that you had registered.
 
+
+## Send bulk Push Notifications,
+
+To send bulk push notifications do the following,
+
+```
+	Notification[] ff = new Notification[]{notification1,notification2};
+	PushNotifications.sendBulk(ff, new PushNotificationsResponseListener(){
+		public void onSuccess(int statusCode, String responseBody) {
+			System.out.println("Successfully sent push notification! Status code: " + statusCode + " Response body: " + responseBody);
+		}
+		public void onFailure(Integer statusCode, String responseBody, Throwable t) {
+			System.out.println("Failed sent push notification. Status code: " + statusCode + " Response body: " + responseBody);
+			if(t != null){
+				t.printStackTrace();
+			}
+		}
+	});
+```
+
 For Javadocs please follow the link:--> https://www.javadoc.io/doc/com.ibm.mobilefirstplatform.serversdk.java/push
 
 ## License
