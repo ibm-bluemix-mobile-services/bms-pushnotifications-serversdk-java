@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.FCMNotificationType;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.FCMPriority;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.Builder.Visibility;
 import com.ibm.mobilefirstplatform.serversdk.java.push.FCM.FCMLights.Builder.FCMLED;
@@ -49,6 +50,7 @@ public final class FCM {
 	private Visibility visibility;
 	private String icon;
 	private FCMLights lights;
+	private FCMNotificationType type;
 
 	public final Boolean getDelayWhileIdle() {
 		return delayWhileIdle;
@@ -98,6 +100,10 @@ public final class FCM {
 	public final FCMLights getLights() {
 		return lights;
 	}
+	
+	public final FCMNotificationType getType() {
+		return type;
+	}
 
 	private FCM(Builder builder) {
 
@@ -113,6 +119,7 @@ public final class FCM {
 		this.visibility = builder.visibility;
 		this.icon = builder.icon;
 		this.lights = builder.lights;
+		this.type = builder.type;
 
 	}
 
@@ -122,6 +129,13 @@ public final class FCM {
 	 *
 	 */
 	public static class Builder {
+		
+		/**
+		 * The available notification types of the FCM notification message.
+		 */
+		public enum FCMNotificationType {
+			DEFAULT, SILENT
+		}
 		/**
 		 * 
 		 * Determines the priority of the notification.
@@ -152,6 +166,8 @@ public final class FCM {
 		private Visibility visibility;
 		private String icon;
 		private FCMLights lights;
+		private FCMNotificationType type;
+
 
 		/**
 		 * 
@@ -320,6 +336,17 @@ public final class FCM {
 		 */
 		public final Builder lights(FCMLights lights) {
 			this.lights = lights;
+			return this;
+		}
+		
+		/**
+		 * 
+		 * @param type
+		 *            {'DEFAULT', 'SILENT'}
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder type(FCMNotificationType type) {
+			this.type = type;
 			return this;
 		}
 
