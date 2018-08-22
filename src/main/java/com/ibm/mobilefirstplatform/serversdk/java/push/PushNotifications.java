@@ -21,13 +21,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -49,6 +53,14 @@ public class PushNotifications {
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
 
 	protected static String secret;
+	
+	protected static String apiKeyIdIs;
+	
+	protected static long apiKeyExpireyTime;
+	
+	protected static String accessToken;
+	
+	protected static String iamRegion;
 
 	protected static String pushMessageEndpointURL;
 
@@ -77,13 +89,17 @@ public class PushNotifications {
 	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
 		secret = pushSecret;
 
+		createPushEndPointUrl(tenantId, bluemixRegion);
+
+	}
+
+	private static void createPushEndPointUrl(String tenantId, String bluemixRegion) {
 		if (overrideServerHost != null) {
 			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
 		} else {
 			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId
 					+ PushConstants.API;
 		}
-
 	}
 
 	/**
@@ -114,6 +130,45 @@ public class PushNotifications {
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
 		}
+	}
+	
+	public static void initWithApiKey(String tenantId, String apiKeyId, String bluemixRegionn) {
+		String tenantIdIs = tenantId;
+		String bluemixRegionnIs = bluemixRegionn;
+		apiKeyIdIs = apiKeyId;
+
+		if(tenantIdIs == null) {
+			tenantIdIs = getApplicationIdFromVCAP();	
+		}
+		
+		if (apiKeyIdIs == null) {
+			apiKeyIdIs = getPushApiKeyFromVCAP();	
+		}
+		
+		createPushEndPointUrl(tenantId, bluemixRegionnIs);
+		iamRegion = bluemixRegionnIs;
+	}
+	
+	public static CloseableHttpResponse getAuthToken()   {
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+
+		String iamUri = PushConstants.IAM_URI + iamRegion + PushConstants.IAM_TOKEN_PATH;
+			
+		HttpPost pushPost = new HttpPost(iamUri);
+
+		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.IAM_CONTENT_TYPE);
+		List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+		nvps.add(new BasicNameValuePair(PushConstants.GRANT_TYPE, PushConstants.GRANT_TYPE_VALUE_APIKEY));
+		nvps.add(new BasicNameValuePair("apikey", apiKeyIdIs));
+
+			try {
+				pushPost.setEntity(new UrlEncodedFormEntity(nvps,  PushConstants.UTFEIGHT));
+				 return httpClient.execute(pushPost);
+			} catch (IOException e) {
+				logger.log(Level.SEVERE, e.toString(), e);
+				return null;
+			}
+		
 	}
 
 	protected static String getApplicationIdFromVCAP() {
@@ -150,6 +205,25 @@ public class PushNotifications {
 
 				if (imfPushCredentials != null) {
 					return imfPushCredentials.optString(PushConstants.APPSECRET);
+				}
+			}
+		}
+
+		return null;
+	}
+	
+	protected static String getPushApiKeyFromVCAP() {
+		String vcapServicesAsString = getEnvironmentVariable(PushConstants.VCAP_SERVICES);
+
+		if (vcapServicesAsString != null) {
+			JSONObject vcapServices = new JSONObject(vcapServicesAsString);
+
+			if (vcapServices.has(PushConstants.IMFPUSH)) {
+				JSONObject imfPushCredentials = vcapServices.getJSONArray(PushConstants.IMFPUSH).optJSONObject(0)
+						.optJSONObject(PushConstants.CREDENTIALS);
+
+				if (imfPushCredentials != null) {
+					return imfPushCredentials.optString(PushConstants.APIKEY);
 				}
 			}
 		}
@@ -194,7 +268,9 @@ public class PushNotifications {
 
 		JSONObject notificationJson = generateJSON(model);
 		
-		HttpPost pushPost = createPushPostRequest(notificationJson);
+		HttpPost pushPost = null;
+
+			pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
 	}
@@ -274,12 +350,12 @@ public class PushNotifications {
 		return json;
 	}
 
-	protected static HttpPost createPushPostRequest(JSONObject notification) {
+	protected static HttpPost createPushPostRequest(JSONObject notification)  {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
-		pushPost.addHeader(PushConstants.APPSECRET, secret);
-
+		
+		setHeader(pushPost);
 		StringEntity body = new StringEntity(notification.toString(), PushConstants.UTFEIGHT);
 		pushPost.setEntity(body);
 
@@ -290,12 +366,43 @@ public class PushNotifications {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL + "/bulk");
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
-		pushPost.addHeader(PushConstants.APPSECRET, secret);
-
+		setHeader(pushPost);
+		
 		StringEntity body = new StringEntity(messageJson.toString(), PushConstants.UTFEIGHT);
 		pushPost.setEntity(body);
 
 		return pushPost;
+	}
+
+	private static void setHeader(HttpPost pushPost) {
+		if (secret != null) {
+			pushPost.addHeader(PushConstants.APPSECRET, secret);	
+		} else {
+			try {
+				CloseableHttpResponse auth = null;
+				if (accessToken == null
+						|| (apiKeyExpireyTime - (System.currentTimeMillis() / 1000)) < 0) {
+					auth = getAuthToken();
+
+					JSONObject json = null;
+					json = new JSONObject(EntityUtils.toString(auth.getEntity()));
+
+					if (auth.getStatusLine().getStatusCode() == 200) {
+						accessToken = json.getString(PushConstants.ACCESS_TOKEN);
+						apiKeyExpireyTime = json.getInt(PushConstants.EXPIRATION);
+						pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER,
+								PushConstants.BEARER + PushConstants.EMPTY_SPACE + accessToken);
+					} else {
+						System.out.println("Failed to generate IAM aunthentication");
+					}
+				} else {
+					pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER, "Bearer " + accessToken);
+				}
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, e.toString(), e);
+			}
+
+		}
 	}
 
 
@@ -351,6 +458,9 @@ public class PushNotifications {
 		if (statusCode != null && statusCode == HttpStatus.SC_ACCEPTED) {
 			listener.onSuccess(statusCode, responseBody);
 		} else {
+			if(statusCode != null && statusCode == 401) {
+				accessToken = null;
+			}
 			listener.onFailure(statusCode, responseBody, null);
 		}
 	}
