@@ -460,6 +460,7 @@ public class PushNotifications {
 		} else {
 			if(statusCode != null && statusCode == 401) {
 				accessToken = null;
+				System.out.println("Access token expired. Please retry so that it will generate new access token");
 			}
 			listener.onFailure(statusCode, responseBody, null);
 		}
