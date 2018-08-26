@@ -144,8 +144,14 @@ public class PushNotifications {
 		if (apiKeyIdIs == null) {
 			apiKeyIdIs = getPushApiKeyFromVCAP();	
 		}
+		if (tenantId != null && apiKeyId != null) {
+			createPushEndPointUrl(tenantId, bluemixRegionnIs);
+		} else {
+			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSH_INIT_EXCEPTION);
+			logger.log(Level.SEVERE, exception.toString(), exception);
+			throw exception;
+		}
 		
-		createPushEndPointUrl(tenantId, bluemixRegionnIs);
 		iamRegion = bluemixRegionnIs;
 	}
 	
@@ -393,7 +399,8 @@ public class PushNotifications {
 						pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER,
 								PushConstants.BEARER + PushConstants.EMPTY_SPACE + accessToken);
 					} else {
-						System.out.println("Failed to generate IAM aunthentication");
+						logger.log(Level.SEVERE, PushConstants.IAM_FAILURE);
+						
 					}
 				} else {
 					pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER, "Bearer " + accessToken);
@@ -460,7 +467,7 @@ public class PushNotifications {
 		} else {
 			if(statusCode != null && statusCode == 401) {
 				accessToken = null;
-				System.out.println("Access token expired. Please retry so that it will generate new access token");
+				logger.log(Level.SEVERE, PushConstants.ACCESS_TOKEN_EXPIRED);
 			}
 			listener.onFailure(statusCode, responseBody, null);
 		}
