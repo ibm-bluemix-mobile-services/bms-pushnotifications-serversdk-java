@@ -64,6 +64,8 @@ public class PushNotifications {
 
 	protected static String pushMessageEndpointURL;
 
+	private static  PushNotificationsResponseListener pushListner;
+	
 	/**
 	 * Overrides default server host with the provided host. It
 	 * {@code overrideServerHost} can be used for dedicated service and
@@ -248,10 +250,12 @@ public class PushNotifications {
 	 *            result of this operation.
 	 */
 	public static void send(Notification notification, PushNotificationsResponseListener listener) {
+		try {
+		pushListner = listener;
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
 			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-
+			
 			if (listener != null) {
 				listener.onFailure(null, null, exception);
 			}
@@ -279,9 +283,15 @@ public class PushNotifications {
 			pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
+		} catch (Exception exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
 	}
 	
 	public static void sendBulk(Notification[] notifications, PushNotificationsResponseListener listener) {
+		
+		try {
+		pushListner = listener;
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
 			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
@@ -318,6 +328,9 @@ public class PushNotifications {
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
+		} catch (Exception exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
 	}
 
 	/**
@@ -356,7 +369,7 @@ public class PushNotifications {
 		return json;
 	}
 
-	protected static HttpPost createPushPostRequest(JSONObject notification)  {
+	protected static HttpPost createPushPostRequest(JSONObject notification) throws Exception  {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -368,7 +381,7 @@ public class PushNotifications {
 		return pushPost;
 	}
 	
-	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) {
+	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) throws Exception {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL + "/bulk");
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -380,7 +393,7 @@ public class PushNotifications {
 		return pushPost;
 	}
 
-	private static void setHeader(HttpPost pushPost) {
+	private static void setHeader(HttpPost pushPost) throws Exception {
 		if (secret != null) {
 			pushPost.addHeader(PushConstants.APPSECRET, secret);	
 		} else {
@@ -392,21 +405,27 @@ public class PushNotifications {
 
 					JSONObject json = null;
 					json = new JSONObject(EntityUtils.toString(auth.getEntity()));
+					int statusCode = auth.getStatusLine().getStatusCode();
+					String resonPhrase = auth.getStatusLine().getReasonPhrase();
 
-					if (auth.getStatusLine().getStatusCode() == 200) {
+					if (statusCode == 200) {
 						accessToken = json.getString(PushConstants.ACCESS_TOKEN);
 						apiKeyExpireyTime = json.getInt(PushConstants.EXPIRATION);
 						pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER,
 								PushConstants.BEARER + PushConstants.EMPTY_SPACE + accessToken);
 					} else {
-						logger.log(Level.SEVERE, PushConstants.IAM_FAILURE);
+						Exception exception = new Exception(resonPhrase);
+						if (pushListner != null) {
+							pushListner.onFailure(statusCode, resonPhrase, exception);
+						}
+						throw exception; 
 						
 					}
 				} else {
 					pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 				}
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, e.toString(), e);
+			} catch (Exception exception) {
+				throw exception;
 			}
 
 		}
@@ -467,7 +486,7 @@ public class PushNotifications {
 		} else {
 			if(statusCode != null && statusCode == 401) {
 				accessToken = null;
-				logger.log(Level.SEVERE, PushConstants.ACCESS_TOKEN_EXPIRED);
+				logger.log(Level.SEVERE, response.getStatusLine().getReasonPhrase());
 			}
 			listener.onFailure(statusCode, responseBody, null);
 		}

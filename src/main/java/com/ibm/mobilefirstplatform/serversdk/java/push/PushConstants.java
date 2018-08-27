@@ -24,8 +24,6 @@ public final class PushConstants {
 	public static final String URL = ":/imfpush/v1/apps/";
 	public static final String API = "/messages";
 	public static final String PUSH_INIT_EXCEPTION = "PushNotifications could not be initialized. Credentials could not be found in environment variables. Make sure they are available, or use the other constructor.";
-	public static final String IAM_FAILURE = "Failed to generate IAM aunthentication";
-	public static final String ACCESS_TOKEN_EXPIRED = "Access token expired. Please retry so that it will generate new access token";
 	public static final String VCAP_SERVICES = "VCAP_SERVICES";
 	public static final String IMFPUSH = "imfpush";
 	public static final String CREDENTIALS = "credentials";

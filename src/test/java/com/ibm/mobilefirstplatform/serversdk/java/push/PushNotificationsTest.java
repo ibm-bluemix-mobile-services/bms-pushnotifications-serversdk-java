@@ -40,7 +40,7 @@ public class PushNotificationsTest {
 	}
 
 	@Test
-	public void shouldCreateCorrectPostRequest() {
+	public void shouldCreateCorrectPostRequest() throws Exception {
 		PushNotifications.pushMessageEndpointURL = "http://www.testendpoint.com";
 		PushNotifications.secret = "testAppSecret";
 
