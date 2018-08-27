@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -32,11 +33,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.mobilefirstplatform.serversdk.java.push.exception.PushServerSDKException;
 
 /**
  * This class is used to send notifications from a Java server to mobile devices
@@ -283,7 +286,7 @@ public class PushNotifications {
 			pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
-		} catch (Exception exception) {
+		} catch (PushServerSDKException exception) {
 			logger.log(Level.SEVERE, exception.toString(), exception);
 		}
 	}
@@ -328,7 +331,7 @@ public class PushNotifications {
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
-		} catch (Exception exception) {
+		} catch (PushServerSDKException exception) {
 			logger.log(Level.SEVERE, exception.toString(), exception);
 		}
 	}
@@ -369,7 +372,7 @@ public class PushNotifications {
 		return json;
 	}
 
-	protected static HttpPost createPushPostRequest(JSONObject notification) throws Exception  {
+	protected static HttpPost createPushPostRequest(JSONObject notification) throws PushServerSDKException  {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -381,7 +384,7 @@ public class PushNotifications {
 		return pushPost;
 	}
 	
-	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) throws Exception {
+	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) throws PushServerSDKException {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL + "/bulk");
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -393,7 +396,7 @@ public class PushNotifications {
 		return pushPost;
 	}
 
-	private static void setHeader(HttpPost pushPost) throws Exception {
+	private static void setHeader(HttpPost pushPost) throws PushServerSDKException {
 		if (secret != null) {
 			pushPost.addHeader(PushConstants.APPSECRET, secret);	
 		} else {
@@ -414,18 +417,24 @@ public class PushNotifications {
 						pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER,
 								PushConstants.BEARER + PushConstants.EMPTY_SPACE + accessToken);
 					} else {
-						Exception exception = new Exception(resonPhrase);
+						PushServerSDKException pushServerSDKException = new PushServerSDKException(resonPhrase);
 						if (pushListner != null) {
-							pushListner.onFailure(statusCode, resonPhrase, exception);
+							pushListner.onFailure(statusCode, resonPhrase, pushServerSDKException);
 						}
-						throw exception; 
+						throw pushServerSDKException; 
 						
 					}
 				} else {
 					pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 				}
-			} catch (Exception exception) {
-				throw exception;
+			} catch (PushServerSDKException pushServerSDKException) {
+				throw pushServerSDKException;
+			} catch (JSONException e) {
+				throw new PushServerSDKException(e);
+			} catch (ParseException e) {
+				throw new PushServerSDKException(e);
+			} catch (IOException e) {
+				throw new PushServerSDKException(e);
 			}
 
 		}
