@@ -131,9 +131,9 @@ public class PushNotifications {
 		if (tenantId != null && pushSecret != null) {
 			init(tenantId, pushSecret, bluemixRegion);
 		} else {
-			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSH_INIT_EXCEPTION);
+			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			throw exception;
+			throw new PushServerSDKException(exception);
 		}
 	}
 	
@@ -152,15 +152,15 @@ public class PushNotifications {
 		if (tenantId != null && apiKeyId != null) {
 			createPushEndPointUrl(tenantId, bluemixRegionnIs);
 		} else {
-			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PUSH_INIT_EXCEPTION);
+			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			throw exception;
+			throw new PushServerSDKException(exception);
 		}
 		
 		iamRegion = bluemixRegionnIs;
 	}
 	
-	public static CloseableHttpResponse getAuthToken()   {
+	public static CloseableHttpResponse getAuthToken() {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 
 		String iamUri = PushConstants.IAM_URI + iamRegion + PushConstants.IAM_TOKEN_PATH;
@@ -177,7 +177,7 @@ public class PushNotifications {
 				 return httpClient.execute(pushPost);
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
-				return null;
+				throw  new PushServerSDKException(PushConstants.PushServerSDKExceptions.IAM_FAILURE_EXCEPTION, e);
 			}
 		
 	}
@@ -253,10 +253,9 @@ public class PushNotifications {
 	 *            result of this operation.
 	 */
 	public static void send(Notification notification, PushNotificationsResponseListener listener) {
-		try {
 		pushListner = listener;
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
-			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
+			Throwable exception = new RuntimeException(PushConstants.PushServerSDKExceptions.NULL_NOTIFICATION_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			
 			if (listener != null) {
@@ -266,7 +265,7 @@ public class PushNotifications {
 		}
 
 		if (notification == null) {
-			Throwable exception = new IllegalArgumentException(PushConstants.NULL_NOTIFICATION_EXCEPTION);
+			Throwable exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.NULL_NOTIFICATION_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			if (listener != null) {
 				listener.onFailure(null, null, exception);
@@ -286,17 +285,14 @@ public class PushNotifications {
 			pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
-		} catch (PushServerSDKException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		}
+		
 	}
 	
 	public static void sendBulk(Notification[] notifications, PushNotificationsResponseListener listener) {
 		
-		try {
 		pushListner = listener;
 		if (pushMessageEndpointURL == null || pushMessageEndpointURL.length() == 0) {
-			Throwable exception = new RuntimeException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
+			Throwable exception = new RuntimeException(PushConstants.PushServerSDKExceptions.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 
 			if (listener != null) {
@@ -306,7 +302,7 @@ public class PushNotifications {
 		}
 
 		if (notifications.length == 0) {
-			Throwable exception = new IllegalArgumentException(PushConstants.NULL_NOTIFICATION_EXCEPTION);
+			Throwable exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.NULL_NOTIFICATION_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			if (listener != null) {
 				listener.onFailure(null, null, exception);
@@ -331,9 +327,6 @@ public class PushNotifications {
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
-		} catch (PushServerSDKException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		}
 	}
 
 	/**
@@ -372,7 +365,7 @@ public class PushNotifications {
 		return json;
 	}
 
-	protected static HttpPost createPushPostRequest(JSONObject notification) throws PushServerSDKException  {
+	protected static HttpPost createPushPostRequest(JSONObject notification)  {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL);
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -384,7 +377,7 @@ public class PushNotifications {
 		return pushPost;
 	}
 	
-	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) throws PushServerSDKException {
+	protected static HttpPost createBulkPushPostRequest(List<JSONObject> messageJson) {
 		HttpPost pushPost = new HttpPost(pushMessageEndpointURL + "/bulk");
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.CONTENT_TYPE);
@@ -396,16 +389,14 @@ public class PushNotifications {
 		return pushPost;
 	}
 
-	private static void setHeader(HttpPost pushPost) throws PushServerSDKException {
+	private static void setHeader(HttpPost pushPost) {
 		if (secret != null) {
-			pushPost.addHeader(PushConstants.APPSECRET, secret);	
+			pushPost.addHeader(PushConstants.APPSECRET, secret);
 		} else {
 			try {
 				CloseableHttpResponse auth = null;
-				if (accessToken == null
-						|| (apiKeyExpireyTime - (System.currentTimeMillis() / 1000)) < 0) {
+				if (accessToken == null || (apiKeyExpireyTime - (System.currentTimeMillis() / 1000)) < 0) {
 					auth = getAuthToken();
-
 					JSONObject json = null;
 					json = new JSONObject(EntityUtils.toString(auth.getEntity()));
 					int statusCode = auth.getStatusLine().getStatusCode();
@@ -419,22 +410,19 @@ public class PushNotifications {
 					} else {
 						PushServerSDKException pushServerSDKException = new PushServerSDKException(resonPhrase);
 						if (pushListner != null) {
-							pushListner.onFailure(statusCode, resonPhrase, pushServerSDKException);
+							pushListner.onFailure(statusCode, pushServerSDKException.getLocalizedMessage(),
+									pushServerSDKException);
 						}
-						throw pushServerSDKException; 
-						
+						throw pushServerSDKException;
+
 					}
 				} else {
 					pushPost.addHeader(PushConstants.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 				}
-			} catch (PushServerSDKException pushServerSDKException) {
-				throw pushServerSDKException;
-			} catch (JSONException e) {
-				throw new PushServerSDKException(e);
-			} catch (ParseException e) {
-				throw new PushServerSDKException(e);
+			}  catch (ParseException e) {
+				throw new PushServerSDKException(PushConstants.PushServerSDKExceptions.JSON_PARSER_EXCEPTION, e);
 			} catch (IOException e) {
-				throw new PushServerSDKException(e);
+				throw  new PushServerSDKException(PushConstants.PushServerSDKExceptions.JSON_IO_EXCEPTION, e);
 			}
 
 		}
