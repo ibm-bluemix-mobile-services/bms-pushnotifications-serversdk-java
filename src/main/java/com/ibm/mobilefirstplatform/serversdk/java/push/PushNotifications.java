@@ -33,7 +33,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -131,9 +130,9 @@ public class PushNotifications {
 		if (tenantId != null && pushSecret != null) {
 			init(tenantId, pushSecret, bluemixRegion);
 		} else {
-			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
+			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			throw new PushServerSDKException(exception);
+			throw exception;
 		}
 	}
 	
@@ -152,9 +151,9 @@ public class PushNotifications {
 		if (tenantId != null && apiKeyId != null) {
 			createPushEndPointUrl(tenantId, bluemixRegionnIs);
 		} else {
-			IllegalArgumentException exception = new IllegalArgumentException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
+			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
-			throw new PushServerSDKException(exception);
+			throw exception;
 		}
 		
 		iamRegion = bluemixRegionnIs;
@@ -174,11 +173,11 @@ public class PushNotifications {
 
 			try {
 				pushPost.setEntity(new UrlEncodedFormEntity(nvps,  PushConstants.UTFEIGHT));
-				 return httpClient.execute(pushPost);
+				return httpClient.execute(pushPost);
 			} catch (IOException e) {
 				logger.log(Level.SEVERE, e.toString(), e);
 				throw  new PushServerSDKException(PushConstants.PushServerSDKExceptions.IAM_FAILURE_EXCEPTION, e);
-			}
+			} 
 		
 	}
 
@@ -282,7 +281,7 @@ public class PushNotifications {
 		
 		HttpPost pushPost = null;
 
-			pushPost = createPushPostRequest(notificationJson);
+		pushPost = createPushPostRequest(notificationJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
 		
@@ -393,8 +392,8 @@ public class PushNotifications {
 		if (secret != null) {
 			pushPost.addHeader(PushConstants.APPSECRET, secret);
 		} else {
+			CloseableHttpResponse auth = null;
 			try {
-				CloseableHttpResponse auth = null;
 				if (accessToken == null || (apiKeyExpireyTime - (System.currentTimeMillis() / 1000)) < 0) {
 					auth = getAuthToken();
 					JSONObject json = null;
@@ -423,7 +422,16 @@ public class PushNotifications {
 				throw new PushServerSDKException(PushConstants.PushServerSDKExceptions.JSON_PARSER_EXCEPTION, e);
 			} catch (IOException e) {
 				throw  new PushServerSDKException(PushConstants.PushServerSDKExceptions.JSON_IO_EXCEPTION, e);
+			} finally {
+				if (auth != null) {
+					try {
+						auth.close();
+					} catch (IOException e) {
+						logger.log(Level.SEVERE, e.toString(), e);
+					}
+				}
 			}
+			
 
 		}
 	}
