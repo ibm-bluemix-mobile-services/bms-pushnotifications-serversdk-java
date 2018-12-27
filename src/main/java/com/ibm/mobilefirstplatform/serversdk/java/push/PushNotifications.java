@@ -15,10 +15,14 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -28,6 +32,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.ssl.SSLContexts;
 import org.json.JSONObject;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -44,6 +49,7 @@ public class PushNotifications {
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
 	public static final String FRANKFURT_REGION = ".eu-de.bluemix.net";
 	public static final String US_EAST_REGION = ".us-east.bluemix.net";
+	public static final String TLS_VERSION = "TLSv1.2";
 
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
@@ -187,7 +193,16 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpClient httpClient = null;
+		SSLContext sslContext;
+		try {
+			sslContext = SSLContexts.custom().useProtocol(TLS_VERSION).build();
+			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+		} catch (KeyManagementException exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		} catch (NoSuchAlgorithmException exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
 
 		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage())
 				.target(notification.getTarget()).settings(notification.getSettings()).build();
@@ -219,7 +234,16 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = HttpClients.createDefault();
+		CloseableHttpClient httpClient = null;
+		SSLContext sslContext;
+		try {
+			sslContext = SSLContexts.custom().useProtocol(TLS_VERSION).build();
+			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+		} catch (KeyManagementException exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		} catch (NoSuchAlgorithmException exception) {
+			logger.log(Level.SEVERE, exception.toString(), exception);
+		}
 
 		
 		List<JSONObject> MessageJson = new ArrayList<JSONObject>();
