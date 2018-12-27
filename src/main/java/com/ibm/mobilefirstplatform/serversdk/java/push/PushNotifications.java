@@ -193,17 +193,8 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = null;
-		SSLContext sslContext;
-		try {
-			sslContext = SSLContexts.custom().useProtocol(TLS_VERSION).build();
-			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
-		} catch (KeyManagementException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		} catch (NoSuchAlgorithmException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		}
-
+		CloseableHttpClient httpClient = enableTLS();
+		
 		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage())
 				.target(notification.getTarget()).settings(notification.getSettings()).build();
 
@@ -234,17 +225,7 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = null;
-		SSLContext sslContext;
-		try {
-			sslContext = SSLContexts.custom().useProtocol(TLS_VERSION).build();
-			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
-		} catch (KeyManagementException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		} catch (NoSuchAlgorithmException exception) {
-			logger.log(Level.SEVERE, exception.toString(), exception);
-		}
-
+		CloseableHttpClient httpClient = enableTLS();
 		
 		List<JSONObject> MessageJson = new ArrayList<JSONObject>();
 		for (Notification notification: notifications){
@@ -260,6 +241,21 @@ public class PushNotifications {
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
+	}
+
+	private static CloseableHttpClient enableTLS() {
+		CloseableHttpClient httpClient = null;
+		SSLContext sslContext = null;
+		try {
+			sslContext = SSLContext.getInstance(TLS_VERSION);
+			sslContext.init(null, null, null);
+		} catch (NoSuchAlgorithmException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		} catch (KeyManagementException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+		return httpClient;
 	}
 
 	/**
