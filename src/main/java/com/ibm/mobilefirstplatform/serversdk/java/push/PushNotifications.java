@@ -49,7 +49,6 @@ public class PushNotifications {
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
 	public static final String FRANKFURT_REGION = ".eu-de.bluemix.net";
 	public static final String US_EAST_REGION = ".us-east.bluemix.net";
-	public static final String TLS_VERSION = "TLSv1.2";
 
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
@@ -247,7 +246,7 @@ public class PushNotifications {
 		CloseableHttpClient httpClient = null;
 		SSLContext sslContext = null;
 		try {
-			sslContext = SSLContext.getInstance(TLS_VERSION);
+			sslContext = SSLContext.getInstance(PushConstants.TLS_VERSION);
 			sslContext.init(null, null, null);
 		} catch (NoSuchAlgorithmException e) {
 			logger.log(Level.SEVERE, e.toString(), e);

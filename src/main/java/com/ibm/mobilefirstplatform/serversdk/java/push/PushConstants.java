@@ -34,6 +34,7 @@ public final class PushConstants {
 	public static final String CONTENT_TYPE = "application/json";
 	public static final String UTFEIGHT = "UTF-8";
 	public static final String ALERT_NOT_NULL_EXCEPTION = "The alert cannot be null. Please use MessageBuilder to set alert";
+	public static final String TLS_VERSION = "TLSv1.2";
 
 	private PushConstants() {
 
