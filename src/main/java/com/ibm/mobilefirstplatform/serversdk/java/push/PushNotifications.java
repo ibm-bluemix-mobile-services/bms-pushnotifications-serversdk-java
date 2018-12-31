@@ -38,6 +38,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.mobilefirstplatform.serversdk.java.push.exception.PushServerSDKException;
 
 /**
  * This class is used to send notifications from a Java server to mobile devices
@@ -327,6 +328,8 @@ public class PushNotifications {
 			if (httpClient != null && listener != null) {
 				response = httpClient.execute(pushPost);
 				sendResponseToListener(response, listener);
+			} else {
+				throw new PushServerSDKException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			}
 		} catch (ClientProtocolException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
