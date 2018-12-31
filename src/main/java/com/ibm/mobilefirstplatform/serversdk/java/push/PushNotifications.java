@@ -248,13 +248,14 @@ public class PushNotifications {
 		try {
 			sslContext = SSLContext.getInstance(PushConstants.TLS_VERSION);
 			sslContext.init(null, null, null);
+			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
 		} catch (NoSuchAlgorithmException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		} catch (KeyManagementException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
 		}
-		httpClient = HttpClients.custom().setSSLContext(sslContext).build();
 		return httpClient;
+		
 	}
 
 	/**
@@ -323,9 +324,8 @@ public class PushNotifications {
 		CloseableHttpResponse response = null;
 
 		try {
-			response = httpClient.execute(pushPost);
-
-			if (listener != null) {
+			if (httpClient != null && listener != null) {
+				response = httpClient.execute(pushPost);
 				sendResponseToListener(response, listener);
 			}
 		} catch (ClientProtocolException e) {
