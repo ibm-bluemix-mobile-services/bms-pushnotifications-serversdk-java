@@ -41,6 +41,8 @@ public final class PushConstants {
 	public static final String EXPIRATION = "expiration";
 	public static final String BEARER = "Bearer";
 	public static final String EMPTY_SPACE = " ";
+	public static final String ALERT_NOT_NULL_EXCEPTION = "The alert cannot be null. Please use MessageBuilder to set alert";
+	public static final String TLS_VERSION = "TLSv1.2";
 
 	private PushConstants() {
 
