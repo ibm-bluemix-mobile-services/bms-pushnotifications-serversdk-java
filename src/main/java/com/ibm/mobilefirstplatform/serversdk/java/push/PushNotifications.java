@@ -15,10 +15,14 @@ package com.ibm.mobilefirstplatform.serversdk.java.push;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -33,6 +37,7 @@ import org.json.JSONObject;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.mobilefirstplatform.serversdk.java.push.exception.PushServerSDKException;
 
 /**
  * This class is used to send notifications from a Java server to mobile devices
@@ -187,8 +192,8 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-
+		CloseableHttpClient httpClient = enableTLS();
+		
 		PushMessageModel model = new PushMessageModel.Builder().message(notification.getMessage())
 				.target(notification.getTarget()).settings(notification.getSettings()).build();
 
@@ -219,8 +224,7 @@ public class PushNotifications {
 			return;
 		}
 
-		CloseableHttpClient httpClient = HttpClients.createDefault();
-
+		CloseableHttpClient httpClient = enableTLS();
 		
 		List<JSONObject> MessageJson = new ArrayList<JSONObject>();
 		for (Notification notification: notifications){
@@ -236,6 +240,22 @@ public class PushNotifications {
 		HttpPost pushPost = createBulkPushPostRequest(MessageJson);
 
 		executePushPostRequest(pushPost, httpClient, listener);
+	}
+
+	private static CloseableHttpClient enableTLS() {
+		CloseableHttpClient httpClient = null;
+		SSLContext sslContext = null;
+		try {
+			sslContext = SSLContext.getInstance(PushConstants.TLS_VERSION);
+			sslContext.init(null, null, null);
+			httpClient = HttpClients.custom().setSSLContext(sslContext).build();
+		} catch (NoSuchAlgorithmException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		} catch (KeyManagementException e) {
+			logger.log(Level.SEVERE, e.toString(), e);
+		}
+		return httpClient;
+		
 	}
 
 	/**
@@ -304,10 +324,11 @@ public class PushNotifications {
 		CloseableHttpResponse response = null;
 
 		try {
-			response = httpClient.execute(pushPost);
-
-			if (listener != null) {
+			if (httpClient != null && listener != null) {
+				response = httpClient.execute(pushPost);
 				sendResponseToListener(response, listener);
+			} else {
+				throw new PushServerSDKException(PushConstants.NOT_PROPERLY_INITIALIZED_EXCEPTION);
 			}
 		} catch (ClientProtocolException e) {
 			logger.log(Level.SEVERE, e.toString(), e);
