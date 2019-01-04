@@ -13,13 +13,16 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 <dependency>
 	<groupId>com.ibm.mobilefirstplatform.serversdk.java</groupId>
 	<artifactId>push</artifactId>
-	<version>1.4.0</version>
+	<version>1.5.0</version>
 </dependency>
 ```
 
 ## Sending a push notification
 
 1. Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
+	
+	Initialize with AppSecret
+	
 	```
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
@@ -29,7 +32,13 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	```
 	PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 	```
+
+	Initialize with ApiKey
 	
+	```
+	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-BLUEMIX-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
+	```
+		
 	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
 	The IBM Cloud regions where the Push Notifications service is hosted are `PushNotifications.US_SOUTH_REGION`, `PushNotifications.UK_REGION`,  `PushNotifications.SYDNEY_REGION`, `PushNotifications.FRANKFURT_REGION` and `PushNotifications.US_EAST_REGION`
 	
