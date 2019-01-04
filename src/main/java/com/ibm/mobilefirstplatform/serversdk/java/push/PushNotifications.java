@@ -142,7 +142,6 @@ public class PushNotifications {
 	
 	public static void initWithApiKey(String tenantId, String apiKeyId, String bluemixRegionn) {
 		String tenantIdIs = tenantId;
-		String bluemixRegionnIs = bluemixRegionn;
 		apiKeyIdIs = apiKeyId;
 
 		if(tenantIdIs == null) {
@@ -153,14 +152,14 @@ public class PushNotifications {
 			apiKeyIdIs = getPushApiKeyFromVCAP();	
 		}
 		if (tenantId != null && apiKeyId != null) {
-			createPushEndPointUrl(tenantId, bluemixRegionnIs);
+			createPushEndPointUrl(tenantId, bluemixRegionn);
 		} else {
 			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
 		}
 		
-		iamRegion = bluemixRegionnIs;
+		iamRegion = bluemixRegionn;
 	}
 	
 	public static CloseableHttpResponse getAuthToken() {
