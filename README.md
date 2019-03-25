@@ -80,7 +80,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.url("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
 			.lines(new String[] { "IBM", "IBM Cloud", "Big Text Notification" }).build();
 		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.GREEN).ledOffMs(1).ledOnMs(1).build();
-		FCM fcm = new FCM.Builder().collapseKey("ping").interactiveCategory("Accept")
+		FCM fcm = new FCM.Builder().androidTitle("androidTitle").collapseKey("ping").interactiveCategory("Accept")
 			.delayWhileIdle(true).payload(new JSONObject().put("alert" , "20% Off for you"))
 			.priority(FCMPriority.MIN)
 			.sound("mysound.wav").timeToLive(3)
