@@ -51,6 +51,7 @@ public final class FCM {
 	private String icon;
 	private FCMLights lights;
 	private FCMNotificationType type;
+	private String androidTitle;
 
 	public final Boolean getDelayWhileIdle() {
 		return delayWhileIdle;
@@ -105,6 +106,10 @@ public final class FCM {
 		return type;
 	}
 
+	public final String getAndroidTitle() {
+		return androidTitle;
+	}
+
 	private FCM(Builder builder) {
 
 		this.delayWhileIdle = builder.delayWhileIdle;
@@ -120,6 +125,7 @@ public final class FCM {
 		this.icon = builder.icon;
 		this.lights = builder.lights;
 		this.type = builder.type;
+		this.androidTitle = builder.androidTitle;
 
 	}
 
@@ -167,6 +173,21 @@ public final class FCM {
 		private String icon;
 		private FCMLights lights;
 		private FCMNotificationType type;
+		private String androidTitle;
+
+
+
+
+		/**
+		 * 
+		 * @param androidTitle
+		 *            androidTitle- The title of Android push 
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder androidTitle(String androidTitle) {
+			this.androidTitle = androidTitle;
+			return this;
+		}
 
 
 		/**
