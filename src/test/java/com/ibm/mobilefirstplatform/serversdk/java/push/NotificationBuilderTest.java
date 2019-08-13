@@ -85,7 +85,7 @@ private static JSONObject generateJSON(Object obj) {
 
 		FCM fcm = new FCM.Builder().androidTitle(null).collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
 				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
-				.visibility(null).build();
+				.visibility(null).androidChannel(null).build();
 
 		ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey(null).delayWhileIdle(null)
 				.iconUrl(null).payload(null).title(null).build();
@@ -158,7 +158,7 @@ private static JSONObject generateJSON(Object obj) {
 		FCM fcm = new FCM.Builder().androidTitle("title").collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
 				.delayWhileIdle(true).payload(new JSONObject()).priority(FCMPriority.MIN).sound("testsoundFile")
 				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(fcmstyle)
-				.lights(fcmlights).build();
+				.lights(fcmlights).androidChannel("channelName").build();
 
 		Settings settings = new Settings.Builder().fcm(fcm).build();
 
@@ -296,7 +296,7 @@ private static JSONObject generateJSON(Object obj) {
 
 		FCMLights fcmlights = new FCMLights.Builder().ledArgb(FCMLED.BLACK).ledOffMs(1).ledOnMs(1).build();
 
-		FCM fcm = new FCM.Builder().androidTitle("androidTitle").collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
+		FCM fcm = new FCM.Builder().androidTitle("androidTitle").androidChannel("androidChannel").collapseKey("testcollapseKey").interactiveCategory("testinteractiveCategory")
 				.delayWhileIdle(true).payload(new JSONObject()).priority(FCMPriority.MIN).sound("testsoundFile")
 				.timeToLive(42).icon("testicon").visibility(Visibility.PUBLIC).sync(true).style(fcmstyle)
 				.lights(fcmlights).build();
@@ -607,7 +607,7 @@ private static JSONObject generateJSON(Object obj) {
 				.locKey("").payload(null).sound("").subtitle("").title("").titleLocArgs(null).titleLocKey("").type(null)
 				.build();
 
-		FCM fcm = new FCM.Builder().androidTitle(null).collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
+		FCM fcm = new FCM.Builder().androidTitle(null).androidChannel(null).collapseKey(null).delayWhileIdle(null).icon(null).interactiveCategory(null)
 				.lights(null).payload(null).priority(null).sound(null).style(null).sync(null).timeToLive(null)
 				.visibility(null)
 
