@@ -40,7 +40,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	```
 		
 	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
-	The IBM Cloud regions where the Push Notifications service is hosted are `PushNotifications.US_SOUTH_REGION`, `PushNotifications.UK_REGION`,  `PushNotifications.SYDNEY_REGION`, `PushNotifications.FRANKFURT_REGION`, `PushNotifications.US_EAST_REGION` and `PushNotifications.JP_TOK`
+	The IBM Cloud regions where the Push Notifications service is hosted are `PushNotifications.US_SOUTH_REGION`, `PushNotifications.UK_REGION`,  `PushNotifications.SYDNEY_REGION`, `PushNotifications.FRANKFURT_REGION`, `PushNotifications.US_EAST_REGION`
 	
 	```
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
