@@ -126,7 +126,6 @@ public final class FCM {
 		this.lights = builder.lights;
 		this.type = builder.type;
 		this.androidTitle = builder.androidTitle;
-
 	}
 
 	/**
@@ -177,7 +176,6 @@ public final class FCM {
 
 
 
-
 		/**
 		 * 
 		 * @param androidTitle
@@ -188,8 +186,7 @@ public final class FCM {
 			this.androidTitle = androidTitle;
 			return this;
 		}
-
-
+		
 		/**
 		 * 
 		 * @param delayWhileIdle

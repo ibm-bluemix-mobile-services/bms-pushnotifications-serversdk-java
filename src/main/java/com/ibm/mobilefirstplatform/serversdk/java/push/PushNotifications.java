@@ -105,8 +105,8 @@ public class PushNotifications {
 		if (overrideServerHost != null) {
 			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
 		} else {
-			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId
-					+ PushConstants.API;
+			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId 
+				+ PushConstants.API;
 		}
 	}
 
