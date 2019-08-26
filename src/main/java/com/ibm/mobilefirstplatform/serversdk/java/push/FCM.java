@@ -52,7 +52,6 @@ public final class FCM {
 	private FCMLights lights;
 	private FCMNotificationType type;
 	private String androidTitle;
-	private String androidChannel;
 
 	public final Boolean getDelayWhileIdle() {
 		return delayWhileIdle;
@@ -111,9 +110,6 @@ public final class FCM {
 		return androidTitle;
 	}
 
-	public final String getAndroidChannel() {
-		return androidChannel;
-	}
 	private FCM(Builder builder) {
 
 		this.delayWhileIdle = builder.delayWhileIdle;
@@ -130,8 +126,6 @@ public final class FCM {
 		this.lights = builder.lights;
 		this.type = builder.type;
 		this.androidTitle = builder.androidTitle;
-		this.androidChannel = builder.androidChannel;
-
 	}
 
 	/**
@@ -179,8 +173,6 @@ public final class FCM {
 		private FCMLights lights;
 		private FCMNotificationType type;
 		private String androidTitle;
-		private String androidChannel;
-
 
 
 
@@ -194,18 +186,6 @@ public final class FCM {
 			this.androidTitle = androidTitle;
 			return this;
 		}
-
-		/**
-		 * 
-		 * @param androidChannel
-		 *            androidChannel- The channel name for Android push 
-		 * @return The Builder object for calls to be linked.
-		 */
-		public final Builder androidChannel(String androidChannel) {
-			this.androidChannel = androidChannel;
-			return this;
-		}
-
 		
 		/**
 		 * 
