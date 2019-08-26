@@ -79,6 +79,14 @@
 
 	<build>
 		<plugins>
+		    <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -147,7 +155,7 @@
 			
 			<!-- Uncomment this plugin to enable GPG signing of the artifacts, required in order to release to Maven Central. -->
 			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
+				<groupId></groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
 				<version>1.5</version>
 				<executions>
