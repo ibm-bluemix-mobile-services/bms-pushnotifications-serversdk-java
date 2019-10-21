@@ -51,6 +51,7 @@ public final class APNs {
 	private String subtitle;
 	private String title;
 	private String attachmentUrl;
+	private String apnsCollapseId;
 
 	public final Integer getBadge() {
 		return badge;
@@ -109,6 +110,10 @@ public final class APNs {
 		return attachmentUrl;
 	}
 
+	public final String getApnsCollapseId() {
+		return apnsCollapseId;
+	}
+
 	private APNs(Builder builder) {
 
 		this.badge = builder.badge;
@@ -125,6 +130,7 @@ public final class APNs {
 		this.subtitle = builder.subtitle;
 		this.attachmentUrl = builder.attachmentUrl;
 		this.type = builder.type;
+		this.apnsCollapseId = builder.apnsCollapseId;
 	}
 
 	/**
@@ -154,6 +160,7 @@ public final class APNs {
 		private String subtitle;
 		private String title;
 		private String attachmentUrl;
+		private String apnsCollapseId;
 
 		/**
 		 * 
@@ -339,6 +346,17 @@ public final class APNs {
 		 */
 		public final Builder attachmentUrl(String attachmentUrl) {
 			this.attachmentUrl = attachmentUrl;
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param apnsCollapseId
+		 * 			Multiple notifications with the same collapse identifier are displayed to the user as a single notification
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder apnsCollapseId(String apnsCollapseId) {
+			this.apnsCollapseId = apnsCollapseId;
 			return this;
 		}
 
