@@ -54,6 +54,7 @@ public class PushNotifications {
 	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
 	public static final String FRANKFURT_REGION = ".eu-de.bluemix.net";
 	public static final String US_EAST_REGION = ".us-east.bluemix.net";
+	public static final String JP_TOK = ".jp-tok.bluemix.net";
 
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
@@ -105,8 +106,12 @@ public class PushNotifications {
 		if (overrideServerHost != null) {
 			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
 		} else {
-			pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId 
+			if (bluemixRegion.equals(JP_TOK)) {
+				pushMessageEndpointURL = PushConstants.JPHOST + PushConstants.URL + tenantId + PushConstants.API;
+			} else {
+				pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId 
 				+ PushConstants.API;
+			}
 		}
 	}
 
