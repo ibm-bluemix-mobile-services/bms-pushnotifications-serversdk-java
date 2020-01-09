@@ -52,9 +52,14 @@ public final class FCM {
 	private FCMLights lights;
 	private FCMNotificationType type;
 	private String androidTitle;
+	private String groupId;
 
 	public final Boolean getDelayWhileIdle() {
 		return delayWhileIdle;
+	}
+
+	public final String getGroupId() {
+		return groupId;
 	}
 
 	public final Integer getTimeToLive() {
@@ -126,6 +131,7 @@ public final class FCM {
 		this.lights = builder.lights;
 		this.type = builder.type;
 		this.androidTitle = builder.androidTitle;
+		this.groupId = builder.groupId;
 	}
 
 	/**
@@ -173,6 +179,7 @@ public final class FCM {
 		private FCMLights lights;
 		private FCMNotificationType type;
 		private String androidTitle;
+		private String groupId;
 
 
 
@@ -186,7 +193,18 @@ public final class FCM {
 			this.androidTitle = androidTitle;
 			return this;
 		}
-		
+
+		/**
+		 * 
+		 * @param groupId 
+		 * 			Set this notification to be part of a group of notifications sharing the same key. Grouped notifications may display in a cluster or stack on devices which support such rendering.
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder groupId(String groupId) {
+			this.groupId = groupId;
+			return this;
+		}
+
 		/**
 		 * 
 		 * @param delayWhileIdle
