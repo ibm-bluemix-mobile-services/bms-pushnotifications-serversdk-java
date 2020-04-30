@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=development)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe43788a157c4c4b971a8918d29c4469)](https://www.codacy.com/app/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java&amp;utm_campaign=Badge_Grade)
 
-The [IBM Cloud Push Notifications service](https://cloud.ibm.com/catalog/services/push-notifications) provides a unified push service to send real-time notifications to mobile and web applications. The Push Notifications Server-side SDK for Java is used to send push notifications to registered devices using the Push Notifications service.
+The [IBM Cloud Push Notifications service](https://cloud.ibm.com/catalog/services/push-notifications) provides a unified push service to send real-time notifications to mobile and web applications. The SDK enables Web Apps to receive push notifications sent from the service.
 
 Ensure that you go through [IBM Cloud Push Notifications service documentation](https://cloud.ibm.com/docs/services/mobilepush?topic=mobile-pushnotification-gettingstartedtemplate#gettingstartedtemplate) before you start.
 
@@ -33,19 +33,19 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	
 - Initialize with AppSecret
 	
-	```
+	```java
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
 
 	However, if your server is running on IBM Cloud as well, you can initialize it with just the region. You can achieve this by binding your Push Notification service to your server application in IBM Cloud, which will then give it access to the service's credentials. To initialize using the region:
 
-	```
+	```java
 	PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 	```
 
 - Initialize with ApiKey
 
-	```
+	```java
 	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
 	```
 		
@@ -58,7 +58,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	- `PushNotifications.FRANKFURT_REGION`
 	- `PushNotifications.US_EAST_REGION`
 	
-	```
+	```java
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
@@ -79,7 +79,7 @@ Builders are introduced which sets the optional settings for the platforms:
 
 - APNs
 	
-	```
+	```java
 		// For APNs settings.
 		APNs apns = new APNs.Builder().badge(1).interactiveCategory("Accept")
 			.iosActionKey("PUSH_OFFER").payload(new JSONObject().put("alert" , "20% Off for you"))
@@ -93,7 +93,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	```
 - FCM
 
-	```
+	```java
 	
 		//For FCM settings
 		/* Style and lights attibute addded to FCM optional settings which 
@@ -116,7 +116,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	```
 - Chrome
 
-	```
+	```java
 		// Chrome settings	
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM Push Offer")
 			.iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
@@ -125,7 +125,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	```
 - ChromeAppExtension
 
-	```
+	```java
 		//ChromeAppExtension settings.  
 		//You need to provide a proper icon urlfor chromAppExtension notification to work properly.		
 		ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true)
@@ -135,7 +135,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	```
 - Firefox
 
-	```
+	```java
 		// Firefox Settings		
 		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
@@ -143,7 +143,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	```
 - Safari
 
-	```
+	```java
 		// Safari Settings. For safari all the three settings are mandatory to set.	
 		SafariWeb safariWeb = new SafariWeb.Builder().title("IBM Offer")
 			.urlArgs(new String[] {"www.IBM.com"}).action("View").build();
@@ -151,7 +151,7 @@ Builders are introduced which sets the optional settings for the platforms:
 
 	**Note** : Ensure that you provide either deviceIds or userIds or platforms or tagNames.The following code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...).
 	
-	```
+	```java
 	Target target = new Target.Builder()
 	.platforms(new Platform[] {
 	Platform.APPLE, Platform.GOOGLE,
@@ -163,13 +163,13 @@ Builders are introduced which sets the optional settings for the platforms:
 	```		
 
 1. 	Set optional values for all platforms to Settings object.
-	```
+	```java
 	Settings settings = new Settings.Builder().apns(apns).fcm(fcm).chromeWeb(chromeWeb)
 		.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 	```		
 
 2. Create a new notification.
-	```
+	```java
 	Notification notification = new Notification.Builder().message(message).settings(settings).target(target).build(); 
 	```
 
@@ -177,7 +177,7 @@ Builders are introduced which sets the optional settings for the platforms:
 	
 	An optional callback `ResponseListener` is provided if you want to get notified of the result or do some processing with response `satusCode` or `responseBody` returned by this callback.
 
-	```
+	```java
 		PushNotifications.send(notification, new PushNotificationsResponseListener(){
 			@Override
 			public void onSuccess(int statusCode, String responseBody) {
@@ -200,7 +200,7 @@ You will now receive the notification that was sent, on the device that you had 
 
 To send bulk push notifications do the following,
 
-```
+```java
 	Notification[] ff = new Notification[]{notification1,notification2};
 	PushNotifications.sendBulk(ff, new PushNotificationsResponseListener(){
 		public void onSuccess(int statusCode, String responseBody) {
