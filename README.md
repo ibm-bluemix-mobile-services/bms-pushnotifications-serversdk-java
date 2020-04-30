@@ -3,9 +3,20 @@
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=development)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe43788a157c4c4b971a8918d29c4469)](https://www.codacy.com/app/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java&amp;utm_campaign=Badge_Grade)
 
-The Push Notifications Server-side SDK for Java is used to send push notifications to registered devices using the [Push Notifications service in IBM® Cloud](https://console.ng.bluemix.net/docs/services/mobilepush/index.html).
+The [IBM Cloud Push Notifications service](https://cloud.ibm.com/catalog/services/push-notifications) provides a unified push service to send real-time notifications to mobile and web applications. The SDK enables Web Apps to receive push notifications sent from the service.
 
-## Getting the SDK
+Ensure that you go through [IBM Cloud Push Notifications service documentation](https://cloud.ibm.com/docs/services/mobilepush?topic=mobile-pushnotification-gettingstartedtemplate#gettingstartedtemplate) before you start.
+
+## Contents
+
+- [Installation](#installation)
+- [Initialize SDK](#initialize-sdk)
+- [Simple notification](#simple-notification)
+- [Notification options](#notification-options)
+- [Send bulk Push Notifications](#send-bulk-push-notifications)
+- [Samples and videos](#samples-and-videos)
+
+## Installation
 
 You can get the SDK from Maven Central. To get it with Maven, include the following in your dependencies:
 
@@ -17,47 +28,58 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 </dependency>
 ```
 
-## Sending a push notification
-
-1. Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
+## Initialize SDK
+ Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
 	
-	Initialize with AppSecret
+- Initialize with AppSecret
 	
-	```
+	```java
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
 
 	However, if your server is running on IBM Cloud as well, you can initialize it with just the region. You can achieve this by binding your Push Notification service to your server application in IBM Cloud, which will then give it access to the service's credentials. To initialize using the region:
 
-	```
+	```java
 	PushNotifications.init(PushNotifications.US_SOUTH_REGION);
 	```
 
-	Initialize with ApiKey
-	
-	```
-	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-BLUEMIX-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
+- Initialize with ApiKey
+
+	```java
+	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
 	```
 		
 	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
-	The IBM Cloud regions where the Push Notifications service is hosted are `PushNotifications.US_SOUTH_REGION`, `PushNotifications.UK_REGION`,  `PushNotifications.SYDNEY_REGION`, `PushNotifications.FRANKFURT_REGION`, `PushNotifications.US_EAST_REGION`
+
+	The IBM Cloud regions where the Push Notifications service is hosted are,
+	- `PushNotifications.US_SOUTH_REGION`
+	- `PushNotifications.UK_REGION`
+	- `PushNotifications.SYDNEY_REGION`
+	- `PushNotifications.FRANKFURT_REGION`
+	- `PushNotifications.US_EAST_REGION`
 	
-	```
+	```java
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
 	PushNotifications.init("YOUR_APPLICATION_ID", "YOUR_SECRET", PushNotifications.US_SOUTH_REGION); 
 	```
 
-2. Create Message attributes using builder.
 
-	```
-	Message message = new Message.Builder().alert("20% Off Offer for you").url("www.ibm.com").build();
-	```
-	
-	You can also configure the notification with some other optional settings. Functionality added for FirefoxWeb, ChromeWeb, SafariWeb, ChromeAppExtension and extra optional settings introduced for APNs and FCM are listed in this document.
+## Simple notification
 
-	Builders are introduced which sets the optional settings for the platforms: 
+ Create Message attributes using builder.
+ 
+ 	Message message = new Message.Builder().alert("20% Off Offer for you").url("www.ibm.com").build();
 	
-	```
+ 
+## Notification options
+
+You can also configure the notification with some other optional settings. Functionality added for FirefoxWeb, ChromeWeb, SafariWeb, ChromeAppExtension and extra optional settings introduced for APNs and FCM are listed in this document.
+
+Builders are introduced which sets the optional settings for the platforms: 
+
+- APNs
+	
+	```java
 		// For APNs settings.
 		APNs apns = new APNs.Builder().badge(1).interactiveCategory("Accept")
 			.iosActionKey("PUSH_OFFER").payload(new JSONObject().put("alert" , "20% Off for you"))
@@ -68,7 +90,11 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.locArgs(new String[] { "Jenna","Frank" }).title("IBM").subtitle("IBM Cloud")
 			.attachmentUrl("https://developer.blackberry.com/native/files/documentation/images/text_messages_icon.png")
 			.build();
-		
+	```
+- FCM
+
+	```java
+	
 		//For FCM settings
 		/* Style and lights attibute addded to FCM optional settings which 
 		/* can be constructed as shown below. Also the timetolive setting is 
@@ -87,22 +113,37 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 			.icon("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.visibility(Visibility.PUBLIC).sync(true).style(fcmstyle).lights(fcmlights).build();
 		
+	```
+- Chrome
+
+	```java
 		// Chrome settings	
 		ChromeWeb chromeWeb = new ChromeWeb.Builder().title("IBM Push Offer")
 			.iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 		
+	```
+- ChromeAppExtension
+
+	```java
 		//ChromeAppExtension settings.  
 		//You need to provide a proper icon urlfor chromAppExtension notification to work properly.		
 		ChromeAppExt chromeAppExt = new ChromeAppExt.Builder().collapseKey("ping").delayWhileIdle(true)
 			.title("IBM Push Offer")
 			.iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
-		
+	```
+- Firefox
+
+	```java
 		// Firefox Settings		
 		FirefoxWeb firefoxWeb = new FirefoxWeb.Builder().title("IBM Offer").iconUrl("https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTptVxkAVpfhZO0h2KXbnQLg16yvDa7uF-y1t5KGmABDxJ13XoHR1YklGM")
 			.timeToLive(3).payload(new JSONObject().put("alert" , "20% Off for you")).build();
 			
+	```
+- Safari
+
+	```java
 		// Safari Settings. For safari all the three settings are mandatory to set.	
 		SafariWeb safariWeb = new SafariWeb.Builder().title("IBM Offer")
 			.urlArgs(new String[] {"www.IBM.com"}).action("View").build();
@@ -110,7 +151,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 
 	**Note** : Ensure that you provide either deviceIds or userIds or platforms or tagNames.The following code snippet uses platforms, same way you can do it for deviceIds(...) or userIds (...) or tagNames(...).
 	
-	```
+	```java
 	Target target = new Target.Builder()
 	.platforms(new Platform[] {
 	Platform.APPLE, Platform.GOOGLE,
@@ -121,22 +162,22 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	.build();
 	```		
 
-3. 	Set optional values for all platforms to Settings object.
-	```
+1. 	Set optional values for all platforms to Settings object.
+	```java
 	Settings settings = new Settings.Builder().apns(apns).fcm(fcm).chromeWeb(chromeWeb)
 		.chromeAppExt(chromeAppExt).firefoxWeb(firefoxWeb).safariWeb(safariWeb).build();
 	```		
 
-4. Create a new notification.
-	```
+2. Create a new notification.
+	```java
 	Notification notification = new Notification.Builder().message(message).settings(settings).target(target).build(); 
 	```
 
-5. Pass the notification.
+3. Pass the notification.
 	
 	An optional callback `ResponseListener` is provided if you want to get notified of the result or do some processing with response `satusCode` or `responseBody` returned by this callback.
 
-	```
+	```java
 		PushNotifications.send(notification, new PushNotificationsResponseListener(){
 			@Override
 			public void onSuccess(int statusCode, String responseBody) {
@@ -155,11 +196,11 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 You will now receive the notification that was sent, on the device that you had registered.
 
 
-## Send bulk Push Notifications,
+## Send bulk Push Notifications
 
 To send bulk push notifications do the following,
 
-```
+```java
 	Notification[] ff = new Notification[]{notification1,notification2};
 	PushNotifications.sendBulk(ff, new PushNotificationsResponseListener(){
 		public void onSuccess(int statusCode, String responseBody) {
@@ -174,14 +215,39 @@ To send bulk push notifications do the following,
 	});
 ```
 
-For Javadocs please follow the link:--> https://www.javadoc.io/doc/com.ibm.mobilefirstplatform.serversdk.java/push
+For Javadocs please follow the link - https://www.javadoc.io/doc/com.ibm.mobilefirstplatform.serversdk.java/push
 
-## License
+## Samples and videos
 
-Copyright 2017 IBM Corp.
+* For samples, visit - [Github Sample](https://github.com/ibm-bluemix-mobile-services/bms-samples-swift-hellopush)
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+* For video tutorials visit - [IBM Cloud Push Notifications](https://www.youtube.com/playlist?list=PLTroxxTPN9dIZYn9IU-IOcQePO-u5r0r4)
+
+### Learning more
+
+* Visit the **[IBM Cloud Developers Community](https://developer.ibm.com/depmodels/cloud/)**.
+
+* [Getting started with IBM MobileFirst Platform for iOS](https://cloud.ibm.com/docs/mobile)
+
+### Connect with IBM Cloud
+
+[Twitter](https://twitter.com/IBMCloud) |
+[YouTube](https://www.youtube.com/watch?v=AVPoBWScRQc) |
+[Blog](https://developer.ibm.com/depmodels/cloud/) |
+[Facebook](https://www.facebook.com/ibmcloud) |
+
+
+=======================
+Copyright 2020-21 IBM Corp.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

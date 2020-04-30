@@ -52,9 +52,24 @@ public final class APNs {
 	private String title;
 	private String attachmentUrl;
 	private String apnsCollapseId;
+	private String apnsThreadId;
+	private String apnsGroupSummaryArg;
+	private Integer apnsGroupSummaryArgCount;
 
 	public final Integer getBadge() {
 		return badge;
+	}
+
+	public final String getApnsThreadId() {
+		return apnsThreadId;
+	}
+
+	public final String getApnsGroupSummaryArg() {
+		return apnsGroupSummaryArg;
+	}
+
+	public final Integer getApnsGroupSummaryArgCount() {
+		return apnsGroupSummaryArgCount;
 	}
 
 	public final String getSound() {
@@ -131,6 +146,9 @@ public final class APNs {
 		this.attachmentUrl = builder.attachmentUrl;
 		this.type = builder.type;
 		this.apnsCollapseId = builder.apnsCollapseId;
+		this.apnsThreadId = builder.apnsThreadId;
+		this.apnsGroupSummaryArg = builder.apnsGroupSummaryArg;
+		this.apnsGroupSummaryArgCount = builder.apnsGroupSummaryArgCount;
 	}
 
 	/**
@@ -161,6 +179,9 @@ public final class APNs {
 		private String title;
 		private String attachmentUrl;
 		private String apnsCollapseId;
+		private String apnsThreadId;
+		private String apnsGroupSummaryArg;
+		private Integer apnsGroupSummaryArgCount;
 
 		/**
 		 * 
@@ -171,6 +192,38 @@ public final class APNs {
 		 */
 		public final Builder badge(Integer badge) {
 			this.badge = badge;
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param apnsThreadId
+		 *            An app-specific identifier for grouping related notifications. This value corresponds to the threadIdentifier property in the UNNotificationContent object.
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder apnsThreadId(String apnsThreadId) {
+			this.apnsThreadId = apnsThreadId;
+			return this;
+		}
+		/**
+		 * 
+		 * @param apnsGroupSummaryArg
+		 * 			  The string the notification adds to the category’s summary format string.
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder apnsGroupSummaryArg(String apnsGroupSummaryArg) {
+			this.apnsGroupSummaryArg = apnsGroupSummaryArg;
+			return this;
+		}
+
+		/**
+		 * 
+		 * @param apnsGroupSummaryArgCount
+		 *            The number of items the notification adds to the category’s summary format string.
+		 * @return The Builder object for calls to be linked.
+		 */
+		public final Builder apnsGroupSummaryArgCount(Integer apnsGroupSummaryArgCount) {
+			this.apnsGroupSummaryArgCount = apnsGroupSummaryArgCount;
 			return this;
 		}
 
