@@ -49,12 +49,12 @@ import com.ibm.mobilefirstplatform.serversdk.java.push.exception.PushServerSDKEx
  * using the Push Notification service.
  */
 public class PushNotifications {
-	public static final String US_SOUTH_REGION = ".ng.bluemix.net";
-	public static final String UK_REGION = ".eu-gb.bluemix.net";
-	public static final String SYDNEY_REGION = ".au-syd.bluemix.net";
-	public static final String FRANKFURT_REGION = ".eu-de.bluemix.net";
-	public static final String US_EAST_REGION = ".us-east.bluemix.net";
-	public static final String JP_TOK = ".jp-tok.bluemix.net";
+	public static final String US_SOUTH_REGION = "us-south";
+	public static final String UK_REGION = "eu-gb";
+	public static final String SYDNEY_REGION = "au-syd";
+	public static final String FRANKFURT_REGION = "eu-de";
+	public static final String US_EAST_REGION = "us-east";
+	public static final String JP_TOK = "jp-tok";
 
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
@@ -82,54 +82,50 @@ public class PushNotifications {
 	public static String overrideServerHost = null;
 
 	/**
-	 * Specify the credentials and Bluemix region for your push notification
+	 * Specify the credentials and IBM Cloud region for your push notification
 	 * service. Also if you are using dedicated service, use overrideServerHost.
 	 * 
 	 * @param tenantId
-	 *            The tenant ID for the Bluemix application that the Push
+	 *            The tenant ID for the IBM Cloud application that the Push
 	 *            Notifications service is bound to.
 	 * @param pushSecret
 	 *            The credential required for Push Notifications service
 	 *            authorization.
-	 * @param bluemixRegion
-	 *            The Bluemix region where the Push Notifications service is
+	 * @param ibmCloudRegion
+	 *            The IBM Cloud region where the Push Notifications service is
 	 *            hosted. For example, US_SOUTH_REGION.
 	 */
-	public static void init(String tenantId, String pushSecret, String bluemixRegion) {
+	public static void init(String tenantId, String pushSecret, String ibmCloudRegion) {
 		secret = pushSecret;
 
-		createPushEndPointUrl(tenantId, bluemixRegion);
+		createPushEndPointUrl(tenantId, ibmCloudRegion);
 
 	}
-
-	private static void createPushEndPointUrl(String tenantId, String bluemixRegion) {
+	
+	private static void createPushEndPointUrl(String tenantId, String ibmCloudRegion) {
 		if (overrideServerHost != null) {
 			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
 		} else {
-			if (bluemixRegion.equals(JP_TOK)) {
-				pushMessageEndpointURL = PushConstants.JPHOST + PushConstants.URL + tenantId + PushConstants.API;
-			} else {
-				pushMessageEndpointURL = PushConstants.HOST + bluemixRegion + PushConstants.URL + tenantId 
+				pushMessageEndpointURL = "https://"+ibmCloudRegion + PushConstants.HOST +  PushConstants.URL+tenantId 
 				+ PushConstants.API;
-			}
 		}
 	}
 
 	/**
-	 * If your application server is running on Bluemix, and your push
+	 * If your application server is running on IBM Cloud, and your push
 	 * notification service is bound to your application, you can use this
-	 * method for initialization which will get the credentials from Bluemix's
+	 * method for initialization which will get the credentials from IBM Cloud's
 	 * environment variables.
 	 * 
-	 * @param bluemixRegion
-	 *            The Bluemix region where the Push Notifications service is
+	 * @param ibmCloudRegion
+	 *            The IBM Cloud region where the Push Notifications service is
 	 *            hosted. For example, US_SOUTH_REGION.
 	 * 
 	 * @throws IllegalArgumentException
 	 *             If either the push application ID or the secret is not found
 	 *             in the environment variables.
 	 */
-	public static void init(String bluemixRegion) {
+	public static void init(String ibmCloudRegion) {
 		String tenantId = null;
 		String pushSecret = null;
 
@@ -137,7 +133,7 @@ public class PushNotifications {
 		pushSecret = getPushSecretFromVCAP();
 
 		if (tenantId != null && pushSecret != null) {
-			init(tenantId, pushSecret, bluemixRegion);
+			init(tenantId, pushSecret, ibmCloudRegion);
 		} else {
 			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
@@ -145,7 +141,7 @@ public class PushNotifications {
 		}
 	}
 	
-	public static void initWithApiKey(String tenantId, String apiKeyId, String bluemixRegionn) {
+	public static void initWithApiKey(String tenantId, String apiKeyId, String ibmCloudRegionn) {
 		String tenantIdIs = tenantId;
 		apiKeyIdIs = apiKeyId;
 
@@ -157,14 +153,14 @@ public class PushNotifications {
 			apiKeyIdIs = getPushApiKeyFromVCAP();	
 		}
 		if (tenantId != null && apiKeyId != null) {
-			createPushEndPointUrl(tenantId, bluemixRegionn);
+			createPushEndPointUrl(tenantId, ibmCloudRegionn);
 		} else {
 			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
 		}
 		
-		iamRegion = bluemixRegionn;
+		iamRegion = ibmCloudRegionn;
 	}
 	
 	public static CloseableHttpResponse getAuthToken() {

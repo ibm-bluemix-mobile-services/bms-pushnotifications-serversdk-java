@@ -49,7 +49,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
 	```
 		
-	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
+	**Note:** If you are using dedicated service, use overrideServerHost and add any of the IBM Cloud region value.
 
 	The IBM Cloud regions where the Push Notifications service is hosted are,
 	- `PushNotifications.US_SOUTH_REGION`
