@@ -76,7 +76,7 @@ public class PushNotificationsTest {
 	@Test
 	public void shouldFailInitializingWhenCredentialsAreNotInEnvironmentVariables() {
 		try {
-			PushNotifications.init("bluemixRegion");
+			PushNotifications.init("ibmCloudRegion");
 		} catch (Throwable e) {
 			// Did fail; test was successful.
 			return;
