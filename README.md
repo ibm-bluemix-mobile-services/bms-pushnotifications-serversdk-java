@@ -1,7 +1,7 @@
 # IBM Cloud Mobile Services - Push Notifications server-side SDK for Java
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=master)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
 [![Build Status](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java.svg?branch=development)](https://travis-ci.org/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/fe43788a157c4c4b971a8918d29c4469)](https://www.codacy.com/app/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a4f3d8ce1a5f4bf8a10feabf7632f51e)](https://www.codacy.com/gh/ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ibm-bluemix-mobile-services/bms-pushnotifications-serversdk-java&amp;utm_campaign=Badge_Grade)
 
 The [IBM Cloud Push Notifications service](https://cloud.ibm.com/catalog/services/push-notifications) provides a unified push service to send real-time notifications to mobile and web applications. The SDK enables Web Apps to receive push notifications sent from the service.
 
@@ -49,7 +49,7 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	PushNotifications.initWithApiKey("YOUR_APPLICATION_ID", "YOUR-PUSH-APIKEY", PushNotifications.US_SOUTH_REGION);
 	```
 		
-	**Note:** If you are using dedicated service, use overrideServerHost and add any of the bluemixRegion (IBM Cloud region) value.
+	**Note:** If you are using dedicated service, use overrideServerHost and add any of the IBM Cloud region value.
 
 	The IBM Cloud regions where the Push Notifications service is hosted are,
 	- `PushNotifications.US_SOUTH_REGION`
