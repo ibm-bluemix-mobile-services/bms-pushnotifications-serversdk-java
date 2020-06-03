@@ -67,8 +67,6 @@ public class PushNotifications {
 	
 	protected static String accessToken;
 	
-	protected static String iamRegion;
-
 	protected static String pushMessageEndpointURL;
 
 	private static  PushNotificationsResponseListener pushListner;
@@ -106,8 +104,7 @@ public class PushNotifications {
 		if (overrideServerHost != null) {
 			pushMessageEndpointURL = overrideServerHost + PushConstants.URL + tenantId + PushConstants.API;
 		} else {
-				pushMessageEndpointURL = "https://"+ibmCloudRegion + PushConstants.HOST +  PushConstants.URL+tenantId 
-				+ PushConstants.API;
+			pushMessageEndpointURL = "https://" + ibmCloudRegion + PushConstants.HOST + PushConstants.URL + tenantId + PushConstants.API;
 		}
 	}
 
@@ -158,16 +155,17 @@ public class PushNotifications {
 			PushServerSDKException exception = new PushServerSDKException(PushConstants.PushServerSDKExceptions.PUSH_INIT_EXCEPTION);
 			logger.log(Level.SEVERE, exception.toString(), exception);
 			throw exception;
-		}
-		
-		iamRegion = ibmCloudRegionn;
+		}		
 	}
 	
 	public static CloseableHttpResponse getAuthToken() {
 		CloseableHttpClient httpClient = HttpClients.createDefault();
 
-		String iamUri = PushConstants.IAM_URI + iamRegion + PushConstants.IAM_TOKEN_PATH;
-			
+		String iamUri = PushConstants.IAM_URI + PushConstants.IAM_TOKEN_PATH;
+		
+		if (overrideServerHost != null) {
+			iamUri = PushConstants.IAM_URI_TEST + PushConstants.IAM_TOKEN_PATH;
+		}
 		HttpPost pushPost = new HttpPost(iamUri);
 
 		pushPost.addHeader(HTTP.CONTENT_TYPE, PushConstants.IAM_CONTENT_TYPE);

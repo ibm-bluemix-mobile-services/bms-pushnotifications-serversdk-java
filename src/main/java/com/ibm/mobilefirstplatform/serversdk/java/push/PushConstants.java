@@ -21,7 +21,6 @@ public final class PushConstants {
 	public static final String MESSAGE_OBJECT_KEY = "message";
 	public static final String SETTINGS_OBJECT_KEY = "settings";
 	public static final String HOST = ".imfpush.cloud.ibm.com";
-	public static final String JPHOST = "https://jp-tok.imfpush.cloud.ibm.com";
 	public static final String URL = "/imfpush/v1/apps/";
 	public static final String API = "/messages";
 	public static final String VCAP_SERVICES = "VCAP_SERVICES";
@@ -34,7 +33,8 @@ public final class PushConstants {
 	public static final String CONTENT_TYPE = "application/json";
 	public static final String IAM_CONTENT_TYPE = "application/x-www-form-urlencoded";	
 	public static final String IAM_TOKEN_PATH = "/identity/token";
-	public static final String IAM_URI = "https://iam";
+	public static final String IAM_URI = "https://iam.cloud.ibm.com";
+	public static final String IAM_URI_TEST = "https://iam.test.cloud.ibm.com";
 	public static final String GRANT_TYPE = "grant_type";
 	public static final String GRANT_TYPE_VALUE_APIKEY = "urn:ibm:params:oauth:grant-type:apikey";
 	public static final String UTFEIGHT = "UTF-8";
