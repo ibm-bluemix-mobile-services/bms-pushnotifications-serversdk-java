@@ -2,7 +2,7 @@ This document contains information and guidelines about contributing to this pro
 
 # Asking Questions
 
-We don't use GitHub as a support forum. If you have issues with the APIs or have a question about the Watson services, see [Stack Overflow](https://stackoverflow.com/questions/tagged/ibm-watson+swift).
+We don't use GitHub as a support forum. If you have issues with the APIs or have a question about the Push Notification services, refer https://cloud.ibm.com/docs/mobilepush?topic=mobilepush-mp-report-problem
 
 # Reporting Issues
 
@@ -12,7 +12,6 @@ See the [issue template](issue_template.md).
 
 - [Java coding style reference 1](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf)
 - [Java coding style reference 2](https://google.github.io/styleguide/javaguide.html)
-
 
 # Pull Requests
 
