@@ -10,8 +10,8 @@ See the [issue template](issue_template.md).
 
 # Coding Style
 
-- [Java Coding style 1](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf)
-- [Java Coding Style 2](https://google.github.io/styleguide/javaguide.html)
+- [Java coding style reference 1](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf)
+- [Java coding style reference 2](https://google.github.io/styleguide/javaguide.html)
 
 
 # Pull Requests
