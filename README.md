@@ -10,7 +10,7 @@ Ensure that you go through [IBM Cloud Push Notifications service documentation](
 ## Contents
 
 - [Installation](#installation)
-- [Authentication](#initialize-sdk)
+- [Authentication](#authentication)
 - [Simple notification](#simple-notification)
 - [Notification options](#notification-options)
 - [Send bulk Push Notifications](#send-bulk-push-notifications)
