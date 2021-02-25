@@ -10,15 +10,9 @@ See the [issue template](issue_template.md).
 
 # Coding Style
 
-Contributions should follow the established coding style and conventions for this project,
-which are loosely based on [The Official raywenderlich.com Swift Style Guide][styleguide]
-and [Swift API Design Guidelines][api-guidelines].
-The project is set up so that developers can use [SwiftLint][swiftlint] to check conformance
-to the coding style guidelines.
+- [Java Coding style 1](https://www.oracle.com/technetwork/java/codeconventions-150003.pdf)
+- [Java Coding Style 2](https://google.github.io/styleguide/javaguide.html)
 
-[styleguide]: https://github.com/raywenderlich/swift-style-guide
-[api-guidelines]: https://swift.org/documentation/api-design-guidelines
-[swiftlint]: https://github.com/realm/SwiftLint
 
 # Pull Requests
 
@@ -63,9 +57,4 @@ By making a contribution to this project, I certify that:
 + [General GitHub documentation](https://help.github.com/)
 + [GitHub pull request documentation](https://help.github.com/send-pull-requests/)
 
-[dw]: https://developer.ibm.com/answers/questions/ask/?topics=watson
-[stackoverflow]: http://stackoverflow.com/questions/ask?tags=ibm-watson
-
 ---
-
-*Some of the ideas and wording for the statements above were based on work by the [Alamofire](https://github.com/Alamofire/Alamofire/blob/master/CONTRIBUTING.md), [Docker](https://github.com/docker/docker/blob/master/CONTRIBUTING.md), and [Linux](http://elinux.org/Developer_Certificate_Of_Origin) communities. We commend them for their efforts to facilitate collaboration in their projects.*
