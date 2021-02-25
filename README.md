@@ -10,7 +10,7 @@ Ensure that you go through [IBM Cloud Push Notifications service documentation](
 ## Contents
 
 - [Installation](#installation)
-- [Initialize SDK](#initialize-sdk)
+- [Authentication](#initialize-sdk)
 - [Simple notification](#simple-notification)
 - [Notification options](#notification-options)
 - [Send bulk Push Notifications](#send-bulk-push-notifications)
@@ -28,7 +28,16 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 </dependency>
 ```
 
-## Initialize SDK
+## Authentication
+In order to use an IBM Push Notifications service in a your Java Application, you will need to create an instance and authenticate first. The following describes the typical path you need to take to do so.
+
+### Create Instance
+Credentials to use an IBM Push Notifications service are obtained via IBM Cloud. You will need an active account and a service instance for the service that you wish to use prior to authenticating in your application.
+
+You can access the service credentials for your instance by taking the following steps:
+1. Go to the [IBM Cloud Dashboard](https://cloud.ibm.com) page.
+
+### Initialize SDK
  Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
 	
 - Initialize with AppSecret
