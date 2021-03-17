@@ -10,11 +10,12 @@ Ensure that you go through [IBM Cloud Push Notifications service documentation](
 ## Contents
 
 - [Installation](#installation)
-- [Initialize SDK](#initialize-sdk)
+- [Authentication](#authentication)
 - [Simple notification](#simple-notification)
 - [Notification options](#notification-options)
 - [Send bulk Push Notifications](#send-bulk-push-notifications)
 - [Samples and videos](#samples-and-videos)
+- [Contributing](#contributing)
 
 ## Installation
 
@@ -28,7 +29,18 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 </dependency>
 ```
 
-## Initialize SDK
+## Authentication
+In order to use an IBM Push Notifications service in a your Java Application, you will need to create an instance and authenticate first. The following describes the typical path you need to take to do so.
+
+### Create Instance
+Credentials to use an IBM Push Notifications service are obtained via IBM Cloud. You will need an active account and a service instance for the service that you wish to use prior to authenticating in your application.
+
+You can access the service credentials for your instance by taking the following steps:
+1. Go to the [IBM Cloud Dashboard](https://cloud.ibm.com) page.
+2. Either click an existing Push Notification service instance in your resource list or goto [Catalog](https://cloud.ibm.com/catalog) -> Search for Push Notifications -> fill the required information, select your plan and region and create a service instance
+3. Click on the Service Credentials tab in the left navigation bar to get required credentials.
+
+### Initialize SDK
  Initialize the SDK with the IBM Cloud region of your application, and optionally, your credentials:
 	
 - Initialize with AppSecret
@@ -222,6 +234,11 @@ For Javadocs please follow the link - https://www.javadoc.io/doc/com.ibm.mobilef
 * For samples, visit - [Github Sample](https://github.com/ibm-bluemix-mobile-services/bms-samples-swift-hellopush)
 
 * For video tutorials visit - [IBM Cloud Push Notifications](https://www.youtube.com/playlist?list=PLTroxxTPN9dIZYn9IU-IOcQePO-u5r0r4)
+
+
+## Contributing
+
+We would love any and all help! If you would like to contribute, please read our [CONTRIBUTING](.github/CONTRIBUTING.md) documentation with information on getting started.
 
 ### Learning more
 
