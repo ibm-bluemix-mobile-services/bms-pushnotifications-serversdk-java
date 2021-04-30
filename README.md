@@ -69,7 +69,6 @@ You can access the service credentials for your instance by taking the following
 	- `PushNotifications.SYDNEY_REGION`
 	- `PushNotifications.FRANKFURT_REGION`
 	- `PushNotifications.US_EAST_REGION`
-	- `PushNotifications.JP_OSA`
 	
 	```java
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
