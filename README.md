@@ -57,7 +57,6 @@ You can get the SDK from Maven Central. To get it with Maven, include the follow
 	- `PushNotifications.SYDNEY_REGION`
 	- `PushNotifications.FRANKFURT_REGION`
 	- `PushNotifications.US_EAST_REGION`
-	- `PushNotifications.JP_OSA`
 	
 	```java
 	PushNotifications.overrideServerHost = "YOUR_SERVICE_HOST";
