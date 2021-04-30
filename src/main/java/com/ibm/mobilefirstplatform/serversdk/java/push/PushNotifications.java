@@ -55,7 +55,6 @@ public class PushNotifications {
 	public static final String FRANKFURT_REGION = "eu-de";
 	public static final String US_EAST_REGION = "us-east";
 	public static final String JP_TOK = "jp-tok";
-	public static final String JP_OSA = "jp-osa";
 
 
 	public static final Logger logger = Logger.getLogger(PushNotifications.class.getName());
